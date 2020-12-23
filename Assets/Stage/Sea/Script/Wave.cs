@@ -476,7 +476,7 @@ public class Wave : MonoBehaviour
 
 
         //影がらみ
-        if (CastSeaShadowBaseList.Count > 0)
+        if (CastSeaShadowBaseList != null && CastSeaShadowBaseList.Count > 0)
         {
             for (int c = 0; c < SeaShadow.Length; c++)
             {
