@@ -92,7 +92,7 @@ public class LOD_Manager : LOD_Conig
             transform.position.ToString().PadRight(18, ' ') + ":" + 
             LastLodPosition.ToString().PadRight(18, ' '));
         */
-
+        /*
         if (_camera.transform.position.y < AdjustedMiniimumAltitude)
         {
             _camera.transform.position = new Vector3
@@ -102,7 +102,8 @@ public class LOD_Manager : LOD_Conig
                 _camera.transform.position.z
              );
         }
-        else if (_camera.transform.position.y > AdjustedMaximumAltitude)
+        else*/
+        if (_camera.transform.position.y > AdjustedMaximumAltitude)
         {
             _camera.transform.position = new Vector3
             (
@@ -217,10 +218,10 @@ public class LOD_Manager : LOD_Conig
     { 
         cc = _camera == null ? Camera.main.transform.position : _camera.position;
         
-        if (cc.y < AdjustedMiniimumAltitude)
-            cc.y = AdjustedMiniimumAltitude;
-        else if (cc.y > AdjustedMaximumAltitude)
-            cc.y = AdjustedMaximumAltitude;
+       // if (cc.y < AdjustedMiniimumAltitude)
+         //   cc.y = AdjustedMiniimumAltitude;
+       if (cc.y > AdjustedMaximumAltitude)
+           cc.y = AdjustedMaximumAltitude;
         if (!init)
             h_1 = (cc.y - AdjustedMiniimumAltitude) / AdjustedFULL;
 
