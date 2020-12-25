@@ -6,7 +6,7 @@ using UnityEngine;
  
 public class Refresh_cacheError : EditorWindow
 {
-    [MenuItem(@"RefreshError/Library\PackageCache\com.unity.collab-proxy@")]
+    [MenuItem(@"RefreshError/Library\PackageCache\com.unity.[xxx]")]
     private static void Create()
     {
         string c = Directory.GetParent(Application.dataPath).ToString() + @"\Library\PackageCache\com.unity.";

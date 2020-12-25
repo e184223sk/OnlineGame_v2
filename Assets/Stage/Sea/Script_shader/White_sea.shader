@@ -16,8 +16,8 @@
 		 
 		void surf(Input IN, inout SurfaceOutputStandard o) 
 		{     
-			o.Albedo = fixed4(1,1,1,1);
-			o.Alpha = (IN.worldPos.y +5) * -0.18; //3 / -0.15
+			o.Albedo = fixed4(1,1, 1,1);
+			o.Alpha = (IN.worldPos.y + 20) *  -0.1; //3 / -0.15
 	    } 
 		ENDCG
 	}
