@@ -18,7 +18,15 @@ public class UnderSeaView : MonoBehaviour
             SetCamera(Wave.wave.targetCamera.transform.GetComponent<Camera>());
         DrawCamera();
     }
-       
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (!UnityEditor.EditorApplication.isPlaying) 
+            Update();
+    }
+#endif
+
     void SetCamera(Camera cam)
     {
         rawImg = transform.Find("img").GetComponent<RawImage>();
