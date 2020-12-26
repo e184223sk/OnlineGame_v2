@@ -11,6 +11,7 @@ public class Editor_SetTag : MonoBehaviour
     { 
         EditorApplication.hierarchyWindowChanged += delegate ()
         { 
+            
             SetTag_("Ground", "GroundObject");
             Set_Static("GroundObject", true);
             Set_Static("Sea", false);
@@ -19,7 +20,8 @@ public class Editor_SetTag : MonoBehaviour
 
 
     static void Set_Static(string rootObj, bool Static = true)
-    {  
+    {
+        if (GameObject.Find(rootObj) == null) return;
         GameObject.Find(rootObj).isStatic = Static;
         foreach (Transform c in GameObject.Find(rootObj).transform)
             c.gameObject.isStatic = Static;
@@ -27,6 +29,8 @@ public class Editor_SetTag : MonoBehaviour
 
     static void SetTag_(string tagName, string rootObj)
     {
+        if (GameObject.Find(rootObj) == null) return;
+
         if (!ExistTag(tagName)) AddTag(tagName); 
         GameObject.Find(rootObj).tag = tagName;
         foreach (Transform c in GameObject.Find(rootObj).transform) c.tag = tagName;
