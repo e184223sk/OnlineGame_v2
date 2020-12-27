@@ -5,13 +5,13 @@ using UnityEngine;
 public static class Key
 {
     public static SelectGamePad gamePad; 
-    public static readonly GamePad_TB A  = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
-    public static readonly GamePad_TB B  = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
-    public static readonly GamePad_TB X  = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
-    public static readonly GamePad_TB Y  = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
-    public static readonly GamePad_TB F0 = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
-    public static readonly GamePad_TB F1 = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
-    public static readonly GamePad_TB F2 = new GamePad_TB(KeyCode.A, KeyCode.JoystickButton0, KeyCode.JoystickButton1); //012
+    public static readonly GamePad_TB A  = new GamePad_TB(KeyCode.Z, KeyCode.JoystickButton3,  KeyCode.JoystickButton0); 
+    public static readonly GamePad_TB B  = new GamePad_TB(KeyCode.X, KeyCode.JoystickButton2,  KeyCode.JoystickButton1); 
+    public static readonly GamePad_TB X  = new GamePad_TB(KeyCode.C, KeyCode.JoystickButton1,  KeyCode.JoystickButton2); 
+    public static readonly GamePad_TB Y  = new GamePad_TB(KeyCode.V, KeyCode.JoystickButton4,  KeyCode.JoystickButton3); 
+    public static readonly GamePad_TB FL = new GamePad_TB(KeyCode.B, KeyCode.JoystickButton9,  KeyCode.JoystickButton6); 
+    //public static readonly GamePad_TB FC = new GamePad_TB(KeyCode.N, KeyCode.JoystickButton14, KeyCode.JoystickButton15); //X
+    public static readonly GamePad_TB FR = new GamePad_TB(KeyCode.M, KeyCode.JoystickButton10, KeyCode.JoystickButton7); 
     public static readonly GamePad_JS JoyStickL = new GamePad_JS("", "");
     public static readonly GamePad_JS JoyStickR = new GamePad_JS("", "");
     public static readonly GamePad_Trigger _L  = new GamePad_Trigger();
