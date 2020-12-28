@@ -21,9 +21,7 @@ public class keyTest : MonoBehaviour
         JoyStick_R = Key.JoyStickR;
         JoyStick_L_Push = Key.JoyStickL.Push;
         JoyStick_R_Push = Key.JoyStickR.Push;
-
-
-
+         
         if (Key.A.Press) Debug.Log("A/×  Press");
         if (Key.B.Press) Debug.Log("B/〇  Press");
         if (Key.X.Press) Debug.Log("X/□  Press");
