@@ -18,7 +18,7 @@ public class keyTest : MonoBehaviour
         Key.gamePad = useGamepad;
 
         JoyStick_L = Key.JoyStickL;
-        JoyStick_R = Key.JoyStickR;
+        //JoyStick_R = Key.JoyStickR;
         JoyStick_L_Push = Key.JoyStickL.Push;
         JoyStick_R_Push = Key.JoyStickR.Push;
 
