@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleScene_Ctrl : MonoBehaviour
+public class SelectScene_Ctrl : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -13,6 +13,7 @@ public class TitleScene_Ctrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Key.A.Down)
+            UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
     }
 }
