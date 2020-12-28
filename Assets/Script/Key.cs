@@ -5,8 +5,7 @@ using UnityEngine;
 public static class Key
 {
     public static SelectGamePad gamePad;
-    
-    
+         
     //================================================   [KEYBOARD]　　　　　[PS4]　　　　　　　　　XBOX360
     public static readonly GamePad_TB A  = new GamePad_TB(KeyCode.Z, KeyCode.JoystickButton1,  KeyCode.JoystickButton0); 
     public static readonly GamePad_TB B  = new GamePad_TB(KeyCode.X, KeyCode.JoystickButton2,  KeyCode.JoystickButton1); 
@@ -17,8 +16,8 @@ public static class Key
     public static readonly GamePad_TB FR = new GamePad_TB(KeyCode.M, KeyCode.JoystickButton9, KeyCode.JoystickButton7);
 
     //=================================================================================
-    public static readonly GamePad_JS JoyStickL = new GamePad_JS("Horizontal", "Vertical", "X axis",   "Y axis",   "X axis",   "Y axis");
-    public static readonly GamePad_JS JoyStickR = new GamePad_JS("JS_RH",      "JS_RV",    "3rd axis", "6th axis", "4th axis", "5th axis");
+    public static readonly GamePad_JS JoyStickL = new GamePad_JS("Horizontal", "Vertical", "X axis",   "Y axis",   "X axis",   "Y axis", KeyCode.A, KeyCode.D, KeyCode.S, KeyCode.W);
+    public static readonly GamePad_JS JoyStickR = new GamePad_JS("JS_RH",      "JS_RV",    "3rd axis", "6th axis", "4th axis", "5th axis", KeyCode.F, KeyCode.H, KeyCode.G, KeyCode.T);
 
     //================================================================
     public static readonly GamePad_Trigger _L  = new GamePad_Trigger();
@@ -41,9 +40,12 @@ public class GamePad_Trigger
 
 }
 
+
 public class GamePad_JS
 {
-    string [,] tags = new string[3,2];
+    public static bool InvertX, InvertY;
+    string[,] tags = new string[3, 2];
+    KeyCode[] H, V;
 
     public GamePad_JS
     (
@@ -51,10 +53,16 @@ public class GamePad_JS
         string KeyBoard_Y,
         string PS4_X,
         string PS4_Y,
-        string XBOX360_X, 
-        string XBOX360_Y
-        )
-    { 
+        string XBOX360_X,
+        string XBOX360_Y,
+        KeyCode keyPush_0a,
+        KeyCode keyPush_0b,
+        KeyCode keyPush_1a,
+        KeyCode keyPush_1b
+    )
+    {
+        H = new KeyCode[] { keyPush_0a, keyPush_0b };
+        V = new KeyCode[] { keyPush_1a, keyPush_1b };
         tags[0, 0] = KeyBoard_X;
         tags[0, 1] = KeyBoard_Y;
         tags[1, 0] = PS4_X;
@@ -63,14 +71,16 @@ public class GamePad_JS
         tags[2, 1] = XBOX360_Y;
     }
 
+    Vector2 Inverts { get { return new Vector2(InvertX ? -1 : 1, InvertY ? 1 : -1); } }
+
     public Vector2 Get
     {
         get
         {
             switch (Key.gamePad)
             {
-                case SelectGamePad.PS4: return new Vector2(GetF(tags[0,0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1])) ;
-                case SelectGamePad.XBOX360: return new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
+                case SelectGamePad.PS4: return Inverts * new Vector2(GetF(tags[0,0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1])) ;
+                case SelectGamePad.XBOX360: return Inverts * new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
             } 
             return new Vector2(0, 0);
         }
@@ -87,6 +97,16 @@ public class GamePad_JS
     {
         get
         {
+
+            bool kb = (Input.GetKey(H[0]) == Input.GetKey(H[1])) || (Input.GetKey(V[0]) == Input.GetKey(V[1]));
+            if (kb) return kb;
+
+            switch (Key.gamePad)
+            {
+                case SelectGamePad.PS4: return false;
+                case SelectGamePad.XBOX360: return false;
+            }
+
             Debug.Log("ジョイスティックのプッシュ検知はまだ未実装です:常にfalseを返します");
             return false;
         }
@@ -146,8 +166,4 @@ public class GamePad_TB
     }
 }
 
-/*
- 
-     
-     
-     */
+/*push / Trigger/ Manual*/

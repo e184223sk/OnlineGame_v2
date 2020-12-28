@@ -15,8 +15,7 @@ public class TitleScene_Ctrl : MonoBehaviour
     public _mode_ mode;
     public Image BlackPlane;
     public float cntT;
-    public VideoPlayer title, movie; 
-    public bool GoSelectScene;
+    public VideoPlayer title, movie;  
     public bool SETIME;
     public AudioSource se;
 
@@ -29,8 +28,7 @@ public class TitleScene_Ctrl : MonoBehaviour
     }
 
     void Next()
-    {
-        GoSelectScene = true;
+    { 
         SETIME = false;
     }
 
@@ -39,16 +37,7 @@ public class TitleScene_Ctrl : MonoBehaviour
         if (SETIME)
         {
             return;
-        } 
-        else if (GoSelectScene)
-        {
-            mode = _mode_.FOut_goT;
-            BlackPlane.color += new Color(0, 0, 0, Time.deltaTime);
-            if (BlackPlane.color.a >= 1)
-            {
-                SceneManager.LoadScene("SelectScene"); 
-            }
-        }
+        }  
         else
         {
             if (mode == _mode_.FOut_goM || mode == _mode_.FOut_goT)
@@ -110,6 +99,7 @@ public class TitleScene_Ctrl : MonoBehaviour
                 {
                     SETIME = true;
                     se.Play();
+                    SceneLoader.Load("SelectScene");
                     Invoke("Next", 2); 
                     cntT = 0;
                     BlackPlane.color = Color.clear; 

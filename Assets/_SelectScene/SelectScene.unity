@@ -269,7 +269,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 252825644}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -289,12 +289,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   cnt: 0
+  cnt2: 0
+  WhiteLevel: 1
+  ColorSpeed: 0.3
+  alphaSpeed: 0.3
+  ColorLevel: 0.6
+  Button_GameMode: {fileID: 376334132}
+  Button_Tutorial: {fileID: 44801565}
+  Button_Option: {fileID: 976844393}
+  Button_MakeAvator: {fileID: 1423008810}
+  Button_BackTitle: {fileID: 587137372}
   DiscriptionTextArea: {fileID: 1036129031}
   Text_GameMode: {fileID: 2800000, guid: 1bc6dbe65eac98f47b2e9a7c93e5d8a5, type: 3}
   Text_Tutorial: {fileID: 2800000, guid: 0196fcf525d4a12479edd220e012b223, type: 3}
   Text_Option: {fileID: 2800000, guid: 3a7bd18b1898ac74cac5b8cc04839969, type: 3}
   Text_MakeAvator: {fileID: 2800000, guid: bdf46d5e125730a4198c0c4e2a673995, type: 3}
   Text_BackTitle: {fileID: 2800000, guid: 65cead8603bbfdc46910dfd0dafdc7b7, type: 3}
+  Se: {fileID: 644040682}
+  next: {fileID: 8300000, guid: 7d797eb897d6ff54197611e8eb0682f1, type: 3}
+  back: {fileID: 8300000, guid: 0e0d32508dbf43b4f8dcec11dd539958, type: 3}
+  select: {fileID: 8300000, guid: e550cb611078d4c4986c57c870ddbeb9, type: 3}
+  SC_H: 0
+  SC_S: 0
+  SC_V: 0
 --- !u!1 &376334130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +1120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

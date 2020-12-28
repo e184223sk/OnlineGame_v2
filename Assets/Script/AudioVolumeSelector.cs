@@ -80,7 +80,7 @@ public class AudioSystem : MonoBehaviour
     {
         EditorApplication.update += () =>
         {
-
+            if (EditorApplication.isPlaying) return;
             foreach (GameObject obj in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
             {
                 // シーン上に存在するオブジェクトならば処理.
