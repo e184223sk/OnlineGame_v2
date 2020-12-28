@@ -150,7 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa04ec6fc29ba7408509a9c0103948c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useGamepad: 0
+  useGamepad: 1
+  JoyStick_L: {x: 0, y: 0}
+  JoyStick_L_Push: 0
+  JoyStick_R: {x: 0, y: 0}
+  JoyStick_R_Push: 0
 --- !u!4 &1158054193
 Transform:
   m_ObjectHideFlags: 0

@@ -17,9 +17,9 @@ public static class Key
     public static readonly GamePad_TB FR = new GamePad_TB(KeyCode.M, KeyCode.JoystickButton9, KeyCode.JoystickButton7);
 
     //=================================================================================
-    public static readonly GamePad_JS JoyStickL = new GamePad_JS("", "");
-    public static readonly GamePad_JS JoyStickR = new GamePad_JS("", "");
-    
+    public static readonly GamePad_JS JoyStickL = new GamePad_JS("Horizontal", "Vertical", "X axis",   "Y axis",   "X axis",   "Y axis");
+    public static readonly GamePad_JS JoyStickR = new GamePad_JS("JS_RH",      "JS_RV",    "3rd axis", "6th axis", "4th axis", "5th axis");
+
     //================================================================
     public static readonly GamePad_Trigger _L  = new GamePad_Trigger();
     public static readonly GamePad_Trigger _LT = new GamePad_Trigger();
@@ -43,28 +43,56 @@ public class GamePad_Trigger
 
 public class GamePad_JS
 {
-    string _x, _y;
-    public GamePad_JS(string x, string y)
-    {
-        _x = x;
-        _y = y;
+    string [,] tags = new string[3,2];
+
+    public GamePad_JS
+    (
+        string KeyBoard_X,
+        string KeyBoard_Y,
+        string PS4_X,
+        string PS4_Y,
+        string XBOX360_X, 
+        string XBOX360_Y
+        )
+    { 
+        tags[0, 0] = KeyBoard_X;
+        tags[0, 1] = KeyBoard_Y;
+        tags[1, 0] = PS4_X;
+        tags[1, 1] = PS4_Y;
+        tags[2, 0] = XBOX360_X;
+        tags[2, 1] = XBOX360_Y;
     }
 
     public Vector2 Get
     {
         get
         {
-            return new Vector2(Input.GetAxis(_x), Input.GetAxis(_y));
+            switch (Key.gamePad)
+            {
+                case SelectGamePad.PS4: return new Vector2(GetF(tags[0,0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1])) ;
+                case SelectGamePad.XBOX360: return new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
+            } 
+            return new Vector2(0, 0);
         }
+    }
+
+    float GetF(string x0, string x1)
+    {
+        float p0 = Input.GetAxis(x0);
+        float p1 = Input.GetAxis(x1);
+        return p0 * p0 > p1 * p1 ? p0 : p1;
     }
 
     public bool Push
     {
         get
         {
+            Debug.Log("ジョイスティックのプッシュ検知はまだ未実装です:常にfalseを返します");
             return false;
         }
     }
+
+    public static implicit operator Vector2(GamePad_JS v) {  return v.Get; }
 
 }
 
