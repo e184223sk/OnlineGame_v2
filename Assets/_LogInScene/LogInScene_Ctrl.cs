@@ -1,6 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
+using System.Net.Security;
+using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -19,7 +24,8 @@ public class LogInScene_Ctrl : MonoBehaviour
         SignUpRoot,
         SignInRoot,
         SendText,
-        BadAccount;
+        BadAccount,
+        exist_Comment;
 
 
 
@@ -27,6 +33,8 @@ public class LogInScene_Ctrl : MonoBehaviour
     {
         Cursor.visible = true;
         ButtonEvent_SignUp_Return();
+
+        exist_Comment.active = false;
     }
 
     void Update()
@@ -55,15 +63,19 @@ public class LogInScene_Ctrl : MonoBehaviour
         SignUpRoot.active = true;
         SignInRoot.active = false;
     }
-
-
-
+     
     public void ButtonEvent_SignUp_Send()
     {
         Update();
-        if(EXISTURL(SignIn_UserName.text + @"\exist.tagtx"))
+
+        SetDATAS(SignUp_UserName.text, "");
+        bool k = EXISTURL(NetData.userEXIST);
+
+        exist_Comment.active = k;
+        if (!k)
         {
-            string PIN = Random.Range(10201020, 99999999).ToString().PadLeft(8,'1');
+            string PIN = Random.Range(10201020, 99999999).ToString().PadLeft(8, '1');
+
             MailMessage msg = new MailMessage();
             msg.From = new MailAddress(NetData.MailAddress, "Picture (久留米工業大学)");
             msg.To.Add(new MailAddress(SignUp_MAIL.text, SignUp_UserName.text));
@@ -78,7 +90,7 @@ public class LogInScene_Ctrl : MonoBehaviour
             "--------------------------------------------------------" + "\n" +
             "　　アカウント名:" + SignUp_UserName.text + "\n" +
             " " + "\n" +
-            "　　P.I.N       :" + PIN.Substring(0,4) + "-" + PIN.Substring(4) + "\n" +
+            "　　P.I.N       :" + PIN.Substring(0, 4) + "-" + PIN.Substring(4) + "\n" +
             "--------------------------------------------------------" + "\n" +
             " " + "\n" +
             " もし心当りがなければ下記連絡先までご連絡ください。" + "\n" +
@@ -91,58 +103,84 @@ public class LogInScene_Ctrl : MonoBehaviour
             " ※メールの返信は翌日(土日,祝日,年末年始を除く)となる場合がございます\n" +
             "◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆" + "\n";
 
+
+
+
             SmtpClient sc = new SmtpClient();
             sc.Host = "smtp.gmail.com";
             sc.Port = 587;
             sc.DeliveryMethod = SmtpDeliveryMethod.Network;
             sc.Credentials = new System.Net.NetworkCredential(NetData.MailAddress, NetData.MailPASS);
             sc.EnableSsl = true;
+
             sc.Send(msg);
             msg.Dispose();
-            ButtonEvent_SignUp_Return();
+
+
+
+
+
             SendText.active = true;
 
-            string user = SignUp_UserName.text;
-            string pin_ = PIN; 
+            BadAccount.active = false;
 
+            SetDATAS(SignUp_UserName.text, PIN);
 
-            string userDir = SignIn_UserName.text;
-            string passDir = SignIn_UserName.text + @"\" + SignIn_Pin.text;
-            string chatDir = passDir + @"\chat";
+            NetData.server.MakeDirectory(NetData.userDir, null, Debug.Log);
+            NetData.server.MakeDirectory(NetData.passDir, null, Debug.Log);
+            NetData.server.MakeDirectory(NetData.chatDir, null, Debug.Log);
+            NetData.server.MkFile(NetData.userEXIST, null, Debug.Log);
+            NetData.server.MkFile(NetData.pin_EXIST);
+            NetData.server.MkFile(NetData.data_config);
+            NetData.server.MkFile(NetData.data_log);
 
-            string userEXIST = userDir + @"\exist.tagtx";
-            string pin_EXIST   = passDir + @"\exist.tagtx";
-            string data_config = passDir + @"\config.txt";
-            string data_avator = passDir + @"\avator.txt";
-            string data_log    = passDir + @"\log.txt"; 
+            ButtonEvent_SignUp_Return();
+        } 
 
-             
-
-        }
     }
 
 
+    void SetDATAS(string user, string pin)
+    {
+        NetData.userDir = "OnlineSystem/_DATA/_USER_DATA__/" + user;
+        NetData.passDir = NetData.userDir + @"/" + pin ;
+        NetData.chatDir = NetData.passDir + @"/chat";
+
+        NetData.userEXIST = NetData.userDir + @"/exist.tagtx";
+        NetData.pin_EXIST = NetData.passDir + @"/exist.tagtx";
+        NetData.data_config = NetData.passDir + @"/data.txt";
+        NetData.data_log = NetData.passDir + @"/log.txt";
+        NetData.user = new USERDATA(user, pin);
+
+    }
     public void ButtonEvent_SignIn_LogIn()
     {
         Update();
-        if (EXISTURL(SignIn_UserName.text + @"\" + SignIn_Pin.text+@"\exist.tagtx"))
+
+        SetDATAS(SignIn_UserName.text, SignIn_Pin.text);
+
+        if (EXISTURL(NetData.pin_EXIST))
         {
-            NetData.user = new USERDATA(SignIn_UserName.text, SignIn_Pin.text);
+            Debug.Log("TRue");
             Cursor.visible = false;
             SceneLoader.LoadN("LogoScene");
         }
-    }
-
-
+        else
+        {
+            Debug.Log("false");
+            SignIn_UserName.text = SignIn_Pin.text = "";
+            SendText.active = false;
+            BadAccount.active = true;
+        }
+    } 
 
     bool EXISTURL(string x)
-    { 
-        string c = NetData.ServerRoot + @"\" + NetData.ServerUser + @"\";
-        var req = UnityWebRequest.Get(c + x);
-        var v = req.responseCode;
-        req.Dispose();
-        return v < 400;
+    {
+        x = "http://xs238699.xsrv.jp/picture/onlineGame_2020/" +  x ;
+        return ((int)NetData.server.GetStatusCode(x)) < 400;
     }
      
+
+
 }
- 
+

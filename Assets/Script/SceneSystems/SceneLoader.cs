@@ -145,7 +145,6 @@ public static class SceneLoader
         r.uvRect = new Rect(0, 0, 1, 1);
 
         DateTime da = DateTime.Now;
-        Debug.Log((da - db).TotalMilliseconds + ":::" + db.Second + "/" + db.Millisecond + ":::" + da.Second + "/" + da.Millisecond);
         return canvas.GetComponent<Fader>();
         //  return (MonoBehaviour.Instantiate(Resources.Load("fader") as GameObject) as GameObject).AddComponent<Fader>();
     }

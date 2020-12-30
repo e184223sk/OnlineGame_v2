@@ -40,6 +40,8 @@ public class SelectScene_Ctrl : MonoBehaviour
     bool flag;
     [SerializeField]
     AudioClip next, back, select;
+
+    int py;
     void Start()
     {
         mode = SELECTMODE.GameMode;
@@ -78,7 +80,7 @@ public class SelectScene_Ctrl : MonoBehaviour
         var d = Key.JoyStickL.Get;
         var dl = mode;
 
-        var sens = 0.2f;
+        var sens = 0.1f;
         string c = "";
         if (d.x > sens) c += "p"; else if (d.x < -sens) c += "m"; else c += "n";
         if (d.y > sens) c += "p"; else if (d.y < -sens) c += "m"; else c += "n";
@@ -94,16 +96,21 @@ public class SelectScene_Ctrl : MonoBehaviour
             {
                 //SELECTMODE.GameMode ------------------------------
                 case SELECTMODE.GameMode:
-                    /* */if (c == "pp") mode = SELECTMODE.Option;
+                    /* */
+                    if (c == "pp") mode = SELECTMODE.Option;
                     else if (c == "mp") mode = SELECTMODE.Tutorial;
                     else if (c == "pm") mode = SELECTMODE.BackTitle;
                     else if (c == "mm") mode = SELECTMODE.MakeAvator;
+                    else if (c == "mn") mode = d.y * py > 0 ? SELECTMODE.Tutorial : SELECTMODE.MakeAvator;
+                    else if (c == "pn") mode = d.y * py > 0 ? SELECTMODE.Option : SELECTMODE.BackTitle;
+                    else if (c == "np") mode = d.x > 0 ? SELECTMODE.Option : SELECTMODE.Tutorial;
+                    else if (c == "nm") mode = d.x > 0 ? SELECTMODE.BackTitle : SELECTMODE.MakeAvator;
                     else flag = true;
                     break; 
 
                 //SELECTMODE.Tutorial ------------------------------
                 case SELECTMODE.Tutorial:
-                    /* */if (c[0] == 'p' && c[1] == 'm') mode = SELECTMODE.Option;
+                    /* */if (c[0] == 'p' && c[1] == 'm') mode = SELECTMODE.GameMode;
                     else if (c[0] != 'p' && c[1] == 'm') mode = SELECTMODE.MakeAvator;
                     else flag = true;
                     break;
@@ -111,8 +118,8 @@ public class SelectScene_Ctrl : MonoBehaviour
 
                 //SELECTMODE.MakeAvator ------------------------------
                 case SELECTMODE.MakeAvator:
-                    /* */if(c[0] == 'p' && c[1] != 'p') mode = SELECTMODE.BackTitle;
-                    else if(c[0] == 'p' && c[1] == 'p') mode = SELECTMODE.Tutorial;
+                    /* */if(c[0] == 'p' && c[1] != 'p') mode = SELECTMODE.GameMode;
+                    else if(c[0] != 'm' && c[1] == 'p') mode = SELECTMODE.Tutorial;
                     else flag = true;
                     break;
 
@@ -142,6 +149,13 @@ public class SelectScene_Ctrl : MonoBehaviour
             ToneSE(select);
         }
 
+        switch (mode)
+        {
+            case SELECTMODE.GameMode: py = 0; break;
+            case SELECTMODE.Tutorial  : case SELECTMODE.Option   :  py = 01; break;
+            case SELECTMODE.MakeAvator: case SELECTMODE.BackTitle:  py = -1; break;
+        }
+        
         SetButton();
         SetText();
     } 
