@@ -163,6 +163,8 @@ public class LogInScene_Ctrl : MonoBehaviour
         {
             Debug.Log("TRue");
             Cursor.visible = false;
+            ConfigData_Manager.LOAD();
+            LogData_Manager.LOAD();
             SceneLoader.LoadN("LogoScene");
         }
         else

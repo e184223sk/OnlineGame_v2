@@ -9,9 +9,10 @@ public class NetData : MonoBehaviour
     public const string ServerAddress = "csys.00.og20@xs238699.xsrv.jp";
     public const string ServerPASS = "fd2rf4yh";
     public const string ServerDomain  = "xs238699.xsrv.jp";
-    public const string ServerRoot  = "OnlineSystem"; 
+    public const string ServerRoot  = "OnlineSystem";
     public const string LOGDIR = "OnlineSystem/_DATA/_LOG_DATA__/";
-        
+    public const string USERDIR = "OnlineSystem/_DATA/_USER_DATA__/";
+
     public static USERDATA user = new USERDATA();
     public static USERDATA[] friends;
     public static Server server = new Server(ServerAddress, ServerPASS, ServerDomain);

@@ -65,7 +65,7 @@ public class GamePad_JS
     public static bool InvertX, InvertY;
     string[,] tags = new string[3, 2]; //add
     KeyCode[] H, V;
-
+    public static float sensivirity = 0.4f;
     public GamePad_JS
     (
         string KeyBoard_X,
@@ -99,8 +99,8 @@ public class GamePad_JS
         {
             switch (Key.gamePad)
             {
-                case SelectGamePad.PS4: return Inverts * new Vector2(GetF(tags[0,0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1])) ;
-                case SelectGamePad.XBOX360: return Inverts * new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
+                case SelectGamePad.PS4: return sensivirity * Inverts * new Vector2(GetF(tags[0,0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1])) ;
+                case SelectGamePad.XBOX360: return sensivirity * Inverts * new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
                     //add
             }
             return new Vector2(0, 0);
