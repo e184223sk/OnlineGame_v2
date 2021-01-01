@@ -113,6 +113,24 @@ public class Server
     }
 
 
+    public void FileUploadStr(string url, string data, TaskEvent finished = null, ErrorEvent error = null)
+    {
+        try
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+            webClient.UploadString(accessUrlBase + url, data);
+            finished?.Invoke();
+        }
+        catch (WebException e)
+        {
+            error?.Invoke(((FtpWebResponse)e.Response).StatusDescription);
+        }
+        catch (Exception e)
+        {
+            error?.Invoke(e.Message);
+        }
+    }
+
 
     public void FileAddWrite(string text, string url, TaskEvent finished = null, ErrorEvent error = null)
     {

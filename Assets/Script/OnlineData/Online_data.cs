@@ -44,7 +44,8 @@ public class Online_data
                         list.RemoveAt(cx);    
         string datas = "";
         foreach (var c in list.ToArray())
-            datas =  c.tag + ":" + c.data + "\n";  
+            datas =  c.tag + ":" + c.data + "\n";
+        NetData.server.FileUploadStr(NetData.USERDIR + NetData.user.ID + "/" + NetData.user.PASS + "/" + path, datas);
     }
 
     /// <summary>
