@@ -1,0 +1,628 @@
+/*---------------------------------
+   色データなどはこちらから変更できます。
+---------------------------------*/
+:root {
+    --HFC: #1b2538E0; /*タイトルとフッターの色*/
+    --MBS: #a9bce2E0; /*メニューバーでカーソルが入ったときの色*/
+    --MBC: #da3c41FF; /*メニューバーをクリック時の色*/
+    --FOT: #FFFFFFFF; /*フッターの文字の色*/
+    --TextColor: #FFFFFF;
+    --BoxColor: #2525378E;
+    --UnderLine: rgba(192, 122, 122, 200);
+}
+
+header {
+    margin: auto;
+}
+
+.ef {
+    margin: 12px;
+}
+ 
+ 
+
+.movs
+{
+    position: relative;
+     width: 90%;
+     height: 700px;
+     overflow: hidden;
+     margin: 5% 2%;
+}
+.sgd
+{
+    
+    margin-left: 20%;
+    margin-right: 20%;
+    
+}
+.img_sgd
+{ 
+    width: 100%;
+    height: auto;
+    align-content: center;
+    text-align: center;
+}
+
+body {
+    margin: 0px;
+    background-image: url(img/BackGround.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+    color: black;
+    background-image: url("img/BackGround.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* contain → cover　*/
+    background-position: center center;
+    /* 追加　*/
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+}
+
+BG {
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    max-width: 100%;
+    height: auto;
+}
+
+input[type="submit" i] 
+{
+    margin: 1%;
+    width: 20%; 
+    margin-left: 0%;
+    font-size: 15px;
+}
+
+.title {
+    margin: 0px;
+    padding: 0.6% 0%;
+    padding-top: 2%;
+    width: 100%;
+    color: var(--HFC);
+    background-color: var(--HFC);
+    text-align: center;
+}
+
+.titleimg {
+    width: 55%;
+    height: auto;
+}
+
+img.prizeIMG {
+    width: 80%;
+        height: auto;
+    margin: 1.3% 10%;
+    margin-bottom: 4%;
+    margin-top: 0%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+/*Menuバー関連*/
+ul.manubar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    align-content: center;
+    margin: auto;
+    padding: 0;
+    list-style-type: none;
+    background-color: var(--HFC);
+}
+
+ul.manubar li {
+    float: left;
+    text-align: center;
+}
+
+ul.manubar li a {
+    display: block;
+    padding: 14px 16px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    margin: auto;
+}
+
+a {
+    font-size: 22px;
+    color:#FF6928;
+
+}
+
+ul.manubar li a:hover:not(.active) {
+    background-color: var(--MBS);
+}
+
+ul.manubar li a.active {
+    background-color: var(--MBC);
+}
+
+ul.manubar li.right {
+    float: right;
+}
+
+.manubarHead {
+    color: aliceblue;
+    vertical-align: top;
+    vertical-align: bottom;
+    font-size:  0px;
+}
+
+/*一般の文字*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+h7,
+h8,
+h9 {
+    margin-bottom: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--TextColor);
+    line-height: 1.0;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+h2 {
+    font-size: 45px;
+}
+
+h3 {
+    font-size: 39px;
+}
+
+h4 {
+    font-size: 30px;
+    margin-top: 12px;
+    border-bottom: solid 4px var(--UnderLine);
+    ;
+}
+
+h5 {
+    font-size: 25px;
+    margin-top: 10px;
+}
+
+h6 {
+    font-size: 23px;
+    margin: 3px;
+    color: var(--TextColor);
+}
+
+h7 {
+    color: var(--TextColor);
+}
+
+p {
+    font-size: 20px;
+    padding: 1px;
+    margin-left: 22px;
+    color: var(--TextColor);
+}
+
+li {
+    color: var(--TextColor);
+    margin-left: 22px;
+    margin-top: 12px;
+}
+
+/*フッター*/
+footer {
+    width: 100%;
+    background: var(--HFC);
+}
+
+.footerText {
+    padding: 40px;
+    text-align: center;
+    padding: 40px;
+    color: var(--FOT);
+    font-size: 22px;
+}
+
+.contents {
+    margin: 40px 50px;
+    align-content: center;
+    flex: 1;
+}
+
+.MailArea {
+    font-size: 30px;
+    padding: 0px;
+    color: aliceblue;
+    background: #22222277;
+    box-shadow: 0 3px 4px #00000050;
+    text-align: center;
+}
+
+.Button {
+    text-align: left;
+    margin-left: 22px
+}
+
+
+textarea {
+    width: 90%;
+    height: 160px;
+}
+
+p.form_p {
+    margin: 0px;
+}
+
+.imgClass {
+    margin-left: 42px;
+    width: 80%;
+    max-width: 50%;
+    height: auto;
+    align-content: center;
+    text-align: center;
+}
+
+.ImgName {
+    margin-top: 50px;
+    margin-left: 12px;
+}
+
+.movies {
+
+    margin-left: 42px;
+    width: 80%;
+    height: auto;
+
+}
+
+.his_select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    align-content: center;
+    margin: auto;
+    padding: 0;
+    list-style-type: none;
+    background-color: var(--HFC);
+
+}
+
+.imgR {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+.imgClass_his {
+    margin-top: 30px;
+    margin-left: 0%;
+    width: 90%;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10%;
+}
+
+.textArea {
+    padding: 0.5em 1em;
+    margin: 52px 22px;
+    color: var(--BoxColor);
+    background: var(--BoxColor);
+    box-shadow: 0 3px 4px #00000050;
+}
+
+.textArea2 {
+    padding: 12px 12px;
+    margin: 22px 22px;
+    margin-bottom: 32px;
+    color: var(--BoxColor);
+    background: var(--BoxColor);
+    box-shadow: 0 3px 4px #00000050;
+}
+
+.mov {
+    width: 123%;
+    height:33%;
+}
+
+.hisName {
+    margin-right: 1.5%;
+    margin-top: 4%;
+    font-size: 40px;
+    text-align: center;
+}
+
+.hisPart {
+    margin-top: 4%;
+    margin-bottom: 3%;
+    font-size: 60px;
+    text-align: center;
+
+}
+
+.hs
+
+/*過去入賞作品の年数選択*/
+    {
+    margin-left: 14%;
+    display: inline-block;
+        
+    vertical-align: top;
+    vertical-align: bottom;
+    font-size:  0px;
+}
+
+#menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-left: auto;
+
+}
+
+#menu li {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+}
+
+#menu li a {
+    display: block;
+    background-color: var(--HFC);
+    padding: 3px 10px;
+    color: #E1E2CF;
+    width: 70%;
+    font-size: 22px;
+    text-align: center;
+}
+
+#menu li a:hover {
+    background-color: var(--MBS);
+}
+
+
+
+@media screen and (max-width: 950px) {
+    a {
+        font-size: 13px;
+    }
+
+    .textArea {
+        margin: 12px;
+    }
+
+    ul.manubar li a {
+        font-size: 12px;
+    }
+
+    p {
+        font-size: 13px;
+    }
+
+    li {
+        font-size: 10px;
+        margin-top: 2px;
+    } 
+    
+     
+    .movs
+    {
+        height: 300px; 
+    }
+}
+
+
+
+@media screen and (max-width: 580px) 
+{ 
+    .manubarHead
+    {
+        margin-top: 0px;
+        
+    }
+    header {
+    margin: auto;
+        margin-bottom: 0px;
+    }
+    
+    
+    h8 {
+        font-size: 7px;
+    }
+
+    h7 {
+        font-size: 8px;
+    }
+
+    h5 {
+        font-size: 12px;
+    }
+
+    li {
+        margin: 0px;
+        margin-left: 0%;
+        padding: inherit;
+    }
+
+    .MailArea {
+        font-size: 14px;
+        margin: 4px;
+    }
+
+    .textArea {
+        padding: 2px 1px;
+        margin: 10px 12px;
+    }
+
+    h6 {
+        font-size: 11px;
+    }
+
+    input {
+        box-sizing: 30%;
+        width: 90%
+    }
+
+    h2 {}
+
+    h9 {
+        font-size: 1px;
+    }
+
+    ul.manubar li.right,
+    ul.manubar li {
+        float: none;
+    }
+
+    ul.manubar {
+        font-size: 2px;
+    }
+
+    ul.manubar li a {
+        padding: 1px 1px;
+    }
+
+    h4 {
+        font-size: 13px;
+    }
+
+    p {
+        font-size: 10px;
+    }
+
+    footer {
+        padding: 10px;
+    }
+
+    .footerText {
+        font-size: 8px;
+    }
+
+    .contents {
+        margin: 12px 10px;
+    }
+
+    .textArea {
+        margin: 6px 6px;
+    }
+
+    a {
+        font-size: 6px;
+    }
+
+    li {
+        font-size: 9px;
+    }
+
+    .imgClass {
+        margin-left: 12px;
+        width: 80%;
+        height: auto;
+    }
+
+    .title {
+        display: inline-block;
+        
+    vertical-align: top;
+    vertical-align: bottom;
+    font-size:  0px;
+        margin: 0px;
+        padding-top: 0px;
+        width: auto;
+        text-align: center;
+    }
+
+    .titleimg {
+        display: block;
+        margin: 0px;
+        padding-top: 0px;
+        width: auto;
+        text-align: center;
+
+        width: 100%;
+        height: auto;
+    }
+
+    .imgClass {
+        margin-left: 12px;
+        border-image-width: 50%;
+        width: 100px;
+        height: auto;
+    }
+
+    .textArea2 {
+        padding: 2px 2px;
+        margin: 2px 2px;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    .hisPart {
+        font-size: 23px;
+        margin-bottom: 2px;
+    }
+
+    .hisName {
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .imgR {
+        margin: 0%;
+    }
+ 
+
+    .imgClass_his {
+        margin-left: 1%;
+        
+    margin-top: 10px;
+    }
+
+    /*Menuバー関連*/
+    ul.manubar {
+        display: flow-root;
+    }
+
+    a {
+        font-size: 12px;
+    }
+
+    ul.manubar li a {
+        font-size: 4px;
+    } 
+    
+    .img_sgd
+    { 
+        width: 95%;
+        height: auto; 
+    }
+    
+    .sgd
+    {
+
+        margin-left: 2%;
+        margin-right: 2%;
+
+    }
+    
+    .movs
+    {
+        height: 200px; 
+    }
+}

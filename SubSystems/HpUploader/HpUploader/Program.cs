@@ -34,18 +34,16 @@ class Program
         string dir = AppDomain.CurrentDomain.BaseDirectory;
         string buildroot = Directory.GetParent(Directory.GetParent(dir).ToString()).ToString();
         dir = Directory.GetParent(Directory.GetParent(dir).ToString()).ToString() + @"\Hp\";
-        int VersionData = int.Parse(File.ReadAllText(dir + "version.txt"));
-        File.WriteAllText(dir + "version.txt", (++VersionData).ToString().PadLeft(8, '0')); 
-        Console.WriteLine("make List File");
+
+        Console.WriteLine("make List");
         string[] files_ = GetAllFiles(dir).ToArray();
         List<string> xdir = new List<string>();
-        for (var f = 0; f < files_.Length; f++) files_[f] = files_[f].Substring(dir.Length);
-        int vv = 0;
-        foreach (var ff in files_)
-        {
-            Console.WriteLine("GetFILE" + vv.ToString().PadLeft(6, '0') + " :: " + ff);
-            vv++;
-        }
+
+        for (var f = 0; f < files_.Length; f++)
+            files_[f] = files_[f].Substring(dir.Length);
+        
+        for (int v = 0; v < files_.Length; v++)
+            Console.WriteLine("GetFILE" + v.ToString().PadLeft(6, '0') + " :: " + files_[v]);
 
         foreach (var ff in files_)
         {
@@ -55,40 +53,38 @@ class Program
                 do
                 {
                     a = a.Substring(0, a.LastIndexOf(@"\"));
-                    if (!xdir.Contains(a))
-                        xdir.Add(a);
-                    Console.WriteLine("BackDIR:" + a);
+                    if (!xdir.Contains(a)) xdir.Add(a); 
                 }
                 while (a != "");
             }
             catch (Exception) { }
         }
+
         for (int ff = 0; ff < xdir.Count; ff++) xdir[ff] = xdir[ff].Replace(@"\", "/");
         string[] fc = xdir.ToArray();
         Array.Sort(fc, new SORT());
         xdir = new List<string>(fc);
         foreach (var ff in xdir.ToArray()) Console.WriteLine("Dir :: " + ff);
 
-        //アップロード -----------------------------------------
-        PostProcess server = new PostProcess( );
-        server.SetRoot("GameSystem/System/");
+        Server server = new Server(NetData.ServerAddress, NetData.ServerPASS, NetData.ServerDomain);
+        server.SetRoot(NetData.ROOT);
 
-        Console.WriteLine("make dir in server");
         foreach (var cc in xdir.ToArray())
-            server.MakeDirectory(cc);
-
-        Console.WriteLine("upload file");
-
-        int xxx__ = 0;
-        foreach (var cc in files_)
         {
-            xxx__++;
-            server.FileUpload(dir + cc, cc);
+            server.MakeDirectory(cc);
+            Console.WriteLine("mkdir::" +cc);
         }
+
+        for (int f = 0; f < files_.Length; f++)
+        { 
+            server.FileUpload(dir + files_[f], files_[f]);
+            Console.WriteLine("fin::" + files_[f]);
+        }
+
         Console.WriteLine("fin");
+        Console.ReadLine();
     }
-
-
+     
 
     public static List<String> GetAllFiles(String DirPath)
     {
@@ -128,60 +124,102 @@ class SORT : IComparer
     }
 }
 
-  
 
 
-public class PostProcess
-{ 
-    HttpClient _httpClient = null;
-    public void SetRoot(string x) { accessUrlBase = "ftp://" + Address + "/%2f" + x; }
+
+
+
+public class Server
+{
+    //デリゲートの型宣言-----------------------------------
+    public delegate void TaskEvent();
+    public delegate void ErrorEvent(string text);
+
+
+    //パラメータ関連 --------------------------------------
+    public string useraddress;
+    public string password;
+    public string serveraddress;
+    public void SetRoot(string x) { accessUrlBase = "ftp://" + useraddress + "/%2f" + x; }
     string accessUrlBase = "";
-    public const string Address = "csys.00.og20@xs238699.xsrv.jp";
-    public const string PASS = "fd2rf4yh";
-    public const string Domain = "xs238699.xsrv.jp";
+    private WebClient webClient;
+    private ICredentials icr;
 
-    ~PostProcess() { Dispose(); }
-
-    public PostProcess()
+    //コンストラクタ -------------------------------------
+    public Server(string useraddress, string password, string serveraddress)
     {
-
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+        this.useraddress = useraddress;
+        this.password = password;
+        this.serveraddress = serveraddress;
+        this.accessUrlBase = "ftp://" + useraddress + "/%2f";
+        icr = new NetworkCredential(useraddress, password);
+        webClient = new WebClient() { Credentials = new NetworkCredential(useraddress, password) };
     }
 
-
-
-    public void Dispose()
-    { 
-        _httpClient.Dispose();
-    }
-
-    public async void ExecuteHttpClient(string url)
+    //デストラクタ関連  ----------------------------------
+    ~Server()
     {
-        string imagePath = @"C:\Users\Default\Pictures\white.jpg";
-
-        MultipartFormDataContent content = new MultipartFormDataContent();
-        // バイナリデータ.
-        ByteArrayContent imageBytes = new ByteArrayContent(File.ReadAllBytes(imagePath));
-        content.Add(imageBytes, "imagefile", Path.GetFileName(imagePath));
-
-        // 文字列.
-        content.Add(new StringContent("E195335D5206A8CC06312DC2717CB514"), "checkkey");
-        content.Add(new StringContent("1"), "id");
-        content.Add(new StringContent("sandy"), "name");
-        _httpClient.PostAsync(new Uri(accessUrlBase + url), content);
+        webClient?.Dispose();
+        icr = null; 
     }
+     
 
 
-
-    public void FileUpload(string local, string url)
+    public void FileUpload(string local, string url, TaskEvent finished = null, ErrorEvent error = null)
     {
-
-
+        try
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+            webClient.UploadFile(accessUrlBase + url, local);
+            finished?.Invoke();
+        }
+        catch (WebException e)
+        {
+            error?.Invoke(((FtpWebResponse)e.Response).StatusDescription);
+        }
+        catch (Exception e)
+        {
+            error?.Invoke(e.Message);
+        }
     }
 
 
-    public void MakeDirectory(string url)
+    public void MakeDirectory(string url, TaskEvent finished = null, ErrorEvent error = null)
     {
-
+        try
+        {
+            //Console.WriteLine("uri full path:" + accessUrlBase + url);
+            FtpWebRequest ftpReq = (FtpWebRequest)WebRequest.Create(accessUrlBase + url);
+            ftpReq.Credentials = icr;
+            ftpReq.Method = WebRequestMethods.Ftp.MakeDirectory;
+            FtpWebResponse ftpRes = (FtpWebResponse)ftpReq.GetResponse();
+            ftpRes.Close();
+            finished?.Invoke();
+        }
+        catch (WebException e)
+        {
+            error?.Invoke(((FtpWebResponse)e.Response).StatusDescription);
+        }
+        catch (Exception e)
+        {
+            error?.Invoke(e.Message);
+        }
     }
 
+
+
+
+
+}
+
+
+
+
+public class NetData
+{
+    public const string ServerAddress = "csys.hp.og20@xs238699.xsrv.jp";
+    public const string ServerPASS = "ffiwoefks";
+    public const string ServerDomain = "xs238699.xsrv.jp";
+    public const string ROOT = "game20202021/";
 }

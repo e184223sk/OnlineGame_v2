@@ -185,8 +185,8 @@ class Program
  
 public class NetData 
 {
-    public const string ServerAddress = "csys.00.og20@xs238699.xsrv.jp";
-    public const string ServerPASS = "fd2rf4yh";
+    public const string ServerAddress = "csys.hp.og20@xs238699.xsrv.jp";
+    public const string ServerPASS = "ffiwoefks";
     public const string ServerDomain = "xs238699.xsrv.jp"; 
 }
 
