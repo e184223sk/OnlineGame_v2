@@ -22,7 +22,7 @@ using System.Net;
 class Program
 {
     static void Main(string[] args)
-    {
+    { 
         string url = "http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/System/version.txt";
         string root = AppDomain.CurrentDomain.BaseDirectory + @"System\";
         if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) ERROR("ネットワークに接続されていません");

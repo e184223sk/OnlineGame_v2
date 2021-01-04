@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Collections.Generic; 
 using System.Windows.Forms;
 
 namespace update
 {
     static class Program
-    {
-        /// <summary>
-        /// アプリケーションのメイン エントリ ポイントです。
-        /// </summary>
+    { 
         [STAThread]
         static void Main()
         {

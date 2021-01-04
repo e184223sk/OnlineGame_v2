@@ -28,12 +28,48 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.text = new System.Windows.Forms.Label();
+            this.bar = new System.Windows.Forms.ProgressBar();
+            this.SuspendLayout();
+            // 
+            // text
+            // 
+            this.text.AutoSize = true;
+            this.text.Location = new System.Drawing.Point(10, 8);
+            this.text.Name = "text";
+            this.text.Size = new System.Drawing.Size(72, 12);
+            this.text.TabIndex = 0;
+            this.text.Text = "initialization...";
+            // 
+            // bar
+            // 
+            this.bar.Location = new System.Drawing.Point(12, 23);
+            this.bar.Maximum = 10000;
+            this.bar.Name = "bar";
+            this.bar.Size = new System.Drawing.Size(260, 13);
+            this.bar.TabIndex = 1;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(286, 45);
+            this.Controls.Add(this.bar);
+            this.Controls.Add(this.text);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "Form1";
+            this.Text = "update";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label text;
+        private System.Windows.Forms.ProgressBar bar;
     }
 }
 

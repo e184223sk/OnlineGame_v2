@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("upload_BuildFile")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hewlett-Packard")]
+[assembly: AssemblyCompany("Picture")]
 [assembly: AssemblyProduct("upload_BuildFile")]
-[assembly: AssemblyCopyright("Copyright © Hewlett-Packard 2021")]
+[assembly: AssemblyCopyright("Copyright © Picture 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
@@ -41,6 +41,7 @@ class Program
         {
             Console.WriteLine("ネットワークに接続されていません");
             Console.Read();
+            Environment.Exit(1);
         }
 
         Console.WriteLine("ネット接続確認\n\n\n");
@@ -109,14 +110,21 @@ class Program
 
         int xxx__ = 0;
         foreach (var cc in files_)
-        {
+        { 
             xxx__++;
-            server.FileUpload(dir + cc, cc, delegate () { Console.WriteLine("fin_upload(" +xxx__ +"/" + files_.Length + ") : " + cc); }, Console.WriteLine);
+            
+            if (cc == "update.exe")
+                Console.WriteLine("skip_upload(" + xxx__ + "/" + files_.Length + ") : update.exe(不要なファイルのためスキップされました)");
+            else
+                server.FileUpload(dir + cc, cc, delegate () { Console.WriteLine("fin_upload(" + xxx__ + "/" + files_.Length + ") : " + cc); }, Console.WriteLine);
+
         }
 
         Console.WriteLine("start baseSystem "); 
         server.SetRoot("GameSystem/GameRoot/");
         var GRF = File.ReadAllLines(buildroot + @"\Build\{uploadSubFileList}.txt");
+        server.FileUpload(buildroot + @"\Build\roots\start.exe", "start.exe", delegate () { Console.WriteLine("fin_uploadLIST"); }, Console.WriteLine);//リストアップロード
+        server.FileUpload(buildroot + @"\Build\roots\update.exe    ", "update.exe", delegate () { Console.WriteLine("fin_uploadLIST"); }, Console.WriteLine);//リストアップロード
 
         server.MakeDirectory(buildroot + @"\Build\subFile\System");
 
@@ -144,8 +152,6 @@ class Program
         Console.WriteLine("RESULT >>> ");
         Console.WriteLine(result);
         Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-
-        Console.ReadLine(); 
     }
 
 
