@@ -118,9 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>「I agree with the terms」左部のチェックボックスに
-チェックを入れることはインストールおよびプレイに際し
-以下の項目をすべて了承したとみなします。
+    <value>「I agree with the terms」左部のチェックボックスにチェックを入れることは
+インストールおよびプレイに際し以下の項目をすべて了承したとみなします。
 
 1.本ゲームはPicture[久留米工業大学学生チーム]
    (以降""開発元"")の作成したコンテンツであり

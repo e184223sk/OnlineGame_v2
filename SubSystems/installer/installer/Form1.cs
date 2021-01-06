@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Net;
+using System.Diagnostics;
 
 [assembly: AssemblyTitle("installer")]
 [assembly: AssemblyDescription("")]
@@ -84,32 +85,64 @@ namespace installer
         string rootdir;
 
         void MakeApp()
-        { 
-            rootdir = textBox1.Text + @"\" + RootDirName + @"\"; 
+        {
+            rootdir = textBox1.Text + @"\" + RootDirName + @"\";
+            
+            //既に同名フォルダがあるとまざるので～(1)\みたいにする------------------------
+            if (Directory.Exists(rootdir))
+            {
+                int f = 0;
+                do
+                {
+                    f++;
+                    rootdir = textBox1.Text + @"\" + RootDirName + "(" + f + ")" + @"\";
+                }
+                while (Directory.Exists(rootdir));
+            }
+
+            //----------------------------------------
             MkDir(""); //ディレクトリ作成
             MkDir("System"); //ディレクトリ作成 
-            GetFile("start.exe"); //ベースシステム(start
-            GetFile(@"System\update.exe"); //ベースシステム(update 
+
+            //----------------------------------------
+            GetFile("start.exe", "start.exe");
+            GetFile("update.exe", @"System\update.exe");
+
+            //----------------------------------------
+            TEXT("XXX", ".ewf,lewpofkep");
             string[] fileList;
             using (var w = new WebClient())
                 fileList = w.DownloadString("http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/GameRootList.txt").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var cd in fileList) GetFile(cd);
+            for (int v = 0; v < fileList.Length; v++) GetFile(fileList[v], fileList[v]);
+            
+            //----------------------------------------
+            Process.Start(rootdir + @"System\update.exe");
+            Environment.Exit(0);
         }
 
-        const string r = "http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/GameRoot/";
-        void MkDir(string c)
+
+
+
+        static string r = "http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/GameRoot/";
+
+        void MkDir(string c) { if(!Directory.Exists(rootdir+c))  Directory.CreateDirectory(rootdir+c);  }
+
+        void GetFile(string x, string f)
         { 
-            if(!Directory.Exists(rootdir+c))
-                Directory.CreateDirectory(rootdir+c);
-        }
-
-        void GetFile(string c)
-        {
-            using (var w = new WebClient())
+            try
             {
-                if (!File.Exists(rootdir + c))
-                    File.CreateText(rootdir + c).Dispose();
-                w.DownloadFile(new Uri(rootdir + c),r + c.Replace(@"\","/"));
+                x = x.Replace("\n", "");
+                using (var w = new WebClient())
+                {
+                    TEXT("AAC", (r + f).Replace(@"\", "/") + "\nlocal::" + rootdir + f);
+                    if (!File.Exists(rootdir + f))
+                        File.CreateText(rootdir + f).Dispose();
+                    w.DownloadFile(new Uri((r + x).Replace(@"\", "/")), rootdir + f);
+                }
+            }
+            catch (Exception e)
+            {
+                TEXT("ERR", (r + x).Replace(@"\", "/") + "\nlocal::" + rootdir + f + "\n"+ e.Message);
             }
         }
 
@@ -119,6 +152,11 @@ namespace installer
             ERRORTEXT();
         }
 
+
+        void TEXT(string head, string text)
+        {
+            MessageBox.Show(text, head, MessageBoxButtons.OK);
+        }
 
         void ERRORTEXT()
         {
@@ -130,23 +168,17 @@ namespace installer
 
         string AgreeText =
 //--------------------------------|ここまで
-$@"「I agree with the terms」左部のチェックボックスに
-チェックを入れることはインストールおよびプレイに際し
-以下の項目をすべて了承したとみなします。
+$@"「I agree with the terms」左部のチェックボックスにチェックを入れることは
+インストールおよびプレイに際し以下の項目をすべて了承したとみなします。
 
-1.本ゲームはPicture[久留米工業大学学生チーム]
-   (以降""開発元"")の作成したコンテンツであり
-   二次配布などを禁止します。 
+1.本ゲームはPicture[久留米工業大学学生チーム](以降""開発元"")の
+  作成したコンテンツであり二次配布などを禁止します。 
 2.本ソフトウェアの改変、解析などを禁止します。
-3.本コンテンツにおいて開発元は
-   一切の責任を負いません。
-4.ゲームインストール後、アカウントを作成していた
-   だきますが、他人のアカウントを無断で使用した
-   り、悪用することを禁止します。
-5.オンライン上にて他ユーザに不快感を与える発言
-   (人種差別や特定の個人を貶めるような発言、
-　性的な発言など)を禁止します。
-
+3.本コンテンツにおいて開発元は一切の責任を負いません。
+4.ゲームインストール後、アカウントを作成していただきますが、
+  他人のアカウントを無断で使用したり、悪用することを禁止します。
+5.オンライン上にて他ユーザに不快感を与える発言(人種差別や特定の個人
+  を貶めるような発言、性的な発言など)を禁止します。
 ";
 
     }

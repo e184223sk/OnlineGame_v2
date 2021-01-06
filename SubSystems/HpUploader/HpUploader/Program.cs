@@ -20,6 +20,7 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.WindowWidth /= 2;
         string result = "";
         Console.WriteLine("Check NetWork");
 
@@ -69,19 +70,13 @@ class Program
         Server server = new Server(NetData.ServerAddress, NetData.ServerPASS, NetData.ServerDomain);
         server.SetRoot(NetData.ROOT);
 
-        foreach (var cc in xdir.ToArray())
-        {
-            server.MakeDirectory(cc);
-            Console.WriteLine("mkdir::" +cc);
-        }
-
-        for (int f = 0; f < files_.Length; f++)
-        { 
-            server.FileUpload(dir + files_[f], files_[f]);
-            Console.WriteLine("fin::" + files_[f]);
-        }
-
-        Console.WriteLine("fin");
+        foreach (var cc in xdir.ToArray()) 
+            server.MakeDirectory(cc, delegate () { Console.WriteLine("mkdir::" + cc); }, delegate (string x) { if(!x.Contains("Exist")) Console.WriteLine("err::" + cc); });
+         
+        for (int f = 0; f < files_.Length; f++) 
+            server.FileUpload(dir + files_[f], files_[f], delegate() { Console.WriteLine("fin::" + files_[f]); }, delegate (string x) { Console.WriteLine("err::" + files_[f]); });
+        
+        Console.WriteLine("アップロードが完了しました");
         Console.ReadLine();
     }
      

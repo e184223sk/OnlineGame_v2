@@ -42,7 +42,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(239, 156);
+            this.button1.Location = new System.Drawing.Point(363, 200);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(28, 19);
             this.button1.TabIndex = 0;
@@ -51,9 +51,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 156);
+            this.textBox1.Location = new System.Drawing.Point(12, 200);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(221, 19);
+            this.textBox1.Size = new System.Drawing.Size(337, 19);
             this.textBox1.TabIndex = 1;
             // 
             // label1
@@ -61,16 +61,16 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(10, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 12);
+            this.label1.Size = new System.Drawing.Size(77, 12);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Consent form";
+            this.label1.Text = "Consent Form";
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button2.Location = new System.Drawing.Point(12, 181);
+            this.button2.Location = new System.Drawing.Point(12, 225);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(169, 19);
+            this.button2.Size = new System.Drawing.Size(264, 19);
             this.button2.TabIndex = 3;
             this.button2.Text = "Install";
             this.button2.UseVisualStyleBackColor = true;
@@ -78,9 +78,9 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button3.Location = new System.Drawing.Point(187, 181);
+            this.button3.Location = new System.Drawing.Point(291, 225);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(80, 19);
+            this.button3.Size = new System.Drawing.Size(100, 19);
             this.button3.TabIndex = 4;
             this.button3.Text = "Exit";
             this.button3.UseVisualStyleBackColor = true;
@@ -88,7 +88,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 129);
+            this.checkBox1.Location = new System.Drawing.Point(13, 178);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(137, 16);
             this.checkBox1.TabIndex = 5;
@@ -97,10 +97,11 @@
             // 
             // richTextBox1
             // 
+            this.richTextBox1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.richTextBox1.Location = new System.Drawing.Point(12, 24);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(266, 99);
+            this.richTextBox1.Size = new System.Drawing.Size(379, 148);
             this.richTextBox1.TabIndex = 7;
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
@@ -108,7 +109,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(12, 203);
+            this.label2.Location = new System.Drawing.Point(12, 252);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 24);
             this.label2.TabIndex = 8;
@@ -118,7 +119,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(290, 232);
+            this.ClientSize = new System.Drawing.Size(403, 285);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.checkBox1);
@@ -128,6 +129,8 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "インストーラー";

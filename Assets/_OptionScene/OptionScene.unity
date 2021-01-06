@@ -771,6 +771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
+  MoveTimeInterval: 0.14
   tag_bgm: {fileID: 36839540}
   tag_se: {fileID: 1735665998}
   tag_voice: {fileID: 1617424488}
@@ -2002,7 +2003,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioType: 3
-  StartTimeSettingOnly: 1
 --- !u!82 &644040682
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4307,7 +4307,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioType: 1
-  StartTimeSettingOnly: 1
 --- !u!82 &1424240617
 AudioSource:
   m_ObjectHideFlags: 0

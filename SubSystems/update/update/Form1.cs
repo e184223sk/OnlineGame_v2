@@ -14,7 +14,6 @@ namespace update
         string[] fileList;
         int cnt;
         string localDL;
-        void CC(string x) { File.WriteAllText(@"C:\Users\yuitiro\Music\cc\ppp.txt", x); }
         Timer t,t2;
         bool isEnd;
 

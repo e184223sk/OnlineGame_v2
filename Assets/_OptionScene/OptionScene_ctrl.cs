@@ -5,8 +5,14 @@ using UnityEngine.UI;
 
 public class OptionScene_ctrl : MonoBehaviour
 {
+
+    
     [SerializeField]
     Mode mode;
+
+    [SerializeField, Range(0.1f, 3)]
+    float MoveTimeInterval = 1;
+
 
     [SerializeField, Space(20)]
     Transform
@@ -61,6 +67,8 @@ public class OptionScene_ctrl : MonoBehaviour
 
     float tagColor,tagCnt;
     bool idol,LCM,LCP,P;
+    float flagTrueTime;
+
 
     void Start()
     {
@@ -78,119 +86,172 @@ public class OptionScene_ctrl : MonoBehaviour
     void Update()
     {
         //Get Input Data --------------------
-        var border = 0.3f; 
-        Vector2 c = Key.JoyStickL;
-        bool MV = c.y < -border;
-        bool MH = c.x < -border;
-        bool PV = c.y > border;
-        bool PH = c.x > border;
+        var border = 0.1f; 
+        Vector2 c = Key.JoyStickL.Get/GamePad_JS.sensivirity;
+        if (GamePad_JS.InvertX) c.x *= -1;
+        if (GamePad_JS.InvertY) c.y *= -1;
+        
+        string xx = c.x > border ? "R" : (c.x < -border ? "L" : "N");
+        float tx = Mathf.Abs(c.x);
+        string xy = c.y > border ? "T" : (c.y < -border ? "B" : "N");
+        float ty = Mathf.Abs(c.y);
+        string ccc = tx > ty ? xx : xy;
         bool CP = Key.B.Press;
         bool CM = Key.A.Press;
 
        
         //Select and Change Select-----------
         if (idol)
-        { 
+        {
+            idol = false;
+
             switch (mode)
             {
                 case Mode.BGM:
-                    if (PV) mode = Mode.SE;
-                    if (MV) mode = Mode.SAVE;
-                    if (PH || MH)
-                        mode = Mode.JOYSTICK;
+                    switch (ccc)
+                    {
+                        case "B": mode = Mode.SE; break; 
+                        case "R": mode = Mode.JOYSTICK; break;
+                        default: idol = true; break;
+                    } 
                     break;
 
+
                 case Mode.SE:
-                    if (PV) mode = Mode.BGM;
-                    if (MV) mode = Mode.VOICE;
-                    if (PH || MH)
-                        mode = Mode.SELECTGAMEPAD;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.BGM; break;
+                        case "B": mode = Mode.VOICE; break; 
+                        case "R": mode = Mode.SELECTGAMEPAD; break;
+                        default: idol = true; break;
+                    }
                     break;
 
                 case Mode.VOICE:
-                    if (PV) mode = Mode.SE;
-                    if (MV) mode = Mode.MASTER;
-                    if (PH || MH)
-                        mode = Mode.GRAPHICQUALITY;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.SE; break;
+                        case "B": mode = Mode.MASTER; break;
+                        case "R": mode = Mode.GRAPHICQUALITY; break;
+                        default: idol = true; break;
+                    }
                     break;
 
 
                 case Mode.MASTER:
-                    if (PV) mode = Mode.VOICE;
-                    if (MV) mode = Mode.LOAD;
-                    if (PH) mode = Mode.INVERT_X;
-                    if (MH) mode = Mode.INVERT_Y;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.VOICE; break;
+                        case "B": mode = Mode.LOAD; break; 
+                        case "R": mode = Mode.INVERT_Y; break;
+                        default: idol = true; break;
+                    }
                     break;
 
 
 
                 case Mode.JOYSTICK:
-                    if (PV) mode = Mode.RETURN;
-                    if (MV) mode = Mode.SELECTGAMEPAD;
-                    if (PH || MH) mode = Mode.BGM;
+                    switch (ccc)
+                    {
+                        case "B": mode = Mode.SELECTGAMEPAD; break;
+                        case "L": mode = Mode.BGM; break;
+                        default: idol = true; break;
+                    }
                     break;
 
                 case Mode.SELECTGAMEPAD:
-                    if (PV) mode = Mode.JOYSTICK;
-                    if (MV) mode = Mode.GRAPHICQUALITY;
-                    if (PH || MH) mode = Mode.SE;
+
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.JOYSTICK; break;
+                        case "B": mode = Mode.GRAPHICQUALITY; break;
+                        case "L": mode = Mode.SE; break; 
+                        default: idol = true; break;
+                    }
                     break;
 
                 case Mode.GRAPHICQUALITY:
-                    if (PV) mode = Mode.SELECTGAMEPAD;
-                    if (MV) mode = Mode.INVERT_X;
-                    if (PH || MH) mode = Mode.VOICE;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.SELECTGAMEPAD; break;
+                        case "B": mode = Mode.INVERT_X; break;
+                        case "L": mode = Mode.VOICE; break;
+                        default: idol = true; break;
+                    }
                     break;
 
                 case Mode.INVERT_X:
-                    if (PV) mode = Mode.GRAPHICQUALITY;
-                    if (MV) mode = Mode.INVERT_Y;
-                    if (PH || MH) mode = Mode.MASTER;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.GRAPHICQUALITY; break;
+                        case "B": mode = Mode.INVERT_Y; break;
+                        case "L": mode = Mode.VOICE; break;
+                        default: idol = true; break;
+                    }
                     break;
 
 
                 case Mode.INVERT_Y:
-                    if (PV) mode = Mode.INVERT_X;
-                    if (PH || MH) mode = Mode.MASTER;
-                    if (MV)
-                        mode = GamePad_JS.InvertY ? Mode.LOAD : Mode.RETURN;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.INVERT_X; break;
+                        case "B": mode = Mode.RETURN; break;
+                        case "L": mode = Mode.MASTER; break;
+                        default: idol = true; break;
+                    }
                     break;
 
 
 
                 case Mode.LOAD:
-                    if (PV) mode = Mode.MASTER;
-                    if (MV) mode = Mode.BGM;
-                    if (PH) mode = Mode.SAVE;
-                    if (MH) mode = Mode.RETURN;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.MASTER; break;
+                        case "R": mode = Mode.SAVE; break;
+                        default: idol = true; break;
+                    }
                     break;
 
 
 
                 case Mode.RETURN:
-                    if (PV) mode = Mode.INVERT_Y;
-                    if (MV) mode = Mode.JOYSTICK;
-                    if (PH) mode = Mode.LOAD;
-                    if (MH) mode = Mode.SAVE;
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.INVERT_Y; break;
+                        case "L": mode = Mode.SAVE; break;
+                        default: idol = true; break;
+                    }
                     break;
 
 
 
-                case Mode.SAVE:
-                    if (PV) mode = Mode.MASTER;
-                    if (MV) mode = Mode.BGM;
-                    if (PH) mode = Mode.RETURN;
-                    if (MH) mode = Mode.LOAD;
+                case Mode.SAVE: 
+                    switch (ccc)
+                    {
+                        case "T": mode = Mode.INVERT_Y; break;
+                        case "L": mode = Mode.LOAD; break;
+                        case "R": mode = Mode.RETURN; break;
+                        default: idol = true; break;
+                    }
                     break;
-            }
-            idol = false;
+            } 
         }
         else
         {
-            idol = (Mathf.Abs(c.x) + Mathf.Abs(c.y)) / 2 < border;
+            idol = Mathf.Abs(c.x) < border && Mathf.Abs(c.y) < border;
         }
 
-        if( ((LCP != CP) && CP) || ((LCM != CM) && CM) )
+        if (!idol)
+        {
+            flagTrueTime += Time.deltaTime;
+            if (flagTrueTime >= MoveTimeInterval)
+            {
+                flagTrueTime = 0;
+                idol = true;
+            }
+        }
+
+        if ( ((LCP != CP) && CP) || ((LCM != CM) && CM) )
             switch (mode)
             {
                 case Mode.BGM: 

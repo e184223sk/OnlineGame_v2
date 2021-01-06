@@ -9,24 +9,18 @@ using UnityEditor;
 public class AudioVolumeSelector : MonoBehaviour
 {
     public AudioType audioType;
-    public bool StartTimeSettingOnly = true;
+    AudioSource a;
+    void Start() { a = GetComponent<AudioSource>(); }
 
-    void Start()
-    {
-        UPDATE();
-        if (StartTimeSettingOnly)
-            Destroy(this);
-    }
-
-    public void UPDATE()
+    void Update()
     {
         switch (audioType)
         {
-            case AudioType.None/*    */: GetComponent<AudioSource>().volume = AudioSystem.MASTER * AudioSystem.None; break;
-            case AudioType.Bgm/*     */: GetComponent<AudioSource>().volume = AudioSystem.MASTER * AudioSystem.BGM; break;
-            case AudioType.SoundEffect : GetComponent<AudioSource>().volume = AudioSystem.MASTER * AudioSystem.SE; break;
-            case AudioType.Other/*   */: GetComponent<AudioSource>().volume = AudioSystem.MASTER * AudioSystem.OTHER; break;
-            case AudioType.Voice/*   */: GetComponent<AudioSource>().volume = AudioSystem.MASTER * AudioSystem.VOICE; break;
+            case AudioType.None/*    */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.None; break;
+            case AudioType.Bgm/*     */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.BGM; break;
+            case AudioType.SoundEffect : a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.SE; break;
+            case AudioType.Other/*   */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.OTHER; break;
+            case AudioType.Voice/*   */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.VOICE; break;
         }
     }
 }

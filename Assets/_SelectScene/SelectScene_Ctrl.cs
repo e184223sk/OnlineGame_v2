@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class SelectScene_Ctrl : MonoBehaviour
-{
-     
-    public enum SELECTMODE {GameMode ,Tutorial, Option, MakeAvator, BackTitle }
+{ 
+    [Space(10)]
     public SELECTMODE mode ;
-    public float cnt, cnt2;
+    float cnt, cnt2;
     
+    [Space(10)]
     [SerializeField, Range(0, 1f)]
-    float WhiteLevel = 1, ColorSpeed = 0.1f, alphaSpeed = 1, ColorLevel;
+    float WhiteLevel = 1;
+
+    [SerializeField, Range(0, 1f)]
+    float ColorSpeed = 0.1f, alphaSpeed = 1, ColorLevel;
+
     [Space(30)]
     [SerializeField]
     RawImage
@@ -39,12 +43,20 @@ public class SelectScene_Ctrl : MonoBehaviour
     AudioSource Se;
     bool flag;
     [SerializeField]
-    AudioClip next, back, select;
-
+    AudioClip next, back, select; 
+    bool idol;
     int py;
+
+    public float SC_H, SC_S, SC_V;
+
+    [SerializeField, Range(0.1f, 2)]
+    float MoveTimeInterval = 1;
+    [SerializeField,Range(0,1f)]
+    float border = 0.7f;
+    float flagTrueTime;
     void Start()
     {
-        mode = SELECTMODE.GameMode;
+        mode = SELECTMODE.GameMode; 
     }
 
     void ToneSE(AudioClip a)
@@ -77,116 +89,128 @@ public class SelectScene_Ctrl : MonoBehaviour
         }
 
         //移動
-        var d = Key.JoyStickL.Get;
+        //Get Input Data --------------------
+        Vector2 d = Key.JoyStickL.Get / GamePad_JS.sensivirity;
+        if (GamePad_JS.InvertX) d.x *= -1;
+        if (GamePad_JS.InvertY) d.y *= -1;
+        Debug.Log(d);
+        string xx = d.x > border ? "R" : (d.x < -border ? "L" : "N");
+        float tx = Mathf.Abs(d.x);
+        string xy = d.y > border ? "T" : (d.y < -border ? "B" : "N");
+        float ty = Mathf.Abs(d.y);
+        string ccc = tx > ty ? xx : xy; 
         var dl = mode;
 
-        var sens = 0.1f;
-        string c = "";
-        if (d.x > sens) c += "p"; else if (d.x < -sens) c += "m"; else c += "n";
-        if (d.y > sens) c += "p"; else if (d.y < -sens) c += "m"; else c += "n";
-
-
-        if (c == "nn")
+        Debug.Log(xx + ":" + xy + ":" + ccc);
+        if (idol)
         {
-            flag = true;
-        }
-        else if(flag)
-        {
+            idol = false;
+            flagTrueTime = 0;
+
             switch (mode)
             {
-                //SELECTMODE.GameMode ------------------------------
                 case SELECTMODE.GameMode:
-                    /* */
-                    if (c == "pp") mode = SELECTMODE.Option;
-                    else if (c == "mp") mode = SELECTMODE.Tutorial;
-                    else if (c == "pm") mode = SELECTMODE.BackTitle;
-                    else if (c == "mm") mode = SELECTMODE.MakeAvator;
-                    else if (c == "mn") mode = d.y * py > 0 ? SELECTMODE.Tutorial : SELECTMODE.MakeAvator;
-                    else if (c == "pn") mode = d.y * py > 0 ? SELECTMODE.Option : SELECTMODE.BackTitle;
-                    else if (c == "np") mode = d.x > 0 ? SELECTMODE.Option : SELECTMODE.Tutorial;
-                    else if (c == "nm") mode = d.x > 0 ? SELECTMODE.BackTitle : SELECTMODE.MakeAvator;
-                    else flag = true;
-                    break; 
+                    switch (ccc)
+                    {
+                        case "T": mode = xx == "R" ? SELECTMODE.Option : SELECTMODE.Tutorial; break;
+                        case "B": mode = xx == "R" ? SELECTMODE.BackTitle : SELECTMODE.MakeAvator; break;
+                        case "L": mode = xy == "T" ? SELECTMODE.Tutorial : SELECTMODE.MakeAvator; break;
+                        case "R": mode = xy == "T" ? SELECTMODE.Option : SELECTMODE.BackTitle; break;
+                        default: break;
+                    }
+                    break;
 
-                //SELECTMODE.Tutorial ------------------------------
                 case SELECTMODE.Tutorial:
-                    /* */if (c[0] == 'p' && c[1] == 'm') mode = SELECTMODE.GameMode;
-                    else if (c[0] != 'p' && c[1] == 'm') mode = SELECTMODE.MakeAvator;
-                    else flag = true;
+                    switch (ccc)
+                    {
+                        case "B": mode = SELECTMODE.MakeAvator; break;
+                        case "R": mode = SELECTMODE.GameMode; break;
+                        default: break;
+                    }
                     break;
 
-
-                //SELECTMODE.MakeAvator ------------------------------
                 case SELECTMODE.MakeAvator:
-                    /* */if(c[0] == 'p' && c[1] != 'p') mode = SELECTMODE.GameMode;
-                    else if(c[0] != 'm' && c[1] == 'p') mode = SELECTMODE.Tutorial;
-                    else flag = true;
+                    switch (ccc)
+                    {
+                        case "T": mode = SELECTMODE.Tutorial; break;
+                        case "R": mode = SELECTMODE.GameMode; break;
+                        default: break;
+                    }
                     break;
 
-                //SELECTMODE.Option ------------------------------
                 case SELECTMODE.Option:
-                    if (c[0] == 'm' && c[1] != 'm') mode = SELECTMODE.GameMode;
-                    else if (c[0] != 'm' && c[1] == 'm') mode = SELECTMODE.BackTitle;
-                    else flag = true;
+                    switch (ccc)
+                    {
+                        case "B": mode = SELECTMODE.BackTitle; break;
+                        case "L": mode = SELECTMODE.GameMode; break;
+                        default: break;
+                    }
                     break;
 
-
-                //SELECTMODE.BackTitle ------------------------------
                 case SELECTMODE.BackTitle:
-                    /* */if (c[0] == 'm' && c[1] != 'p') mode = SELECTMODE.GameMode;
-                    else if (c[0] != 'm' && c[1] == 'p') mode = SELECTMODE.Option; 
-                    else flag = true;
+                    switch (ccc)
+                    {
+                        case "T": mode = SELECTMODE.Option; break;
+                        case "L": mode = SELECTMODE.GameMode; break;
+                        default: break;
+                    }
                     break;
-                
-            }
 
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            flagTrueTime += Time.deltaTime;
+            if (flagTrueTime >= MoveTimeInterval)
+            {
+                flagTrueTime = 0;
+                idol = true;
+            }
+            else
+            { 
+                idol = Mathf.Abs(d.x) < border && Mathf.Abs(d.y) < border;
+            }
         }
 
-
-        if (dl != mode)
+        if (mode != dl)
         { 
             flag = false;
             ToneSE(select);
         }
 
-        switch (mode)
+
+        if (!idol)
         {
-            case SELECTMODE.GameMode: py = 0; break;
-            case SELECTMODE.Tutorial  : case SELECTMODE.Option   :  py = 01; break;
-            case SELECTMODE.MakeAvator: case SELECTMODE.BackTitle:  py = -1; break;
+            
         }
-        
-        SetButton();
-        SetText();
-    } 
-     
-    public float SC_H,SC_S, SC_V;
-    void SetButton()
-    {
+
+
         cnt += Time.deltaTime * alphaSpeed;
-        cnt2 += Time.deltaTime* ColorSpeed;
-        SC_H = (Mathf.Sin(cnt2) + 1)/2;
+        cnt2 += Time.deltaTime * ColorSpeed;
+        SC_H = (Mathf.Sin(cnt2) + 1) / 2;
         SC_S = ColorLevel;
         SC_V = (Mathf.Sin(cnt) * (1 - WhiteLevel) + WhiteLevel + 1) / 2;
         var sc = Color.HSVToRGB(SC_H, SC_S, SC_V);
-        var nc = new Color(0.4f, 0.4f, 0.4f, 1); 
+        var nc = new Color(0.4f, 0.4f, 0.4f, 1);
         Button_GameMode.color = mode == SELECTMODE.GameMode ? sc : nc;
         Button_Tutorial.color = mode == SELECTMODE.Tutorial ? sc : nc;
         Button_Option.color = mode == SELECTMODE.Option ? sc : nc;
         Button_MakeAvator.color = mode == SELECTMODE.MakeAvator ? sc : nc;
         Button_BackTitle.color = mode == SELECTMODE.BackTitle ? sc : nc;
-    }
 
-    void SetText()
-    {
         switch (mode)
         {
-            case SELECTMODE.GameMode  : DiscriptionTextArea.texture = Text_GameMode;   break;
-            case SELECTMODE.Tutorial  : DiscriptionTextArea.texture = Text_Tutorial;   break;
-            case SELECTMODE.Option    : DiscriptionTextArea.texture = Text_Option;     break;
+            case SELECTMODE.GameMode: DiscriptionTextArea.texture = Text_GameMode; break;
+            case SELECTMODE.Tutorial: DiscriptionTextArea.texture = Text_Tutorial; break;
+            case SELECTMODE.Option: DiscriptionTextArea.texture = Text_Option; break;
             case SELECTMODE.MakeAvator: DiscriptionTextArea.texture = Text_MakeAvator; break;
-            case SELECTMODE.BackTitle : DiscriptionTextArea.texture = Text_BackTitle;  break;
+            case SELECTMODE.BackTitle: DiscriptionTextArea.texture = Text_BackTitle; break;
         }
     }
+     
 
 }
+ 
+public enum SELECTMODE { GameMode, Tutorial, Option, MakeAvator, BackTitle,None }

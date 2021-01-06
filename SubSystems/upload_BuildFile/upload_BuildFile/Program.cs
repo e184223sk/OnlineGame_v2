@@ -34,6 +34,7 @@ class Program
 
     static void Main(string[] args)
     {
+        Console.WindowWidth = Console.WindowWidth/2;
         string result = "";
         Console.WriteLine("Check NetWork");
 
@@ -185,11 +186,11 @@ class Program
  
 public class NetData 
 {
-    public const string ServerAddress = "csys.hp.og20@xs238699.xsrv.jp";
-    public const string ServerPASS = "ffiwoefks";
+    public const string ServerAddress = "csys.00.og20@xs238699.xsrv.jp";
+    public const string ServerPASS = "fd2rf4yh";
     public const string ServerDomain = "xs238699.xsrv.jp"; 
 }
-
+//ftp://" + useraddress/%2f
  
 public class Server
 {

@@ -288,8 +288,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  cnt: 0
-  cnt2: 0
   WhiteLevel: 1
   ColorSpeed: 0.3
   alphaSpeed: 0.3
@@ -312,6 +310,8 @@ MonoBehaviour:
   SC_H: 0
   SC_S: 0
   SC_V: 0
+  MoveTimeInterval: 0.2
+  border: 0.1
 --- !u!1 &376334130
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,7 +483,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioType: 3
-  StartTimeSettingOnly: 1
 --- !u!82 &644040682
 AudioSource:
   m_ObjectHideFlags: 0
@@ -875,7 +874,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioType: 1
-  StartTimeSettingOnly: 1
 --- !u!82 &1424240617
 AudioSource:
   m_ObjectHideFlags: 0
