@@ -14,13 +14,14 @@ public class AudioVolumeSelector : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(AudioSystem.MASTER + ":: f:" + SceneLoader.Fadeings);
         switch (audioType)
         {
-            case AudioType.None/*    */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.None; break;
-            case AudioType.Bgm/*     */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.BGM; break;
-            case AudioType.SoundEffect : a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.SE; break;
-            case AudioType.Other/*   */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.OTHER; break;
-            case AudioType.Voice/*   */: a.volume = AudioSystem.MASTER * Mathf.Abs(Fader.Fadeings_) * AudioSystem.VOICE; break;
+            case AudioType.None/*    */: a.volume = AudioSystem.MASTER * ( Mathf.Abs(Fader.Fadeings_)) * AudioSystem.None; break;
+            case AudioType.Bgm/*     */: a.volume = AudioSystem.MASTER * ( Mathf.Abs(Fader.Fadeings_)) * AudioSystem.BGM; break;
+            case AudioType.SoundEffect : a.volume = AudioSystem.MASTER * ( Mathf.Abs(Fader.Fadeings_)) * AudioSystem.SE; break;
+            case AudioType.Other/*   */: a.volume = AudioSystem.MASTER * ( Mathf.Abs(Fader.Fadeings_)) * AudioSystem.OTHER; break;
+            case AudioType.Voice/*   */: a.volume = AudioSystem.MASTER * ( Mathf.Abs(Fader.Fadeings_)) * AudioSystem.VOICE; break;
         }
     }
 }

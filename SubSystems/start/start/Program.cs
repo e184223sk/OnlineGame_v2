@@ -25,11 +25,22 @@ class Program
     { 
         string url = "http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/System/version.txt";
         string root = AppDomain.CurrentDomain.BaseDirectory + @"System\";
+
         if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) ERROR("ネットワークに接続されていません");
-        if (!File.Exists(root + "OnlineGame.exe")) ERROR("システムが正常に機能していません。再インストールしてください(ErrorCode:0x00)");
-        if (!File.Exists(root + "update.exe"    )) ERROR("システムが正常に機能していません。再インストールしてください(ErrorCode:0x01)");
-        if (!File.Exists(root + "version.txt"   )) ERROR("システムが正常に機能していません。再インストールしてください(ErrorCode:0x02)");
-        Process.Start(root + ((File.ReadAllText(root + @"version.txt") != new WebClient().DownloadString(url)) ? "update.exe" : "OnlineGame.exe"));
+        else
+        {  
+            if (!File.Exists(root + "version.txt")) ERROR("システムが正常に機能していません。再インストールしてください(ErrorCode:0x02)");
+            else if (!File.Exists(root + "update.exe")) ERROR("システムが正常に機能していません。再インストールしてください(ErrorCode:0x01)");
+            else
+            {
+                if (!File.Exists(root + "OnlineGame.exe"))
+                    Process.Start(root + "update.exe");
+                else if(File.ReadAllText(root + @"version.txt") != new WebClient().DownloadString(url))
+                    Process.Start(root + "update.exe");
+                else
+                    Process.Start(root + "OnlineGame.exe");
+            }
+        }
     }
 
     static void ERROR(string text)

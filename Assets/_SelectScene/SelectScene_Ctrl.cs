@@ -75,11 +75,30 @@ public class SelectScene_Ctrl : MonoBehaviour
             ToneSE(next);
             switch (mode)
             {//^^
-                case SELECTMODE.GameMode  : SceneLoader.Load("GO_Scene"); break;
-                case SELECTMODE.Tutorial  : SceneLoader.Load("TutorialScene"); break;
-                case SELECTMODE.MakeAvator: SceneLoader.Load("MakeAvatorScene"); break;
-                case SELECTMODE.Option    : SceneLoader.Load("OptionScene"); break;
-                case SELECTMODE.BackTitle : SceneLoader.Load("TitleScene"); break;
+                case SELECTMODE.GameMode:
+                    ToneSE(next);
+                    SceneLoader.Load("GO_Scene");
+                    break;
+
+                case SELECTMODE.Tutorial  :
+                    ToneSE(next);
+                    SceneLoader.Load("TutorialScene");
+                    break;
+
+                case SELECTMODE.MakeAvator:
+                    ToneSE(next);
+                    SceneLoader.Load("MakeAvatorScene");
+                    break;
+
+                case SELECTMODE.Option    :
+                    ToneSE(next);
+                    SceneLoader.Load("OptionScene");
+                    break;
+
+                case SELECTMODE.BackTitle :
+                    ToneSE(back);
+                    SceneLoader.Load("TitleScene");
+                    break;
             } 
         }
         if (Key.B.Down)

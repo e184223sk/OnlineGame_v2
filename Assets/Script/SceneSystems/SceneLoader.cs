@@ -76,7 +76,8 @@ public static class SceneLoader
     { 
         SceneManager.sceneLoaded += delegate (Scene n, LoadSceneMode m) 
         {
-            Fader.FadeHandle = true; 
+            Fader.FadeHandle = true;
+            Fader.INIT();
         };
     }
     
@@ -178,6 +179,8 @@ public class Fader : MonoBehaviour
     public static float FadeOutTime = 2;
     float vals;
 
+    public static void INIT() { Fadeings = 1; }
+
     static float Fadeings;
     public static float Fadeings_ { get {return Fadeings; } } 
 
@@ -255,6 +258,9 @@ public class Fader : MonoBehaviour
                 IsActive = false;
                 Destroy(gameObject);
                 IsFade = false;
+                _name = "";
+                _index = -1;
+                Fadeings = -1;
             }
         } 
         else
@@ -264,6 +270,8 @@ public class Fader : MonoBehaviour
 
             if (vals >= FadeOutTime)
             {
+
+                Fadeings = 0;
                 if (_name != string.Empty)
                     SceneLoader.LoadN(_name);
                 else if (_index >= 0)

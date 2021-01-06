@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Net;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 [assembly: AssemblyTitle("installer")]
 [assembly: AssemblyDescription("")]
@@ -113,10 +114,14 @@ namespace installer
             string[] fileList;
             using (var w = new WebClient())
                 fileList = w.DownloadString("http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/GameRootList.txt").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            for (int v = 0; v < fileList.Length; v++) GetFile(fileList[v], fileList[v]);
-            
+            for (int v = 0; v < fileList.Length; v++)
+            {
+                fileList[v] = Regex.Replace(fileList[v], @"[^\w\.@-]", "", RegexOptions.None ); 
+                GetFile(fileList[v], fileList[v]);
+            }
+
             //----------------------------------------
-            Process.Start(rootdir + @"System\update.exe");
+            Process.Start(rootdir + @"System\update.exe"); 
             Environment.Exit(0);
         }
 
