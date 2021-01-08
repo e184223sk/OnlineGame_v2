@@ -110,7 +110,6 @@ namespace installer
             GetFile("update.exe", @"System\update.exe");
 
             //----------------------------------------
-            TEXT("XXX", ".ewf,lewpofkep");
             string[] fileList;
             using (var w = new WebClient())
                 fileList = w.DownloadString("http://xs238699.xsrv.jp/picture/onlineGame_2020/GameSystem/GameRootList.txt").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -139,16 +138,12 @@ namespace installer
                 x = x.Replace("\n", "");
                 using (var w = new WebClient())
                 {
-                    TEXT("AAC", (r + f).Replace(@"\", "/") + "\nlocal::" + rootdir + f);
                     if (!File.Exists(rootdir + f))
                         File.CreateText(rootdir + f).Dispose();
                     w.DownloadFile(new Uri((r + x).Replace(@"\", "/")), rootdir + f);
                 }
             }
-            catch (Exception e)
-            {
-                TEXT("ERR", (r + x).Replace(@"\", "/") + "\nlocal::" + rootdir + f + "\n"+ e.Message);
-            }
+            catch (Exception) {}
         }
 
         void TextChanged()
@@ -157,11 +152,7 @@ namespace installer
             ERRORTEXT();
         }
 
-
-        void TEXT(string head, string text)
-        {
-            MessageBox.Show(text, head, MessageBoxButtons.OK);
-        }
+        
 
         void ERRORTEXT()
         {
