@@ -69,6 +69,10 @@ public class GameScene_UI_Manager : MonoBehaviour
 
     CTRLUI_Discription_TEXTUI ps4, ps5, xbox, keyboard;
 
+    public BulletUI bullet;
+
+    RawImage bullet0, bullet1, bullet2, bullet3, bullet4, bullet5;
+    RawImage weaponName;
     void Start()
     {
         ui = this;
@@ -201,4 +205,10 @@ public class CTRLUI_Discription_TEXTUI
         L_JoyStick.text = c.L_JoyStick;
         R_JoyStick.text = c.R_JoyStick;
     }
+}
+
+public class BulletUI
+{
+    public Texture2D icon;
+    public int now, max;
 }
