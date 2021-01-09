@@ -63,8 +63,12 @@ public class OptionScene_ctrl : MonoBehaviour
          text_LOAD,
          text_SAVE,
          text_RETURN;
-     
 
+    public AudioSource Se;
+    [SerializeField]
+    AudioClip next, back, move;
+
+    public AudioSource VoiceSE;
     float tagColor,tagCnt;
     bool idol,LCM,LCP,P;
     float flagTrueTime;
@@ -90,21 +94,20 @@ public class OptionScene_ctrl : MonoBehaviour
         Vector2 c = Key.JoyStickL.Get/GamePad_JS.sensivirity;
         if (GamePad_JS.InvertX) c.x *= -1;
         if (GamePad_JS.InvertY) c.y *= -1;
-        
+        var mL = mode;
         string xx = c.x > border ? "R" : (c.x < -border ? "L" : "N");
         float tx = Mathf.Abs(c.x);
         string xy = c.y > border ? "T" : (c.y < -border ? "B" : "N");
         float ty = Mathf.Abs(c.y);
         string ccc = tx > ty ? xx : xy;
-        bool CP = Key.B.Press;
-        bool CM = Key.A.Press;
+        bool CP = Key.B.Down;
+        bool CM = Key.A.Down;
 
-       
         //Select and Change Select-----------
         if (idol)
         {
             idol = false;
-
+            flagTrueTime = 0;
             switch (mode)
             {
                 case Mode.BGM:
@@ -254,9 +257,9 @@ public class OptionScene_ctrl : MonoBehaviour
         if ( ((LCP != CP) && CP) || ((LCM != CM) && CM) )
             switch (mode)
             {
-                case Mode.BGM: 
+                case Mode.BGM:
                     if (CP) AudioSystem.BGM += 0.1f;
-                    if (CM) AudioSystem.BGM -= 0.1f; 
+                    if (CM) AudioSystem.BGM -= 0.1f;
                     break;
 
                 case Mode.SE:
@@ -265,8 +268,10 @@ public class OptionScene_ctrl : MonoBehaviour
                     break;
 
                 case Mode.VOICE:
+                    var vv = AudioSystem.VOICE;
                     if (CP) AudioSystem.VOICE += 0.1f;
                     if (CM) AudioSystem.VOICE -= 0.1f;
+                    if (CP||CM) VoiceSE.Play();
                     break;
 
 
@@ -282,9 +287,9 @@ public class OptionScene_ctrl : MonoBehaviour
                     if (CM) GamePad_JS.sensivirity -= 0.1f;
                     break;
 
-                case Mode.SELECTGAMEPAD: 
+                case Mode.SELECTGAMEPAD:
                     if (CP) SelectGamepad.Select++;
-                    if (CM) SelectGamepad.Select--; 
+                    if (CM) SelectGamepad.Select--;
                     break;
 
                 case Mode.GRAPHICQUALITY:
@@ -292,27 +297,47 @@ public class OptionScene_ctrl : MonoBehaviour
                     if (CM) GraphicQuality.Select--;
                     break;
 
-                case Mode.INVERT_X:  
+                case Mode.INVERT_X:
                     if (CP || CM) GamePad_JS.InvertX = !GamePad_JS.InvertX;
                     break;
-                 
+
                 case Mode.INVERT_Y:
                     if (CP || CM) GamePad_JS.InvertY = !GamePad_JS.InvertY;
                     break;
-                 
-                case Mode.LOAD: 
-                    if (CP) ConfigData_Manager.LOAD();
-                    if (CM) mode = Mode.RETURN;
+
+                case Mode.LOAD:
+                    if (CM)
+                    {
+                        PLAY_NEXT();
+                        ConfigData_Manager.LOAD();
+                    }
+                    if (CP)
+                    {
+                        PLAY_BACK();
+                        mode = Mode.RETURN;
+                    }
                     break;
-                 
+
                 case Mode.SAVE:
-                    if (CP) ConfigData_Manager.SAVE();
-                    if (CM) mode = Mode.RETURN; 
+                    if (CM)
+                    { 
+                        PLAY_NEXT();
+                        ConfigData_Manager.SAVE();
+                    }
+                    if (CP)
+                    {
+                        PLAY_BACK();
+                        mode = Mode.RETURN;
+                    } 
                     break;
                  
                 case Mode.RETURN:
-                    if (CP) SceneLoader.Load("SelectScene");
-                    if (CM) mode = Mode.RETURN;
+                    if (CM)
+                    {
+                        PLAY_BACK();
+                        SceneLoader.Load("SelectScene");
+                    }
+                    
                     break;
 
             }
@@ -383,12 +408,23 @@ public class OptionScene_ctrl : MonoBehaviour
         //FINISH TASK
         LCM = CM;
         LCP = CP;
+        if (mL != mode)
+            PLAY_MOVE();
 
+        if (mode != Mode.VOICE && (Key.B.Down || Key.A.Down) && !vFLAG)
+        {
+            vFLAG = true;
+            Invoke("FLAG_V", 0.1f);
+            PLAY_MOVE();
+        }
     }
-     
-    
 
-
+    void PLAY_NEXT() => TONE(next);
+    void PLAY_BACK() => TONE(back);  
+    void PLAY_MOVE() => TONE(move);  
+    void TONE (AudioClip a) { Se.PlayOneShot(a);/* Se.clip = a; Se.Play();*/ }
+    bool vFLAG;
+    void FLAG_V() => vFLAG = false;
 
     public enum Mode
     {

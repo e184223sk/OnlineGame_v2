@@ -73,7 +73,8 @@ public class BuildingSystem : MonoBehaviour
     {
         string ROOTDIR = Directory.GetParent(Application.dataPath.Replace("/", @"\")) + @"\";
         if (!File.Exists(ROOTDIR + c)) return false;
-        Process.Start(ROOTDIR + c);
+        var p = Process.Start(ROOTDIR + c);
+        while (!p.HasExited || !p.Responding) ;
         return true;
     }
 

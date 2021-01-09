@@ -9,12 +9,15 @@ using UnityEditor;
 public class AudioVolumeSelector : MonoBehaviour
 {
     public AudioType audioType;
+    [Range(0, 1)]
+    public float Adjusted = 1f;
+
     AudioSource a;
     void Start() { a = GetComponent<AudioSource>(); }
 
     void Update()
     {
-        Debug.Log(AudioSystem.MASTER + ":: f:" + SceneLoader.Fadeings);
+       // Debug.Log(AudioSystem.MASTER + ":: f:" + SceneLoader.Fadeings);
         switch (audioType)
         {
             case AudioType.None/*    */: a.volume = AudioSystem.MASTER * ( Mathf.Abs(Fader.Fadeings_)) * AudioSystem.None; break;

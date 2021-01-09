@@ -17,6 +17,33 @@ public class NetData : MonoBehaviour
     public static USERDATA[] friends;
     public static Server server = new Server(ServerAddress, ServerPASS, ServerDomain);
     public static string userDir, passDir, chatDir, userEXIST, pin_EXIST, data_config, data_log;
+
+
+    public static void SetDATAS(string user, string pin)
+    {
+        NetData.userDir = "OnlineSystem/_DATA/_USER_DATA__/" + user;
+        NetData.passDir = NetData.userDir + @"/" + pin;
+        NetData.chatDir = NetData.passDir + @"/chat";
+
+        NetData.userEXIST = NetData.userDir + @"/exist.tagtx";
+        NetData.pin_EXIST = NetData.passDir + @"/exist.tagtx";
+        NetData.data_config = NetData.passDir + @"/data.txt";
+        NetData.data_log = NetData.passDir + @"/log.txt";
+        NetData.user = new USERDATA(user, pin);
+
+    }
+
+
+
+    public static string Get__USERSPACE
+    {
+        get => USERDIR + user.ID + "/" + user.PASS + "/";
+    }
+
+    public static string Get__DATA_TXT { get => Get__USERSPACE + "data.txt"; }
+    public static string Get__LOG_TXT { get => Get__USERSPACE + "data.txt"; }
+    public static string Get__CHATDIR { get => Get__USERSPACE + "chat/"; }
+
 }
 
 

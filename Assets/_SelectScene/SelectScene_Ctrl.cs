@@ -120,7 +120,7 @@ public class SelectScene_Ctrl : MonoBehaviour
         string ccc = tx > ty ? xx : xy; 
         var dl = mode;
 
-        Debug.Log(xx + ":" + xy + ":" + ccc);
+       // Debug.Log(xx + ":" + xy + ":" + ccc);
         if (idol)
         {
             idol = false;

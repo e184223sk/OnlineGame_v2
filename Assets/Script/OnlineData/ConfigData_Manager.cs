@@ -6,8 +6,24 @@ public static class ConfigData_Manager
 {
     static List<Online_data> data = new List<Online_data>();
 
-    public static void SAVE() => Online_data.SaveList("data.txt", data);
+    public static void SAVE()
+    { 
+        //Option-------------------------------------------------------------------------------------
+        data.Add(new Online_data() { tag = DATATAG.BGM_VOL, data = ((int)(AudioSystem.BGM * 10)).ToString()});
+        data.Add(new Online_data() { tag = DATATAG.SE_VOL, data = ((int)(AudioSystem.SE * 10)).ToString() });
+        data.Add(new Online_data() { tag = DATATAG.VOICE_VOL, data = ((int)(AudioSystem.VOICE * 10)).ToString() });
+        data.Add(new Online_data() { tag = DATATAG.MASTER_VOL, data = ((int)(AudioSystem.MASTER * 10)).ToString() });
+        data.Add(new Online_data() { tag = DATATAG.JoyStickSensivirity, data = ((int)(GamePad_JS.sensivirity * 10)).ToString() }); 
+        data.Add(new Online_data() { tag = DATATAG.InvertX, data = GamePad_JS.InvertX ? "TRUE" : "FALSE" });
+        data.Add(new Online_data() { tag = DATATAG.InvertY, data = GamePad_JS.InvertY ? "TRUE" : "FALSE" }); 
+        data.Add(new Online_data() { tag = DATATAG.GraphicQuality, data = ConfigData.graphics.ToString() });
+        data.Add(new Online_data() { tag = DATATAG.SelectGamePad, data = Key.select.ToString() });
 
+        //Avator-------------------------------------------------------------------------------------
+
+        //SAVE==============================================================================================
+        Online_data.SaveList(NetData.Get__DATA_TXT, data);
+    }
     public static void LOAD()
     { 
         data = Online_data.GetList("data.txt");
@@ -21,7 +37,7 @@ public static class ConfigData_Manager
         GamePad_JS.InvertX = Online_data.GetData(DATATAG.InvertX, data) == "TRUE";
         GamePad_JS.InvertY = Online_data.GetData(DATATAG.InvertY, data) == "TRUE";
         ConfigData.graphics = CASTINT(Online_data.GetData(DATATAG.GraphicQuality, data), ConfigData.graphics);
-        AudioSystem.BGM = CASTINT(Online_data.GetData(DATATAG.SelectGamePad, data), Key.select);
+        Key.select = CASTINT(Online_data.GetData(DATATAG.SelectGamePad, data), Key.select);
         
         //Avator-------------------------------------------------------------------------------------
         

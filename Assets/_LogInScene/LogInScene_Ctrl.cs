@@ -140,19 +140,8 @@ public class LogInScene_Ctrl : MonoBehaviour
     }
 
 
-    void SetDATAS(string user, string pin)
-    {
-        NetData.userDir = "OnlineSystem/_DATA/_USER_DATA__/" + user;
-        NetData.passDir = NetData.userDir + @"/" + pin ;
-        NetData.chatDir = NetData.passDir + @"/chat";
-
-        NetData.userEXIST = NetData.userDir + @"/exist.tagtx";
-        NetData.pin_EXIST = NetData.passDir + @"/exist.tagtx";
-        NetData.data_config = NetData.passDir + @"/data.txt";
-        NetData.data_log = NetData.passDir + @"/log.txt";
-        NetData.user = new USERDATA(user, pin);
-
-    }
+    void SetDATAS(string user, string pin) => NetData.SetDATAS(user, pin);
+    
     public void ButtonEvent_SignIn_LogIn()
     {
         Update();

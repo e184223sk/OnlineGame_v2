@@ -5,19 +5,19 @@ public class Online_data
 {
     public string tag, data;
     public Online_data(string raw)
-    {
+    { 
         if (raw.IndexOf(":") < 0)
         {
             tag = raw;
-            data = "";
+            data = ""; 
         }
         else
         {
-            tag = raw.Substring(0, raw.IndexOf(":") - 1);
-            data = raw.Substring(raw.IndexOf(":") + 1);
+            tag = raw.Substring(0, raw.IndexOf(":"));
+            data = raw.Substring(raw.IndexOf(":") + 1); 
         }
     }
-
+    public Online_data() { }
     /// <summary>
     /// pathはPIN/以降だけでおｋ
     /// </summary>
@@ -37,15 +37,25 @@ public class Online_data
 
     public static void SaveList(string path, List<Online_data> list, bool optimisation = true)
     {
-        if (optimisation) 
-            for (var g = list.Count - 1; g >= 0; g--) 
-                for (var cx = g; cx >= list.Count - 1; cx--) 
-                    if (list[g].tag == list[cx].tag)
-                        list.RemoveAt(cx);    
+
+        List<Online_data> xc = new List<Online_data>();
+
+        if (optimisation)
+        {
+            for (var g = list.Count - 1; g >= 0; g--)
+            {
+                bool ccc = false;
+                foreach (var f in xc.ToArray())
+                    if (f.tag == list[g].tag)
+                        ccc = true;
+                    
+                if (!ccc) xc.Add(list[g]);
+            } 
+        }  
         string datas = "";
-        foreach (var c in list.ToArray())
-            datas =  c.tag + ":" + c.data + "\n";
-        NetData.server.FileUploadStr(NetData.USERDIR + NetData.user.ID + "/" + NetData.user.PASS + "/" + path, datas);
+        foreach (var c in xc.ToArray())
+            datas +=  c.tag + ":" + c.data + "\n";
+        NetData.server.FileUploadStr( path, datas);
     }
 
     /// <summary>
