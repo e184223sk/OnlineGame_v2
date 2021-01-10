@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class GameScene_UI_Manager : MonoBehaviour
 {
     public static GameScene_UI_Manager ui;
+    public static bool FocusChatTextBox;
+    public Texture2D TeamIcon;
 
+    [Space(10)]
     [SerializeField,Range(0,1f)]
     float HpValue;
 
@@ -52,7 +55,7 @@ public class GameScene_UI_Manager : MonoBehaviour
 
     [SerializeField]
     Texture2D[] num;
-
+    public Texture2D[] getNum { get { return num; }  }
     //[SerializeField]
     RawImage[] money;
 
@@ -64,15 +67,22 @@ public class GameScene_UI_Manager : MonoBehaviour
 
     [Space(35)]
     public GameScene_UI_CTRLUI ctrler;
-    [SerializeField,Space(5)]
+
+    [SerializeField,Space(25)]
     public CTRLUI_Discription Ctrl_Discription;
 
     CTRLUI_Discription_TEXTUI ps4, ps5, xbox, keyboard;
 
-    public BulletUI bullet;
+    [Space(55)]
+    [SerializeField] public WeaponUIData Weapon0;
+    [Space(15)]
+    [SerializeField] public WeaponUIData Weapon1;
+    WeaponUI_obj WeaponUI0, WeaponUI1;
+     
+    GameObject chatBOX, ctrlerDiscription;
 
-    RawImage bullet0, bullet1, bullet2, bullet3, bullet4, bullet5;
-    RawImage weaponName;
+    public chatBox ChatBox;
+
     void Start()
     {
         ui = this;
@@ -95,11 +105,28 @@ public class GameScene_UI_Manager : MonoBehaviour
         ps5 = new CTRLUI_Discription_TEXTUI(c.Find("ps5").gameObject);
         xbox = new CTRLUI_Discription_TEXTUI(c.Find("xbox").gameObject);
         keyboard = new CTRLUI_Discription_TEXTUI(c.Find("keyboard").gameObject);
+        chatBOX = GameObject.Find("Canvas/Chat");
+        ctrlerDiscription = GameObject.Find("Canvas/Discription");
+        int gsui = PlayerPrefs.GetInt("GS-UI", 3);
+        chatBOX.active = gsui /2 == 1;
+        ctrlerDiscription.active = gsui % 2 == 1;
+        WeaponUI0 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI1"));
+        WeaponUI1 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI1"));
     }
 
-    // Update is called once per frame
+    void OnDestroy()
+    {
+        SaveUIEbl();
+    }
+
+
+
     void Update()
     {
+        //Input-------------------------------------------
+        if (Key.FL.Down) chatBOX.active = !chatBOX.active;
+        if (Key.FR.Down) ctrlerDiscription.active = !ctrlerDiscription.active;
+
         //HP Slider -------------------------------------
         HP.value = HpValue;
         hpImg.color = hpColor.Evaluate(HpValue);
@@ -156,26 +183,213 @@ public class GameScene_UI_Manager : MonoBehaviour
             case GameScene_UI_CTRLUI.Xbox: xbox.root.active = true; break;
             case GameScene_UI_CTRLUI.KEYBOARD: keyboard.root.active = true; break;
         }
+
+        WeaponUI0.Update(Weapon0);
+        WeaponUI1.Update(Weapon1);
     }
+
+
+
+
+    void SaveUIEbl()
+    {
+        PlayerPrefs.SetInt("GS-UI", (chatBOX.active ? 2 : 0) + (ctrlerDiscription.active ? 1 : 0));
+        PlayerPrefs.Save();
+    }
+
+
+
 }
 
-public enum GameScene_UI_CTRLUI { Xbox, KEYBOARD, PS4, PS5 }
 
+
+
+
+
+
+
+/// <summary>
+/// 右下の操作説明UIにおいてどれを表示するか?
+/// </summary>
+public enum GameScene_UI_CTRLUI
+{
+    Xbox,
+    KEYBOARD,
+    PS4,
+    PS5
+}
+
+
+
+
+/// <summary>
+/// 右下の操作説明の説明文のデータ
+/// </summary>
 [System.Serializable]
 public class CTRLUI_Discription
 {
+
+    /// <summary>
+    /// Aキーの操作説明文
+    /// </summary>
     [SerializeField]
-    public string A, B, X, Y, L, L2, R, R2;
-    public string L_JoyStick, R_JoyStick;
+    public string A;
+
+
+
+    /// <summary>
+    /// Bキーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string B;
+
+
+
+    /// <summary>
+    /// Xキーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string X;
+
+
+
+    /// <summary>
+    /// Yキーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string Y;
+
+
+
+    /// <summary>
+    /// 左トリガーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string L;
+
+
+
+    /// <summary>
+    /// 左縦トリガーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string L2;
+
+
+
+    /// <summary>
+    /// 右トリガーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string R;
+
+
+
+    /// <summary>
+    /// 右縦トリガーの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string R2;
+
+
+
+    /// <summary>
+    /// 左ジョイスティックの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string L_JoyStick;
+
+
+
+    /// <summary>
+    /// 右ジョイスティックの操作説明文
+    /// </summary>
+    [SerializeField]
+    public string R_JoyStick;
+
 }
 
 
+
+
+
+
+/// <summary>
+/// 画面右下の操作説明UIを管理するクラス
+/// </summary>
 [System.Serializable]
 public class CTRLUI_Discription_TEXTUI
 {
-    public Text A, B, X, Y, L, L2, R, R2, L_JoyStick, R_JoyStick;
+    /// <summary>
+    /// AキーのUI
+    /// </summary>
+    public Text A;
+
+
+    /// <summary>
+    /// BキーのUI
+    /// </summary>
+    public Text B;
+
+
+    /// <summary>
+    /// XキーのUI
+    /// </summary>
+    public Text X;
+
+
+    /// <summary>
+    /// YキーのUI
+    /// </summary>
+    public Text Y;
+
+
+    /// <summary>
+    /// LキーのUI
+    /// </summary>
+    public Text L;
+
+
+    /// <summary>
+    /// LTキーのUI
+    /// </summary>
+    public Text L2;
+
+
+    /// <summary>
+    /// RキーのUI
+    /// </summary>
+    public Text R;
+
+
+    /// <summary>
+    /// RTキーのUI
+    /// </summary>
+    public Text R2;
+
+
+    /// <summary>
+    /// 左ジョイスティックのUI
+    /// </summary>
+    public Text L_JoyStick;
+
+    /// <summary>
+    /// 右ジョイスティックのUI
+    /// </summary>
+    public Text R_JoyStick;
+
+
+    /// <summary>
+    /// 親オブジェクト
+    /// </summary>
     public GameObject root;
 
+
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    /// <param name="f"></param>
     public CTRLUI_Discription_TEXTUI(GameObject f)
     {
         root = f; 
@@ -191,6 +405,13 @@ public class CTRLUI_Discription_TEXTUI
         R_JoyStick = f.transform.Find("JSR").GetComponent<Text>();
     }
 
+
+
+    /// <summary>
+    /// 更新する
+    /// </summary>
+    /// <param name="c">表示情報</param>
+    /// <param name="f">UIを描画するか(def = false)</param>
     public void Update(CTRLUI_Discription c, bool f = false)
     {
         root.active = f;
@@ -205,10 +426,263 @@ public class CTRLUI_Discription_TEXTUI
         L_JoyStick.text = c.L_JoyStick;
         R_JoyStick.text = c.R_JoyStick;
     }
+
+
 }
 
-public class BulletUI
+
+
+
+
+
+/// <summary>
+/// 武器情報のデータ
+/// </summary>
+[System.Serializable]
+public class WeaponUIData
 {
+    /// <summary>
+    /// 表示するか?
+    /// </summary>
+    public bool enable;
+
+    /// <summary>
+    /// 武器のアイコン
+    /// </summary>
     public Texture2D icon;
-    public int now, max;
+    
+    
+    /// <summary>
+    /// 武器名
+    /// </summary>
+    public string weaponName;
+
+    /// <summary>
+    /// 残弾数
+    /// </summary>
+    [Range(0, 999)]
+    public int now;
+
+    /// <summary>
+    /// 最大弾数
+    /// </summary>
+    [Range(0,999)]
+    public int max;
+
+    /// <summary>
+    /// 武器番号
+    /// </summary>
+    [Range(0,1)]
+    public int weaponNumber;
+
+    /// <summary>
+    /// リロード状態
+    /// <para>(0.0f～1.0f)</para>
+    /// </summary>
+    [Range(0,1f)]
+    public float reload;
+
 }
+
+
+
+
+/// <summary>
+/// 武器情報を表示するUIのオブジェクトデータ
+/// </summary>
+public class WeaponUI_obj
+{
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    /// <param name="object">親オブジェクト</param>
+    public WeaponUI_obj(GameObject @object)
+    {
+        root = @object;
+        Icon = @object.transform.Find("root/Icon").GetComponent<RawImage>();
+        Name = @object.transform.Find("root/Name").GetComponent<Text>();
+        WeaponNumber = @object.transform.Find("root/WeaponNumber").GetComponent<Text>();
+        Reload = @object.transform.Find("root/Reload").GetComponent<Slider>();
+        n2 = @object.transform.Find("root/x00-000").GetComponent<RawImage>();
+        n1 = @object.transform.Find("root/0x0-000").GetComponent<RawImage>();
+        n0 = @object.transform.Find("root/00x-000").GetComponent<RawImage>();
+        m2 = @object.transform.Find("root/000-x00").GetComponent<RawImage>();
+        m1 = @object.transform.Find("root/000-0x0").GetComponent<RawImage>();
+        m0 = @object.transform.Find("root/000-00x").GetComponent<RawImage>();
+    }
+
+
+    /// <summary>
+    /// UIを更新
+    /// </summary>
+    /// <param name="data">情報(WeaponUIData型)</param>
+    public void Update(WeaponUIData data)
+    {
+        root.active = data.enable;
+        Icon.texture = data.icon;
+        Reload.value = data.reload;
+        WeaponNumber.text = "Weapon" + data.weaponNumber;
+
+        int now = data.now < 0 ? 0 : (data.now > 999 ? 999 : data.now);
+        int max = data.max < 0 ? 0 : (data.max > 999 ? 999: data.max);
+
+        n2.texture = GameScene_UI_Manager.ui.getNum[now / 100];
+        n2.texture = GameScene_UI_Manager.ui.getNum[now % 100/10];
+        n2.texture = GameScene_UI_Manager.ui.getNum[now % 10];
+
+        m2.texture = GameScene_UI_Manager.ui.getNum[max / 100];
+        m2.texture = GameScene_UI_Manager.ui.getNum[max % 100 / 10];
+        m2.texture = GameScene_UI_Manager.ui.getNum[max % 10];
+    }
+
+    /// <summary>
+    /// 武器のアイコン
+    /// </summary>
+    public RawImage Icon;
+
+    /// <summary>
+    /// 武器名
+    /// </summary>
+    public Text Name;
+
+    /// <summary>
+    /// 武器番号を表示するtext(Weapon?の表記)
+    /// </summary>
+    public Text WeaponNumber;
+
+    /// <summary>
+    /// リロードのバー
+    /// </summary>
+    public Slider Reload;
+
+    /// <summary>
+    /// 残弾数のUI
+    /// </summary>
+    public RawImage n2, n1, n0;
+
+    /// <summary>
+    /// 残弾数のUI
+    /// </summary>
+    public RawImage m2, m1, m0;
+
+    /// <summary>
+    /// ルートオブジェクト
+    /// </summary>
+    public GameObject root;
+
+
+}
+
+
+
+
+
+
+
+/// <summary>
+/// チャットボックスを管理するクラス
+/// </summary>
+public class chatBox
+{
+    /// <summary>
+    /// 現在何回チャットに入力されたか?
+    /// </summary>
+    int g = 0;
+
+    /// <summary>
+    /// チャットを表示させるTextUIの配列
+    /// (上から0,1,2...)
+    /// </summary>
+    Text[] texts;
+
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    /// <param name="root">親オブジェクト</param>
+    public chatBox(GameObject root)
+    {
+        texts = new Text[6];
+        for (int i = 0; i < 6; i++)
+            texts[i] = root.transform.Find("Text (" + i + ")").GetComponent<Text>();
+        foreach (var t in texts)
+        {
+            t.text = "";
+        }
+    }
+
+    /// <summary>
+    /// チャットに新しい文を追加する
+    /// </summary>
+    /// <param name="chat">チャットデータ(ChatData)</param>
+    public void Add(ChatData chat)
+    {
+        g++;
+        if (g > 7)
+        {
+            for (int c = 0; c < 6; c++)
+                Set(c, texts[c + 1].text, texts[c + 1].color);
+            Set(6, "[" + chat.user + "]" + chat.text, chat.color);
+        }
+        else
+        {
+            Set(g, "[" + chat.user + "]" + chat.text, chat.color);
+        }
+    }
+
+    /// <summary>
+    /// 文字を更新する関数
+    /// </summary>
+    /// <param name="p">変更したいtextsの要素番号</param>
+    /// <param name="text">文字</param>
+    /// <param name="c">色</param>
+    void Set(int p, string text, Color c)
+    {
+        texts[p].text = text;
+        texts[p].color = c;
+    }
+}
+
+
+
+
+
+/// <summary>
+/// チャット1文のデータを保持するクラス
+/// </summary>
+public class ChatData
+{
+    /// <summary>
+    /// ユーザー名
+    /// </summary>
+    public string user;
+
+    /// <summary>
+    /// チャット文字データ
+    /// </summary>
+    public string text;
+
+    /// <summary>
+    /// チャット文字のデータ
+    /// </summary>
+    public Color color;
+
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    /// <param name="user">ユーザネーム</param>
+    /// <param name="text">文字情報</param>
+    /// <param name="color">文字の色</param>
+    public ChatData(string user, string text, Color color)
+    {
+        this.user = user;
+        this.text = text;
+        this.color = color;
+    }
+}
+
+
+
+
+
