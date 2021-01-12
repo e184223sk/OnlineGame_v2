@@ -12,8 +12,11 @@ using UnityEngine.UI;
 
 public class LogInScene_Ctrl : MonoBehaviour
 {
+
     [SerializeField]
-    InputField 
+    LogInScene_Loop looper;
+    [SerializeField]
+    InputField
         SignIn_UserName,
         SignIn_Pin,
         SignUp_UserName,
@@ -27,7 +30,8 @@ public class LogInScene_Ctrl : MonoBehaviour
         BadAccount,
         exist_Comment;
 
-
+    [SerializeField]
+    Button button_a, button_b, button_c, button_d;
 
     void Start()
     {
@@ -38,12 +42,22 @@ public class LogInScene_Ctrl : MonoBehaviour
     }
 
     void Update()
-    {
+    { 
         SignIn_UserName.text = SignIn_UserName.text.Replace(" ", "").Replace("　", "");
         SignIn_Pin.text = SignIn_Pin.text.Replace(" ", "").Replace("　", "");
         SignUp_UserName.text = SignUp_UserName.text.Replace(" ", "").Replace("　", "");
         SignUp_MAIL.text = SignUp_MAIL.text.Replace(" ", "").Replace("　", "");
-       
+
+        if (ISLOOPTIME)
+        {
+            if (!looper.gameObject.active)
+            { 
+                ISLOOPTIME = false;
+                if (c) CLEAR();
+                else MISS();
+            }
+        }
+
     }
 
 
@@ -53,7 +67,7 @@ public class LogInScene_Ctrl : MonoBehaviour
         SignUp_UserName.text = "";
         SignUp_MAIL.text = "";
         SignUpRoot.active = false;
-        SignInRoot.active =true;
+        SignInRoot.active = true;
     }
 
 
@@ -63,7 +77,7 @@ public class LogInScene_Ctrl : MonoBehaviour
         SignUpRoot.active = true;
         SignInRoot.active = false;
     }
-     
+
     public void ButtonEvent_SignUp_Send()
     {
         Update();
@@ -135,35 +149,66 @@ public class LogInScene_Ctrl : MonoBehaviour
             NetData.server.MkFile(NetData.data_log);
 
             ButtonEvent_SignUp_Return();
-        } 
+        }
 
     }
-
+    bool c;
+    bool ISLOOPTIME;
 
     void SetDATAS(string user, string pin) => NetData.SetDATAS(user, pin);
-    
+
     public void ButtonEvent_SignIn_LogIn()
     {
         Update();
 
         SetDATAS(SignIn_UserName.text, SignIn_Pin.text);
 
-        if (EXISTURL(NetData.pin_EXIST))
-        {
-            Debug.Log("TRue");
-            Cursor.visible = false;
-            ConfigData_Manager.LOAD();
-            LogData_Manager.LOAD();
-            SceneLoader.LoadN("LogoScene");
-        }
-        else
-        {
-            Debug.Log("false");
-            SignIn_UserName.text = SignIn_Pin.text = "";
-            SendText.active = false;
-            BadAccount.active = true;
-        }
-    } 
+        lOGINTIME(EXISTURL(NetData.pin_EXIST));
+    }
+
+    void lOGINTIME(bool p)
+    {
+        c = p;
+        looper.gameObject.active = true;
+        ISLOOPTIME = true;
+        OFF_BUTTON();
+        looper.NORMAL(p);
+
+        BadAccount.active = false;
+    }
+
+    void CLEAR()
+    { 
+        Debug.Log("true");
+        Cursor.visible = false;
+        ConfigData_Manager.LOAD();
+        LogData_Manager.LOAD();
+        SceneLoader.LoadN("LogoScene");
+        button_a.interactable = true;
+        button_b.interactable = true;
+        button_c.interactable = true;
+        button_d.interactable = true;
+    }
+
+    void MISS()
+    {
+        Debug.Log("false");
+        SignIn_UserName.text = SignIn_Pin.text = "";
+        SendText.active = false;
+        BadAccount.active = true;
+        button_a.interactable = true;
+        button_b.interactable = true;
+        button_c.interactable = true;
+        button_d.interactable = true;
+    }
+
+    void OFF_BUTTON()
+    { 
+        button_a.interactable = false;
+        button_b.interactable = false;
+        button_c.interactable = false;
+        button_d.interactable = false;
+    }
 
     bool EXISTURL(string x)
     {
