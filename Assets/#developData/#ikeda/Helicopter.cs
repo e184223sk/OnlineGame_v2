@@ -45,8 +45,8 @@ public class Helicopter : DynamicObjectBehavior
      
     void Update()
     {
-        if (Key.A.Press) xc += Time.deltaTime * c;
-        if (Key.B.Press) xc -= Time.deltaTime * c;
+        if (Key.A.Press) xc -= Time.deltaTime * c;
+        if (Key.B.Press) xc += Time.deltaTime * c;
         xc = MinCut(xc*DecelerationRate);
 
         var input = (Vector2)Key.JoyStickL * Time.deltaTime;

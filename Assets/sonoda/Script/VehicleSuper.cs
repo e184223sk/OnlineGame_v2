@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Rigidbody))]
 public class VehicleSuper : MonoBehaviour
 {
     //
@@ -15,6 +16,9 @@ public class VehicleSuper : MonoBehaviour
 
     //バックの最高速度のゲッター変数
     public int _getMinSpeed { get { return _MinSpeed; } }
+
+    public float Power = 5;
+    public float PowerTorque = 5;
 
     #endregion
 
@@ -29,6 +33,8 @@ public class VehicleSuper : MonoBehaviour
     private float _fadingSpeed = 0.05f;
 
     private float _accel = 0;
+
+    private Rigidbody _rigidbody;
     #endregion
 
     #region Protected Variables
@@ -68,11 +74,17 @@ public class VehicleSuper : MonoBehaviour
 
     [Range(0, 1), SerializeField]
     protected float _fliction;
-    
+
     #endregion
 
 
     #region Protected Methods
+
+    protected void Initialized()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+        //mass以外は固定
+    }
 
     protected void Drive()
     {
@@ -82,7 +94,7 @@ public class VehicleSuper : MonoBehaviour
             _speed = _speed > 0.01 ? _speed -_inertia * Time.deltaTime : 0;
         if(!Input.GetKey(KeyCode.S) && _speed < 0)
             _speed = _speed < -0.01 ? _speed + _inertia * Time.deltaTime : 0;
-        
+
 
         //前進
         if (Input.GetKey(KeyCode.W))
@@ -98,8 +110,7 @@ public class VehicleSuper : MonoBehaviour
         //右に曲がる
         if (Input.GetKey(KeyCode.D))
             TurnRight();
-
-        transform.position += transform.forward * _speed * Time.deltaTime;
+        _rigidbody.AddRelativeForce(Vector3.forward *  _speed * Power * Time.deltaTime, ForceMode.Acceleration); 
     }
 
     #endregion
@@ -153,9 +164,8 @@ public class VehicleSuper : MonoBehaviour
     {
         if (_speed == 0)
             return;
-
-        transform.position -= transform.right * (_speed / _slippery) * Time.deltaTime;
-        transform.Rotate(-new Vector3(0, 1, 0) * _steering * Time.deltaTime);
+        //_rigidbody.AddRelativeForce(-transform.right * (_speed / _slippery) * Time.deltaTime);
+        _rigidbody.AddRelativeTorque(Vector3.up * -_steering * PowerTorque * Time.deltaTime, ForceMode.Acceleration);
     }
 
     //右に曲がる
@@ -163,8 +173,8 @@ public class VehicleSuper : MonoBehaviour
     {
         if (_speed == 0)
             return;
-        transform.position += transform.right * (_speed / _slippery) * Time.deltaTime;
-        transform.Rotate(new Vector3(0,1,0) * _steering * Time.deltaTime);
+        //_rigidbody.AddRelativeForce(transform.right * (_speed / _slippery)  * Time.deltaTime);
+        _rigidbody.AddRelativeTorque(Vector3.up * _steering * PowerTorque * Time.deltaTime, ForceMode.Acceleration); 
     }
 
     #endregion
