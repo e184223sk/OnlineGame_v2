@@ -22,3 +22,6 @@ Assets/3DAssets/
 
 #hp
 Assets/Hp/
+
+#パッケージのバージョン情報を無視
+Packages/manifest.json
