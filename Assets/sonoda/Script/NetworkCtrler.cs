@@ -146,7 +146,7 @@ public class NetworkCtrler : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F3) && !MonobitNetwork.isHost)
+        /*if (Input.GetKeyDown(KeyCode.F3) && !MonobitNetwork.isHost)
         {
             _monobitView.RPC("LoadStageRequest", MonobitTargets.Host);
         }
@@ -154,7 +154,7 @@ public class NetworkCtrler : MonobitEngine.MonoBehaviour
         //エスケープキーでゲームとチャットを切り替え
         if (Input.GetKeyDown(KeyCode.Escape))
             _InPlay = !_InPlay;
-
+        */
         //サーバーに未接続のとき自動で接続
         if (!MonobitNetwork.isConnect)
         {

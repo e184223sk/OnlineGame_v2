@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: MonobitServerSettings
   m_EditorClassIdentifier: 
   HostType: 1
-  HostProtocol: 0
-  AuthID: 
-  SelfServerAddress: 
-  m_SelfServerPortString: 
-  m_SelfServerPort: 0
+  HostProtocol: 1
+  AuthID: f89f1344-86ce-49a5-a5a2-345ce2e444e5-13f11e5e
+  SelfServerAddress: 103.141.96.126
+  m_SelfServerPortString: 20
+  m_SelfServerPort: 20
   MunCloudEndpointAddress: 
   MunCloudAppID: 
   MunCloudConnectionTimeOut: 20000
-  EnableAutoJoinLobby: 0
+  EnableAutoJoinLobby: 1
   EnableLobbyStatistics: 0
   CustomAuthType: 0
   CustomAuth_IgnoreError: 0
