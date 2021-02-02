@@ -13,8 +13,9 @@ public class IsCaterpillarGrounding : MonoBehaviour
         for (int y = 0; y < CheckCnt; y++)
         {
             Ray ray = new Ray();
-            RaycastHit hit; 
-            var startPos = transform.position + transform.InverseTransformVector(Positioning) + transform.forward * DetectionInterval * y / (CheckCnt);
+            RaycastHit hit;
+            var vv = transform.forward * Positioning.z + transform.right * Positioning.x + transform.up * Positioning.y;
+            var startPos = transform.position + vv + transform.forward * (DetectionInterval * y / CheckCnt);
             if (Physics.Raycast(startPos, -transform.up, out hit, DetectionDistance))
                 if (transform.root != hit.transform.root)
                 {
@@ -29,12 +30,13 @@ public class IsCaterpillarGrounding : MonoBehaviour
         Update();
         Gizmos.color = Color.blue;
         for (int y = 0; y < CheckCnt; y++)
-        { 
-            var startPos = transform.position + transform.InverseTransformVector(Positioning) + transform.forward * DetectionInterval * y / (CheckCnt);
+        {
+            var vv = transform.forward*Positioning.z + transform.right * Positioning.x + transform.up*Positioning.y;
+            var startPos = transform.position + vv + transform.forward * (DetectionInterval * y / CheckCnt);
             var endPos = startPos - transform.up * (DetectionDistance - 0.1f); 
             Gizmos.DrawWireSphere(startPos, 0.1f); 
             Gizmos.DrawWireSphere(endPos, 0.1f); 
-            Gizmos.DrawLine ( startPos, endPos );
+            Gizmos.DrawLine (startPos, endPos);
         }
     }
 

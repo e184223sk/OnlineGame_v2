@@ -9,7 +9,7 @@ public class TANK : MonoBehaviour
     float forwardSpeed;
 
     float L_Speed, R_Speed;
-
+    public ForceMode forceMODE;
     IsCaterpillarGrounding CL, CR;
     [System.NonSerialized]
     public Transform Turret, Cannon;
@@ -20,11 +20,11 @@ public class TANK : MonoBehaviour
     public float TurretSpinSpeed;
     public float Torque;
     float tss, tsx;
-
+    
     void Start()
     {
         rigidbody_ = GetComponent<Rigidbody>();
-        rigidbody_.drag = 0;
+        rigidbody_.drag = 4;
         rigidbody_.angularDrag = 0;
         Turret = transform.Find("Body/Turret");
         Cannon = transform.Find("Body/Turret/MainCannon"); 
@@ -32,6 +32,8 @@ public class TANK : MonoBehaviour
         caterpillar_R.Init(transform.Find("Body/CaterpillarR"));
         CL = transform.Find("Body/CaterpillarL").GetComponent<IsCaterpillarGrounding>();
         CR = transform.Find("Body/CaterpillarR").GetComponent<IsCaterpillarGrounding>();
+        rigidbody_.centerOfMass -= transform.up * 0.3f;
+        //rigidbody_.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void Update()
@@ -51,9 +53,12 @@ public class TANK : MonoBehaviour
 
 
         if (L_Speed > 1) L_Speed = 1; else if (L_Speed < -1) L_Speed = -1;
+
+        L_Speed *= -1;
         caterpillar_L.Update(L_Speed);
 
         if (R_Speed > 1) R_Speed = 1; else if (R_Speed < -1) R_Speed = -1;
+        R_Speed *= -1;
         caterpillar_R.Update(-R_Speed);
 
         Turret.Rotate(Vector3.up * Time.deltaTime * TurretSpinSpeed * tss * 360);
@@ -65,12 +70,14 @@ public class TANK : MonoBehaviour
         var p = forwardSpeed * Time.deltaTime;//下記2行で使用する変数
         if (CL.IsGround)
         {
-            rigidbody_.AddForceAtPosition(L_Speed  * p* (transform.forward + transform.right), caterpillar_R.Mesh.transform.position, ForceMode.Impulse);
+            rigidbody_.AddForceAtPosition(-L_Speed * p* (transform.forward - transform.right * 0.001f ), caterpillar_R.Mesh.transform.position, forceMODE);
         }
         if (CR.IsGround)
         {
-            rigidbody_.AddForceAtPosition(-R_Speed  * p * (transform.forward - transform.right), caterpillar_L.Mesh.transform.position, ForceMode.Impulse);  
+            rigidbody_.AddForceAtPosition(R_Speed * p * (transform.forward + transform.right * 0.001f ), caterpillar_L.Mesh.transform.position, forceMODE);  
         }
+
+        rigidbody_.AddForce(Vector3.down);
         if (FMC)
         {
             Debug.Log("fire");
@@ -106,7 +113,7 @@ public class CaterpillarData
     {
         foreach (var t in Wheels)
             t.Rotate(Vector3.up*Time.deltaTime*Radius* -c * SpeedSensiviry);
-        Mesh.materials[0].mainTextureOffset += new Vector2(0, -c * SpeedSensiviry);
+        Mesh.materials[0].mainTextureOffset += new Vector2( -c * SpeedSensiviry, 0);
     }
 }
 
@@ -124,4 +131,4 @@ public class tank_weaponloader
     public bool IsReadyFire;
 }
 
-//発射|サブ|移動|se
+//発射|サブ|se
