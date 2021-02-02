@@ -38,10 +38,8 @@ public static class Key
     public static readonly GamePad_JS JoyStickR = new GamePad_JS("JS_RH",      "JS_RV",    "3rd axis", "6th axis", "4th axis", "5th axis", KeyCode.F, KeyCode.H, KeyCode.G, KeyCode.T);
 
     //================================================================
-    public static readonly GamePad_Trigger _L  = new GamePad_Trigger();
-    public static readonly GamePad_Trigger _LT = new GamePad_Trigger();
-    public static readonly GamePad_Trigger _R  = new GamePad_Trigger();
-    public static readonly GamePad_Trigger _RT = new GamePad_Trigger();
+    public static readonly GamePad_Trigger _Trigger  = new GamePad_Trigger("", "", "");
+    public static readonly GamePad_Trigger _Trigger2 = new GamePad_Trigger("", "", "");
 }
 
 
@@ -55,8 +53,36 @@ public enum SelectGamePad
 
 public class GamePad_Trigger
 {
-    //add
+    string[] tags = new string[3]; //add
+    public GamePad_Trigger
+    (
+        string KeyBoard, 
+        string PS4_,
+        string XBOX360
+    )
+    {
+        tags[0] = KeyBoard;
+        tags[1] = PS4_;
+        tags[2] = XBOX360;
+        //add
+    }
 
+    
+    public float Get
+    {
+        get
+        {
+            switch (Key.gamePad)
+            {
+                case SelectGamePad.PS4     : return Input.GetAxis(tags[1]) > Input.GetAxis(tags[0]) ? Input.GetAxis(tags[1]) : Input.GetAxis(tags[0]);
+                case SelectGamePad.XBOX360 : return Input.GetAxis(tags[2]) > Input.GetAxis(tags[0]) ? Input.GetAxis(tags[2]) : Input.GetAxis(tags[0]);
+                    //add
+            }
+            return 0;
+        }
+    }
+     
+    public static implicit operator float(GamePad_Trigger v) { return v.Get; }
 }
 
 
@@ -97,10 +123,18 @@ public class GamePad_JS
     {
         get
         {
+            return Vector2.Scale(GetRAW, Inverts); 
+        }
+    }
+
+    public Vector2 GetRAW
+    {
+        get
+        {
             switch (Key.gamePad)
             {
-                case SelectGamePad.PS4: return sensivirity * Inverts * new Vector2(GetF(tags[0,0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1])) ;
-                case SelectGamePad.XBOX360: return sensivirity * Inverts * new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
+                case SelectGamePad.PS4: return sensivirity  * new Vector2(GetF(tags[0, 0], tags[1, 0]), GetF(tags[0, 1], tags[1, 1]));
+                case SelectGamePad.XBOX360: return sensivirity  * new Vector2(GetF(tags[0, 0], tags[2, 0]), GetF(tags[0, 1], tags[2, 1]));
                     //add
             }
             return new Vector2(0, 0);
