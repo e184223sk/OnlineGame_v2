@@ -9,12 +9,14 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
     public float defaultSpeed = 5f;
     public float speed = 5f;//移動速度
     public float jumpForce = 100f;//ジャンプ力
-    public float climbForce = 160f;
+    public float climbForce = 10f;
+    public bool NoClimb = true;
     private bool Ground = true;
     private float angle = 0;
     private GameObject PL;
     private CapsuleCollider playercharacter;
     private Animator animator;
+    private Vector3 target = new Vector3(0,10,1);
 
     void Start()
     {
@@ -149,11 +151,15 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
     ///　崖上り
     public void Climb()
     {
-        
-    }
-
-    IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(10000000000000000000);
+        if (NoClimb == false && Input.GetKey(KeyCode.E))//崖登りしない設定がオフになっていてかつEキーが押された時崖を登る（条件は仮置きです）
+        {
+            animator.SetBool("Key_E",true);
+            float step = climbForce * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, target, step);
+        }
+        else
+        {
+            animator.SetBool("Key_E", false);
+        }
     }
   }
