@@ -38,8 +38,9 @@ public static class Key
     public static readonly GamePad_JS JoyStickR = new GamePad_JS("JS_RH",      "JS_RV",    "3rd axis", "6th axis", "4th axis", "5th axis", KeyCode.F, KeyCode.H, KeyCode.G, KeyCode.T);
 
     //================================================================
-    public static readonly GamePad_Trigger _Trigger  = new GamePad_Trigger("", "", "");
-    public static readonly GamePad_Trigger _Trigger2 = new GamePad_Trigger("", "", "");
+    public static readonly GamePad_Trigger _Trigger  = new GamePad_Trigger("Trigger", "Trigger_ps4", "Trigger_xbox");
+    public static readonly GamePad_Trigger _Trigger_TL = new GamePad_Trigger("Trigger_TL", "Trigger_TL_ps4", "Trigger_TL_xbox");
+    public static readonly GamePad_Trigger _Trigger_TR = new GamePad_Trigger("Trigger_TR", "Trigger_TR_ps4", "Trigger_TR_xbox");
 }
 
 
@@ -50,41 +51,42 @@ public enum SelectGamePad
     //add
 }
 
-
 public class GamePad_Trigger
 {
-    string[] tags = new string[3]; //add
+    string keyboard, xbox, ps4;//add
+    
     public GamePad_Trigger
     (
-        string KeyBoard, 
+        string keyboard,
         string PS4_,
         string XBOX360
     )
     {
-        tags[0] = KeyBoard;
-        tags[1] = PS4_;
-        tags[2] = XBOX360;
+        this.keyboard = keyboard; 
+        ps4  = PS4_;
+        xbox = XBOX360;
         //add
     }
 
-    
+
     public float Get
     {
         get
         {
             switch (Key.gamePad)
             {
-                case SelectGamePad.PS4     : return Input.GetAxis(tags[1]) > Input.GetAxis(tags[0]) ? Input.GetAxis(tags[1]) : Input.GetAxis(tags[0]);
-                case SelectGamePad.XBOX360 : return Input.GetAxis(tags[2]) > Input.GetAxis(tags[0]) ? Input.GetAxis(tags[2]) : Input.GetAxis(tags[0]);
+                case SelectGamePad.PS4: return Input.GetAxis(ps4) > Input.GetAxis(keyboard) ? Input.GetAxis(ps4) : Input.GetAxis(keyboard);
+                case SelectGamePad.XBOX360: return Input.GetAxis(xbox) > Input.GetAxis(keyboard) ? Input.GetAxis(xbox) : Input.GetAxis(keyboard);
                     //add
             }
             return 0;
         }
     }
-     
+
     public static implicit operator float(GamePad_Trigger v) { return v.Get; }
 }
 
+ 
 
 public class GamePad_JS
 {
