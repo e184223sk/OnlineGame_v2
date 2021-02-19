@@ -62,6 +62,14 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         return _ID;
     }
 
+    public void Buy(Item.ItemName item , int num)
+    {
+        int sum = Item.ItemSuper.GetPriceSum(Item.ItemName.ToiletPaper, 10);
+        if(_wallet.IsBuyable(sum))
+            _wallet.Pay(sum);
+        _inventry.AddItem(item, num);
+    }
+
     #endregion
 
     #region Private Methods
