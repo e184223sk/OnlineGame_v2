@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Item;
 public class Inventry : MonoBehaviour
 {
     #region Public Properties
@@ -49,14 +49,27 @@ public class Inventry : MonoBehaviour
 
 
     #region Public Methods
+
+    public Inventry(List<ItemSuper> items)
+    {
+        for(int i = 0; i < _ItemList.Count; i++)
+        {
+            _ItemList[i] = items[i];
+        }
+    }
+
+
+
+
+
     /// <summary>
     /// アイテム追加処理　すでに持っているアイテムは数を増やすだけ　超過分は次のスロットに格納
     /// </summary>
-    public void AddItem(ItemSuper item, int num)
+    public void AddItem(ItemName item, int num)
     {
         foreach (ItemSuper i in _ItemList)
         {
-            if (i.GetName() == item.GetName())
+            if (i.GetName() == item.ToString())
             {
                 int tmp_sum = i.GetNum() + num;         //とりあえず合計
                 int over_num = tmp_sum - i._MaxNum;     //とりあえず超過数
@@ -79,12 +92,12 @@ public class Inventry : MonoBehaviour
     }
 
     //アイテム削除処理
-    public void DeleteItem(ItemSuper item, int num)
+    public void DeleteItem(ItemName item, int num)
     {
         foreach (ItemSuper i in _ItemList)
         {
             //インベントリにアクセスしてアイテムを num 分減らす
-            if (i.GetName() == item.GetName())
+            if (i.GetName() == item.ToString())
             {
                 //削除個数が超過した場合、所持数を 0 にしてインベントリから削除
                 if (i.GetNum() > num)
