@@ -20,7 +20,9 @@ public class TANK : MonoBehaviour
     public float TurretSpinSpeed;
     public float Torque;
     float tss, tsx;
-    
+    Vector3 mas;
+    public float masSens;
+    public float Stability;
     void Start()
     {
         rigidbody_ = GetComponent<Rigidbody>();
@@ -32,16 +34,17 @@ public class TANK : MonoBehaviour
         caterpillar_R.Init(transform.Find("Body/CaterpillarR"));
         CL = transform.Find("Body/CaterpillarL").GetComponent<IsCaterpillarGrounding>();
         CR = transform.Find("Body/CaterpillarR").GetComponent<IsCaterpillarGrounding>();
-        rigidbody_.centerOfMass -= transform.up * 0.3f;
+        //rigidbody_.centerOfMass -= transform.up * 0.3f;
+        mas = rigidbody_.centerOfMass;
         //rigidbody_.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void Update()
-    { 
+    {
         //------------------------------------------------------------
-      //  tss = Key.FL;
-    
-        
+        //  tss = Key.FL;
+        rigidbody_.centerOfMass = mas + Vector3.down * masSens;
+
         tsx += Time.deltaTime * Key.JoyStickR.Get.y;
 
 
@@ -65,19 +68,18 @@ public class TANK : MonoBehaviour
 
         if (tsx < 0) tsx = 0; else if (tsx > 1) tsx = 1;
         Cannon.localRotation =Quaternion.Euler(CannonRange.min + tsx * (CannonRange.max - CannonRange.min), 0, 0);
-
-
+         
         var p = forwardSpeed * Time.deltaTime;//下記2行で使用する変数
         if (CL.IsGround)
         {
-            rigidbody_.AddForceAtPosition(-L_Speed * p* (transform.forward - transform.right * 0.001f ), caterpillar_R.Mesh.transform.position, forceMODE);
+            rigidbody_.AddForceAtPosition(L_Speed* p* (transform.forward - transform.right) * Time.deltaTime, caterpillar_R.Mesh.transform.position, forceMODE);
         }
         if (CR.IsGround)
         {
-            rigidbody_.AddForceAtPosition(R_Speed * p * (transform.forward + transform.right * 0.001f ), caterpillar_L.Mesh.transform.position, forceMODE);  
+            rigidbody_.AddForceAtPosition(-R_Speed * p * (transform.forward + transform.right  ) * Time.deltaTime, caterpillar_L.Mesh.transform.position, forceMODE);  
         }
 
-        rigidbody_.AddForce(Vector3.down);
+        rigidbody_.AddForce(Vector3.down* Stability * Time.deltaTime);
         if (FMC)
         {
             Debug.Log("fire");
