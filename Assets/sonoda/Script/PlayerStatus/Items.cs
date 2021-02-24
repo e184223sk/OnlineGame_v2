@@ -11,7 +11,8 @@ namespace Item
 
         #region Static Properties
         //デフォルトの設定
-        public static ToieltPaper ToiletPaperDefault = new ToieltPaper("トイレットペーパー", 100, 50);
+        public static readonly ToieltPaper ToiletPaperDefault = new ToieltPaper("トイレットペーパー", 100, 50);
+
 
         #endregion
 
@@ -22,19 +23,23 @@ namespace Item
             _name = name;
             _price = price;
             _num = num;
+            _prefabName = "TOILETPAPER";
         }
 
 
         #endregion
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
+    }
+    public class Mask : ItemSuper
+    {
+        public static Mask MaskDefault = new Mask("不織布マスク", 200, 30);
 
-        // Update is called once per frame
-        void Update()
-        {
 
+        public Mask( string name , int price , int num)
+        {
+            _name = name;
+            _price = price;
+            _num = num;
+            _prefabName = "MASK";
         }
     }
 
@@ -44,6 +49,7 @@ namespace Item
 
     public enum ItemName
     {
-        ToiletPaper
+        ToiletPaper,
+        Mask
     }
 }

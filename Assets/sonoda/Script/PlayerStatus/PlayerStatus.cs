@@ -24,8 +24,11 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     //プレイヤーの所持金
     private Wallet _wallet;
 
+    //プレイヤーが持っているアイテム
     Inventry _inventry;
 
+    //精算前に商品を入れるカゴ
+    Inventry _basket;
 
     #endregion
 
@@ -74,6 +77,10 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
 
     #region Private Methods
 
+    private void Shopping()
+    {
+
+    }
 
     #endregion
 

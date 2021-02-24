@@ -1,25 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using Item;
 public class Inventry : MonoBehaviour
 {
     #region Public Properties
-    
+
     /// <summary>
     /// アイテムを格納する配列　読み取り専用なのでアクセスはメソッドからお願いします
     /// </summary>
-    public readonly List<ItemSuper> _ItemList = new List<ItemSuper>()
-    {
-        ItemSuper.Null,
-        ItemSuper.Null,
-        ItemSuper.Null,
-        ItemSuper.Null,
-        ItemSuper.Null,
-        ItemSuper.Null
-    };
+    public readonly List<ItemSuper> _ItemList = new List<ItemSuper>();
 
-
+    public int Length { get { return _slot; } }
+        
     #endregion
 
     #region Private Properties
@@ -41,7 +35,7 @@ public class Inventry : MonoBehaviour
                 count += (_ItemList[i] == ItemSuper.Null) ? 1 : 0;
             }
             return count;
-        }
+        }   
         set { }
     }
 
@@ -52,15 +46,16 @@ public class Inventry : MonoBehaviour
 
     public Inventry(List<ItemSuper> items)
     {
-        for(int i = 0; i < _ItemList.Count; i++)
+        _ItemList = new List<ItemSuper>(_slot);
+        _ItemList.AddRange(Enumerable.Repeat(ItemSuper.Null, _slot));
+
+        for (int i = 0; i < _ItemList.Count; i++)
         {
-            _ItemList[i] = items[i];
+            //itemsが_itemListより要素が少ないとき
+            if(i > items.Count - 1)  return;
+            _ItemList[i] =  items[i];
         }
     }
-
-
-
-
 
     /// <summary>
     /// アイテム追加処理　すでに持っているアイテムは数を増やすだけ　超過分は次のスロットに格納
@@ -88,6 +83,23 @@ public class Inventry : MonoBehaviour
                 //非超過分を足す
                 i.AddNum(num);
             }
+        }
+    }
+    /// <summary>
+    /// ただ単純にアイテムを追加するだけ　デフォルトの値が設定される
+    /// </summary>
+    /// <param name="item"></param>
+    public void AddItem(ItemName item )
+    {
+        switch (item)
+        {
+            case ItemName.Mask:
+                _ItemList.Add(Item.Mask.MaskDefault);
+                break;
+
+            case ItemName.ToiletPaper:
+                _ItemList.Add(Item.ToieltPaper.ToiletPaperDefault);
+                break;
         }
     }
 
@@ -142,7 +154,7 @@ public class Inventry : MonoBehaviour
         _slot -= num;
     }
 
-
+    
 
     #endregion
 

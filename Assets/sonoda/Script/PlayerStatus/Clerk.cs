@@ -14,16 +14,6 @@ public class Clerk : MonoBehaviour
 
     #region Private Properties 
 
-    //ショップの商品だな　仮想
-    private Inventry _inventry = new Inventry(
-        new List<ItemSuper>() {
-        Item.ToieltPaper.ToiletPaperDefault,
-        Item.ToieltPaper.ToiletPaperDefault,
-        Item.ToieltPaper.ToiletPaperDefault,
-        Item.ToieltPaper.ToiletPaperDefault,
-        Item.ToieltPaper.ToiletPaperDefault,
-        Item.ToieltPaper.ToiletPaperDefault}
-        );
 
     //プレイヤーがいる範囲を検知する中心点
     [SerializeField]
