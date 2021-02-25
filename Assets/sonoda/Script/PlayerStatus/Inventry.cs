@@ -57,16 +57,18 @@ public class Inventry : MonoBehaviour
         }
     }
 
+    public Inventry() { }
+
     /// <summary>
     /// アイテム追加処理　すでに持っているアイテムは数を増やすだけ　超過分は次のスロットに格納
     /// </summary>
-    public void AddItem(ItemName item, int num)
+    public void AddItem(ItemSuper item, int num)
     {
         foreach (ItemSuper i in _ItemList)
         {
-            if (i.GetName() == item.ToString())
+            if (i.GetName() == item.GetName())
             {
-                int tmp_sum = i.GetNum() + num;         //とりあえず合計
+                int tmp_sum = i.GetNum() + item.GetNum(); ;         //とりあえず合計
                 int over_num = tmp_sum - i._MaxNum;     //とりあえず超過数
                 int remain_num = i._MaxNum - i.GetNum(); //とりあえず保有可能数
 
@@ -81,10 +83,22 @@ public class Inventry : MonoBehaviour
                     }
                 }
                 //非超過分を足す
-                i.AddNum(num);
+                i.AddNum(remain_num);
             }
         }
     }
+
+    /// <summary>
+    /// 渡されたアイテムをただ追加するだけ　超過分とかは考慮しない   店の在庫向け
+    /// </summary>
+    /// <param name="item"></param>
+    public void AddItem(ItemSuper item)
+    {
+        _ItemList.Add(item);
+    }
+
+
+
     /// <summary>
     /// ただ単純にアイテムを追加するだけ　デフォルトの値が設定される
     /// </summary>
@@ -98,7 +112,7 @@ public class Inventry : MonoBehaviour
                 break;
 
             case ItemName.ToiletPaper:
-                _ItemList.Add(Item.ToieltPaper.ToiletPaperDefault);
+                _ItemList.Add(Item.ToiletPaper.ToiletPaperDefault);
                 break;
         }
     }
@@ -108,7 +122,7 @@ public class Inventry : MonoBehaviour
     {
         foreach (ItemSuper i in _ItemList)
         {
-            //インベントリにアクセスしてアイテムを num 分減らす
+            //インベントリにアクセスしてアイテムを num 分減らす   プレイヤーのインベントリ向け
             if (i.GetName() == item.ToString())
             {
                 //削除個数が超過した場合、所持数を 0 にしてインベントリから削除

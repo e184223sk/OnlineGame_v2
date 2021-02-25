@@ -34,9 +34,11 @@ namespace Item
         //アイテム名
         protected string _name;
 
-        //プレハブ名
+        //プレハブ名 アイテムを生成するときにResourceから呼び出す時に使う
         protected string _prefabName;
 
+        //生成したオブジェクトに付けるスクリプト
+        protected ItemSuper _addComponent;
         #endregion ----------------------------------------------------------------
 
         #region Private Properties
@@ -92,8 +94,6 @@ namespace Item
 
         public ItemSuper GetItem()
         {
-
-            Destroy(_object, 0f);
             return this;
         }
         #endregion ----------------------------------------------------------
@@ -138,6 +138,7 @@ namespace Item
 
 
             _object = Instantiate(tmp_obj, pos, Quaternion.identity);
+             
             return _object;
         }
 
@@ -161,11 +162,16 @@ namespace Item
             {
 
                 case ItemName.ToiletPaper:
-                    return Item.ToieltPaper.ToiletPaperDefault.GetPrice() * num;
+                    return Item.ToiletPaper.ToiletPaperDefault.GetPrice() * num;
 
             }
             return 0;
 
+        }
+
+        public static int GetPriceSum(ItemSuper item)
+        {
+            return item.GetPrice() * item.GetNum();
         }
 
 
@@ -191,4 +197,12 @@ namespace Item
         #endregion ---------------------------------------------------------------------------------
 
     }
+
+    public enum ItemName
+    {
+        ToiletPaper,
+        Mask
+    }
 }
+
+

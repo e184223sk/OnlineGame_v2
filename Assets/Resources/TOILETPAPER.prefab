@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6065250670641327691}
   - component: {fileID: 2987891952760493181}
   - component: {fileID: 8812302631625189508}
+  - component: {fileID: 6253677078870036935}
   m_Layer: 0
-  m_Name: toiletpaper
+  m_Name: TOILETPAPER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,3 +80,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &6253677078870036935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7095210662868048984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c75176003ba5541b247c56b6ab61b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _object: {fileID: 7095210662868048984}
