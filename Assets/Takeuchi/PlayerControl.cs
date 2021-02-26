@@ -16,7 +16,7 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
     private GameObject PL;
     private CapsuleCollider playercharacter;
     private Animator animator;
-    private Vector3 target = new Vector3(0,10,1);
+    private Vector3 target = new Vector3(0,2,2);
 
     void Start()
     {
@@ -151,7 +151,15 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
     ///　崖上り
     public void Climb()
     {
-        if (NoClimb == false && Input.GetKey(KeyCode.E))//崖登りしない設定がオフになっていてかつEキーが押された時崖を登る（条件は仮置きです）
+        if (Input.GetKey(KeyCode.E))
+        {
+            animator.SetBool("Key_E", true);
+        }
+        else
+        {
+            animator.SetBool("Key_E", false);
+        }
+        /*if (NoClimb == false && Input.GetKey(KeyCode.E))//崖登りしない設定がオフになっていてかつEキーが押された時崖を登る（条件は仮置きです）
         {
             animator.SetBool("Key_E",true);
             float step = climbForce * Time.deltaTime;
@@ -160,6 +168,6 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
         else
         {
             animator.SetBool("Key_E", false);
-        }
+        }*/
     }
   }
