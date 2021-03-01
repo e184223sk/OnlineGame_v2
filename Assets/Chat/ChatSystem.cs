@@ -45,8 +45,13 @@ public class ChatSystem : MonoBehaviour
             new ChatData(),
             new ChatData()
         };
+
+        foreach (var t in uiData) t.name_.text = t.text_.text = "";
+
     }
-      
+    
+    
+
     void Update()
     {
         if (Key.FL.Down)
@@ -55,10 +60,16 @@ public class ChatSystem : MonoBehaviour
         }
         if (flag)
         {
-            tc += Time.deltaTime*1.3f;
-            space.color = new Color(updateTimeColor.r, updateTimeColor.g, updateTimeColor.b, Mathf.Sin(tc)/3);
+            tc += Time.deltaTime;
+            space.color = new Color
+            (
+                updateTimeColor.r,
+                updateTimeColor.g,
+                updateTimeColor.b,
+                Mathf.Sin(tc)*0.7f
+            );
 
-            if (tc > 1)
+            if (tc > 0.5f)
             {
                 tc = 0;
                 flag = false;
@@ -78,7 +89,6 @@ public class ChatSystem : MonoBehaviour
 
     public void New(ChatUSER user, string text)
     {
-        Debug.Log("call New Method!!" + "::: userN:" + user.NAME + "/// text:" + text + "/// color: " + user.COLOR.r + ":" + user.COLOR.g + ":" + user.COLOR.b + ":" + user.COLOR.a);
         flag = true;
         updateTimeColor = (user.COLOR + Color.white) / 2;
         for (int y = 0; y < 5; y++)
@@ -87,13 +97,13 @@ public class ChatSystem : MonoBehaviour
 
         for (int y = 0; y < 6; y++)
         {
-            uiData[y].name_.text = chatDatas[y].username;
+            uiData[y].name_.text = chatDatas[y].username + ":";
             uiData[y].text_.text = chatDatas[y].text;
             uiData[y].name_.color = uiData[y].text_.color = chatDatas[y].color;
         }
     }
 
-
+    int CntStringData(string x) { return System.Text.Encoding.GetEncoding("Shift_JIS").GetByteCount(x); }
 
     private void OnDestroy()
     {
@@ -119,6 +129,10 @@ public class ChatSystem : MonoBehaviour
 
     public void WritingChat(string x)
     {
-        inputErrorText.enabled = textBox.text.Length >= 32;
+        inputErrorText.enabled = CntStringData(textBox.text) >= 32;
+        if (inputErrorText.enabled)
+            textBox.characterLimit = textBox.text.Length;
+        else
+            textBox.characterLimit = 32;
     }
 }

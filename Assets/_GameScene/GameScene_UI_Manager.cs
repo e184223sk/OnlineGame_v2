@@ -518,8 +518,8 @@ public class WeaponUI_obj
     public void Update(WeaponUIData data)
     {
         root.active = data.enable;
-        Icon.texture = data.icon;
-        Reload.value = data.reload;
+      //  Icon.texture = data.icon;
+      //  Reload.value = data.reload;
         WeaponNumber.text = "Weapon" + data.weaponNumber;
 
         int now = data.now < 0 ? 0 : (data.now > 999 ? 999 : data.now);
