@@ -92,11 +92,9 @@ public class ChatSync : MonobitEngine.MonoBehaviour
     public  void RECV(string str0, string str1)
     {
         ChatUSER user = new ChatUSER(str0);
-        string text = str1;
-
-        //各PCの
-
+        string text = str1; 
         Debug.Log("username : " + str0 + "   text : " + str1);
+        ChatSystem.system.New(user, text);
     }
 
     #endregion ---------------------------------------------------------

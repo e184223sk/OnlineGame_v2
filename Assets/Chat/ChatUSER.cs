@@ -17,17 +17,14 @@ public class ChatUSER
         string[] r = raw.Split( new string[] { ":.:" }, System.StringSplitOptions.None);
         try
         {
-            if (r.Length == 4)
-            {
-                NAME = r[0];
-                COLOR = new Color
-                    (
-                        float.Parse(r[1]),
-                        float.Parse(r[2]),
-                        float.Parse(r[3]),
-                        float.Parse(r[4])
-                    );
-            }
+            NAME = r[0];
+            COLOR = new Color
+                (
+                    float.Parse(r[1]),
+                    float.Parse(r[2]),
+                    float.Parse(r[3]),
+                    float.Parse(r[4])
+                );
         }
         catch (Exception)
         {

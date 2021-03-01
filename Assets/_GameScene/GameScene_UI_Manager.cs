@@ -192,7 +192,7 @@ public class GameScene_UI_Manager : MonoBehaviour
 
     void SaveUIEbl()
     {
-        PlayerPrefs.SetInt("GS-UI", (chatBOX.active ? 2 : 0) + (ctrlerDiscription.active ? 1 : 0));
+       // PlayerPrefs.SetInt("GS-UI", (chatBOX.active ? 2 : 0) + (ctrlerDiscription.active ? 1 : 0));
         PlayerPrefs.Save();
     }
 
