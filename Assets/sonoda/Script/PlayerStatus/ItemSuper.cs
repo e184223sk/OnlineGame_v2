@@ -132,14 +132,10 @@ namespace Item
         /// このアイテムを生成する処理
         /// </summary>
         /// <returns></returns>
-        public GameObject Init(Vector3 pos)
+        public GameObject Init()
         {
             GameObject tmp_obj = Resources.Load(_prefabName) as GameObject;
-
-
-            _object = Instantiate(tmp_obj, pos, Quaternion.identity);
-             
-            return _object;
+            return Instantiate(tmp_obj, Vector3.zero, Quaternion.identity); ;
         }
 
         public override string ToString()
@@ -182,6 +178,30 @@ namespace Item
             
             return (ItemName)System.Enum.Parse(typeof(ItemName) ,names[Random.Range(0, names.Length)]);
 
+        }
+
+        public static ItemSuper RandomItem()
+        {
+            ItemName name = RandomItemName();
+            switch (name.ToString())
+            {
+                case "Mask":
+                    Mask tmp_mask = Mask.MaskDefault;
+                    tmp_mask._object = Resources.Load(tmp_mask._prefabName) as GameObject;
+
+                    return tmp_mask;
+
+
+
+                case "ToiletPaper":
+                    ToiletPaper tmp_ToiletPaper = ToiletPaper.ToiletPaperDefault;
+                    tmp_ToiletPaper._object = Resources.Load(tmp_ToiletPaper._prefabName) as GameObject;
+
+                    return tmp_ToiletPaper;
+            }
+
+
+            return ItemSuper.Null;
         }
 
 

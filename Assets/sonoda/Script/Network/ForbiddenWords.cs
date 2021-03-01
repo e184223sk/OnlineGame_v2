@@ -58,17 +58,17 @@ public class ForbiddenWords
     /// </summary>
     /// <param name="text"></param>
     /// <returns></returns>
-    public static bool WordFilter(string text)
+    public static string WordFilter(string text)
     {
         foreach (string s in Words)
         {
             if (text.Contains(s))
             {
-                return true;
+                return "";
             }
         }
 
-        return false;
+        return text;
     }
     #endregion
 }

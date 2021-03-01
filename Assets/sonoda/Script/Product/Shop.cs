@@ -8,24 +8,32 @@ using Item;
 public class Shop : MonoBehaviour
 {
     #region Public Properties
-    
+
     //アイテムが自動で生成される間隔　〇秒
-    [Range(0,180)]
-    public float _SpawnInterval ;
-    
-    
+    [Range(0, 180)]
+    public float _SpawnInterval;
+
+
     #endregion
 
     #region Private Properties
 
+    //初期のアイテム生成個数
+    [SerializeField, Range(2, 10)]
+    private int _startItemNum = 2;
+
+    //アイテム最大出現個数
+    private int _maxItemNum = 10;
+
+
     //この店の在庫
-    private Inventry _stock;
+    private List<ItemSuper> _stock = new List<ItemSuper>();
 
     //商品を配置する範囲
     [SerializeField]
     private Vector3 _productArea;
 
-   
+
     //商品を配置する範囲の中心
     [SerializeField]
     private Vector3 _productCenter;
@@ -37,18 +45,22 @@ public class Shop : MonoBehaviour
     private Transform _transform;
 
     //アイテムの親オブジェクト　（空）
+    [SerializeField]
     private GameObject _itemParent;
 
     //経過時間
     private float _time;
 
     //最低生成個数
-    [SerializeField ,Range(0,50)]
+    [SerializeField, Range(0, 50)]
     private int _MinSpawn;
 
     //最大生成個数
     [SerializeField, Range(50, 100)]
     private int _MaxSpawn;
+
+
+    private bool _IsStart =false;
 
     #endregion
 
@@ -59,19 +71,13 @@ public class Shop : MonoBehaviour
     void Start()
     {
         //------------------------------------- 初期化 ---------------------------------------
-        //最初にスポーンさせるアイテムのリスト
-        var list = new List<Item.ItemSuper>()
-        {
-            Item.Mask.MaskDefault,
-            Item.ToiletPaper.ToiletPaperDefault
-        };
-
         //在庫の初期化
-        _stock = new Inventry( list );
+
+        
 
         //アイテムの親オブジェクト　初期化
         _itemParent = new GameObject();
-        _itemParent.name = "ItemParent";
+        _itemParent.name = "ItemParent" + this.gameObject.name;
         _itemParent.transform.parent = this.transform;
         _itemParent.transform.position = transform.TransformPoint(Vector3.zero);
 
@@ -82,24 +88,19 @@ public class Shop : MonoBehaviour
         int[] a = new int[1];
         //------------------------------------ 生成 ----------------------------------------
 
-        for (int i = 0; i < _stock._ItemList.Count; i++)
+        for(int i = 0; i < _startItemNum; i++)
         {
-            if (_stock._ItemList[i] != Item.ItemSuper.Null)
-            {
-               GameObject tmp_obj = _stock._ItemList[i].Init(RandomPos());
-                tmp_obj.transform.parent = _itemParent.transform;
-            }
+            GenerateItem();
         }
 
         //------------------------------------ 生成終わり ----------------------------------------
-
-
 
     }
 
     // Update is called once per frame
     void Update()
     {
+
         SpawnItem();
     }
 
@@ -112,7 +113,7 @@ public class Shop : MonoBehaviour
 
         //商品を生成するエリアを可視化
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(_productCenter + transform.position,_productArea);
+        Gizmos.DrawWireCube(_productCenter + transform.position, _productArea);
     }
 
     //入店処理
@@ -123,7 +124,7 @@ public class Shop : MonoBehaviour
         //入ってきたのがプレイヤーなら
         if (player != null)
         {
-            player.EnterShop(this);
+            player.EnterShop(this.gameObject);
         }
     }
 
@@ -137,6 +138,8 @@ public class Shop : MonoBehaviour
         {
             player.LeaveShop();
         }
+
+        near_dis = 10000;
     }
 
 
@@ -145,7 +148,7 @@ public class Shop : MonoBehaviour
 
     #region Public Methods ----------------------------------------------------------------------------
 
-
+    private float near_dis = 10000;
     /// <summary>
     /// あるオブジェクトに一番近いアイテムの位置を返す
     /// </summary>
@@ -153,32 +156,43 @@ public class Shop : MonoBehaviour
     /// <returns>一番近い</returns>
     public ItemSuper NearestItem(Vector3 objPos)
     {
-        ItemSuper nearestItem=  ItemSuper.Null;
-        float near_dis = 10000;
+        ItemSuper nearestItem = ItemSuper.Null;
 
-        foreach(var i in _stock._ItemList)
+
+        foreach (var i in _stock)
         {
-
             if (i == ItemSuper.Null) continue;
 
-            //
-
-
-                if (Vector3.Distance(i._object.transform.position,objPos) < near_dis)
+            
+            float tmp_dis = Vector3.Distance(  i._object.transform.position, objPos);
+            Debug.Log(i._object.name);
+            Debug.Log(i._object.transform.position);
+            Debug.Log(i.GetName() + " : " + tmp_dis.ToString());
+            //より近いアイテムがあったら
+            if (near_dis > tmp_dis)
             {
                 nearestItem = i;
-                near_dis = Vector3.Distance(i._object.transform.position, objPos);
-            }
 
+                near_dis = tmp_dis;
+            }
+            
         }
         return nearestItem;
 
     }
 
 
-    #endregion
+    public List<ItemSuper> GetStock()
+    {
+        return _stock;
+    }
+
+    #endregion  ----------------------------------------------------------------------------
 
     #region Private Methods ----------------------------------------------------------------------------
+
+
+    private int count = 1;
 
     /// <summary>
     /// Updateで実行　一定間隔でランダムにアイテムを生成
@@ -187,30 +201,55 @@ public class Shop : MonoBehaviour
     {
         _time += Time.deltaTime;
 
-        if(_time  > _SpawnInterval)
+        //最大出現個数を上回ったら生成しない
+        if (_stock.Count >= _maxItemNum) _time = 0f;
+
+        if (_time > _SpawnInterval)
         {
-            _stock.AddItem(ItemSuper.RandomItemName());
-            GameObject tmp_obj= _stock._ItemList[_stock._ItemList.Count - 1].Init(RandomPos());
+            //あらかじめ設定した値を追加するように
+            GenerateItem();
+
+            //これだと追加した後の変更が利かない　_objectの設定がうまくいってないと思われる
+            /*_stock.AddItem(ItemSuper.RandomItemName());
+            GameObject tmp_obj = _stock._ItemList[_stock._ItemList.Count - 1].Init(RandomPos());
             tmp_obj.transform.parent = _itemParent.transform;
-            
+            //tmp_obj.tra
+            */
             _time = 0;
         }
 
     }
 
 
+    private void GenerateItem()
+    {
+        ItemSuper item = ItemSuper.RandomItem();
+        
+        Vector3 pos = RandomPos();
+
+        item._object = item.Init();
+        item._object.transform.parent = _itemParent.transform;
+        item._object.transform.position = pos;
+        _stock.Add(item);
+
+
+    }
+
+
     /// <summary>
-    /// 商品を生成する位置をランダムで生成
+    /// 商品を生成する位置をランダムで生成   （ローカル）
     /// </summary>
     /// <returns></returns>
     private Vector3 RandomPos()
     {
         float x, y, z;
         x = Random.Range(-_productArea.x / 2, _productArea.x / 2) + _productCenter.x;
-        y = Random.Range(0, _productArea.y ) + _productCenter.y;
+        y = Random.Range(0, _productArea.y) + _productCenter.y;
         z = Random.Range(-_productArea.z / 2, _productArea.z / 2) + _productCenter.z;
 
-        return transform.TransformPoint(new Vector3(x, y, z));
+
+
+        return transform.TransformPoint( new Vector3(x, y, z));
     }
 
     #endregion  ----------------------------------------------------------------------------

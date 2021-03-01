@@ -42,7 +42,7 @@ public class NetworkSuper :MonobitEngine.MonoBehaviour
         //不適切な表現を削除--------------------------------------------------------------
 
         text = text.Replace(" ", "").Replace("　", "").Trim();
-        if (ForbiddenWords.WordFilter(text))
+        if (ForbiddenWords.WordFilter(text) == "")
         {
             text += Environment.NewLine + "<color=red>不適切な表現を含むため送信できません</color>";
             return;

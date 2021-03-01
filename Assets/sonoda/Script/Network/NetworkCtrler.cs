@@ -190,7 +190,7 @@ public class NetworkCtrler : MonobitEngine.MonoBehaviour
         _playerName = name;
 
 
-        //プレイヤー名が入力されていれば部屋への入室するボタン  
+        //プレイヤー名が入力されていれば部屋へ入室するボタン  
         if ( !string.IsNullOrEmpty(_playerName))
         {
             if (!MonobitNetwork.inRoom)

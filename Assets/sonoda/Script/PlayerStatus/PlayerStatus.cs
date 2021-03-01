@@ -6,12 +6,19 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
 {
     #region Public Properties
 
-    //MonobitNetwork上でのID
-    private int _ID;
+    public int ShowMoney;
+
+    public bool _isShop;
+
+    public Item.ItemSuper gettablItem;
 
     #endregion
 
     #region Private Properties
+
+    //MonobitNetwork上でのID
+    private int _ID;
+
 
     //プレイヤーの体力　Hit Point
     private PlayerHP _HP;
@@ -37,6 +44,7 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     [SerializeField]
     float GettableDis;
 
+
     #endregion
 
 
@@ -48,13 +56,20 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     {
         _ID = MonobitNetwork.player.ID;
 
+        _wallet = new Wallet(100000);
+
         _basket = new Inventry();
     }
 
     // Update is called once per frame
     void Update()
     {
+        ShowMoney = _wallet.GetMoney();
+
         Shopping();
+        _isShop = _nowShop != null;
+        
+
     }
 
     #endregion
@@ -82,9 +97,14 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         _inventry.AddItem(item, num);
     }
    */
-    public void EnterShop(Shop shop)
+    public void EnterShop(GameObject shopObj)
     {
-        _nowShop = shop;
+        _nowShop = shopObj.GetComponent<Shop>();
+       /* Debug.Log(shop.name);
+        foreach(var i in shop.GetStock())
+        {
+            Debug.Log(i._object.transform.position);
+        }*/
     }
 
     public void LeaveShop()
@@ -104,8 +124,6 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         {
             _inventry.AddItem(i);
         }
-
-
     }
        
 
@@ -122,14 +140,19 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
             // A(仮) が押されたら　ボタンは後で変更
             if (Key.A.Down || Input.GetKeyDown(KeyCode.Space))
             {
-                Item.ItemSuper item = _nowShop.NearestItem(gameObject.transform.position);
 
+                Debug.Log(_nowShop.gameObject.name);
+                Item.ItemSuper item = _nowShop.NearestItem(gameObject.transform.position); //自分のアイテム以外にも働いちゃってる
+
+                //Debug.Log( item.GetName() +" : " + item._object.transform.position.ToString());
 
                 //取得可能な距離にいたら
                 if(GettableDis > Vector3.Distance(item._object.transform.position , gameObject.transform.position))
                 {
+                    Debug.Log("gettableItem is : " + item._object.name);
                     _basket.AddItem(item);
-                    Destroy(item._object);
+                    gettablItem = item;
+                    //Destroy(item._object);
                 }
             }
         }
