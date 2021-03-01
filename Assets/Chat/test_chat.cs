@@ -2,8 +2,7 @@
 
 public class test_chat : MonoBehaviour
 {
-    public string user;
-    public Color color;
+    public ChatUSER user; 
 
-    void Update() => ChatSystem.userDatas = new ChatUSER(user, color);
+    void Update() => ChatSystem.userDatas = user;
 }

@@ -8,12 +8,15 @@ public class GameSceneSystem : MonoBehaviour
     public float time;
     public static float start_time;
     TimerUI timerui;
+    public ChatUSER user;
+     
     public bool IsGameTime;///ゲーム中か?(時間切れや勝利条件を満たしたならfalse)
     void Start()
     {
         time = start_time;
         timerui = GameObject.Find("TimerUI_Canvas/TimerUI").GetComponent<TimerUI>();
         IsGameTime = true;
+        ChatSystem.userDatas = user;
     }
 
 
