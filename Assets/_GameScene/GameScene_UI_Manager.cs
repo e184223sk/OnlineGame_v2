@@ -80,8 +80,7 @@ public class GameScene_UI_Manager : MonoBehaviour
     WeaponUI_obj WeaponUI0, WeaponUI1;
      
     GameObject chatBOX, ctrlerDiscription;
-
-    public chatBox ChatBox;
+     
 
     void Start()
     {
@@ -578,109 +577,10 @@ public class WeaponUI_obj
 
 
 
-
-/// <summary>
-/// チャットボックスを管理するクラス
-/// </summary>
-public class chatBox
-{
-    /// <summary>
-    /// 現在何回チャットに入力されたか?
-    /// </summary>
-    int g = 0;
-
-    /// <summary>
-    /// チャットを表示させるTextUIの配列
-    /// (上から0,1,2...)
-    /// </summary>
-    Text[] texts;
+ 
 
 
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    /// <param name="root">親オブジェクト</param>
-    public chatBox(GameObject root)
-    {
-        texts = new Text[6];
-        for (int i = 0; i < 6; i++)
-            texts[i] = root.transform.Find("Text (" + i + ")").GetComponent<Text>();
-        foreach (var t in texts)
-        {
-            t.text = "";
-        }
-    }
-
-    /// <summary>
-    /// チャットに新しい文を追加する
-    /// </summary>
-    /// <param name="chat">チャットデータ(ChatData)</param>
-    public void Add(ChatData chat)
-    {
-        g++;
-        if (g > 7)
-        {
-            for (int c = 0; c < 6; c++)
-                Set(c, texts[c + 1].text, texts[c + 1].color);
-            Set(6, "[" + chat.user + "]" + chat.text, chat.color);
-        }
-        else
-        {
-            Set(g, "[" + chat.user + "]" + chat.text, chat.color);
-        }
-    }
-
-    /// <summary>
-    /// 文字を更新する関数
-    /// </summary>
-    /// <param name="p">変更したいtextsの要素番号</param>
-    /// <param name="text">文字</param>
-    /// <param name="c">色</param>
-    void Set(int p, string text, Color c)
-    {
-        texts[p].text = text;
-        texts[p].color = c;
-    }
-}
-
-
-
-
-
-/// <summary>
-/// チャット1文のデータを保持するクラス
-/// </summary>
-public class ChatData
-{
-    /// <summary>
-    /// ユーザー名
-    /// </summary>
-    public string user;
-
-    /// <summary>
-    /// チャット文字データ
-    /// </summary>
-    public string text;
-
-    /// <summary>
-    /// チャット文字のデータ
-    /// </summary>
-    public Color color;
-
-
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    /// <param name="user">ユーザネーム</param>
-    /// <param name="text">文字情報</param>
-    /// <param name="color">文字の色</param>
-    public ChatData(string user, string text, Color color)
-    {
-        this.user = user;
-        this.text = text;
-        this.color = color;
-    }
-}
+ 
 
 
 
