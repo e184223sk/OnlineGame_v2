@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ChatSync : MonoBehaviour
 {
-    void SEND(ChatUSER user, string text)
+    public static void SEND(ChatUSER user, string text)
     {
         //各PCのADD関数を引数をそのまま入れて呼ぶ
     }
 
-    void RECV(ChatUSER user, string text)
+    public static void RECV(ChatUSER user, string text)
     {
         //各PCの
     }
