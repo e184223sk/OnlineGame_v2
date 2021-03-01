@@ -1,19 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine; 
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ChatTextUI : MonoBehaviour
+public class ChatTextUI
 {
-    // Start is called before the first frame update
-    void Start()
+    public Text name_, text_;
+    public ChatTextUI(Transform root_)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        name_ = root_.Find("name").GetComponent<Text>();
+        text_ = root_.Find("text").GetComponent<Text>();
+    } 
 }

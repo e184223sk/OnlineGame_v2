@@ -9,12 +9,7 @@ public class test_chat : MonoBehaviour
     public Text text;
     public string username, text_;
     public Color color;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+     
     // Update is called once per frame
     void Update()
     { 
