@@ -98,25 +98,6 @@ public class Inventry : MonoBehaviour
     }
 
 
-
-    /// <summary>
-    /// ただ単純にアイテムを追加するだけ　デフォルトの値が設定される
-    /// </summary>
-    /// <param name="item"></param>
-    public void AddItem(ItemName item )
-    {
-        switch (item)
-        {
-            case ItemName.Mask:
-                _ItemList.Add(Item.Mask.MaskDefault);
-                break;
-
-            case ItemName.ToiletPaper:
-                _ItemList.Add(Item.ToiletPaper.ToiletPaperDefault);
-                break;
-        }
-    }
-
     //アイテム削除処理
     public void DeleteItem(ItemName item, int num)
     {

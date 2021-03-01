@@ -125,6 +125,7 @@ public class Shop : MonoBehaviour
         if (player != null)
         {
             player.EnterShop(this.gameObject);
+            _SpawnInterval = 100;   //スポーン間隔を遅く
         }
     }
 
@@ -228,8 +229,9 @@ public class Shop : MonoBehaviour
         Vector3 pos = RandomPos();
 
         item._object = item.Init();
-        item._object.transform.parent = _itemParent.transform;
+        //item._object.transform.parent = _itemParent.transform;
         item._object.transform.position = pos;
+        item._object.name += count++.ToString();
         _stock.Add(item);
 
 
@@ -249,7 +251,7 @@ public class Shop : MonoBehaviour
 
 
 
-        return transform.TransformPoint( new Vector3(x, y, z));
+        return new Vector3(x, y, z)　+ transform.position;
     }
 
     #endregion  ----------------------------------------------------------------------------

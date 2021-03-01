@@ -45,6 +45,8 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     float GettableDis;
 
 
+    [SerializeField]
+    List<Item.ItemSuper> ITEMS;
     #endregion
 
 
@@ -99,11 +101,15 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
    */
     public void EnterShop(GameObject shopObj)
     {
+        
         _nowShop = shopObj.GetComponent<Shop>();
-       /* Debug.Log(shop.name);
-        foreach(var i in shop.GetStock())
+        //Debug.Log(_nowShop.name);
+       // Debug.Log("配列の要素数" + _nowShop.GetStock().Count);
+
+        ITEMS = _nowShop.GetStock();
+        /*foreach(var i in _nowShop.GetStock())
         {
-            Debug.Log(i._object.transform.position);
+            Debug.Log(i._object.name +  i._object.transform.position);
         }*/
     }
 

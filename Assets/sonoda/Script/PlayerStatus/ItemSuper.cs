@@ -134,8 +134,7 @@ namespace Item
         /// <returns></returns>
         public GameObject Init()
         {
-            GameObject tmp_obj = Resources.Load(_prefabName) as GameObject;
-            return Instantiate(tmp_obj, Vector3.zero, Quaternion.identity); ;
+            return Instantiate(Resources.Load(_prefabName), Vector3.zero, Quaternion.identity) as GameObject;
         }
 
         public override string ToString()
@@ -152,7 +151,7 @@ namespace Item
         /// <param name="item">列挙型のアイテム名</param>
         /// <param name="num">指定する個数</param>
         /// <returns></returns>
-        public static int GetPriceSum(ItemName item, int num)
+        /*public static int GetPriceSum(ItemName item, int num)
         {
             switch (item)
             {
@@ -163,7 +162,7 @@ namespace Item
             }
             return 0;
 
-        }
+        }*/
 
         public static int GetPriceSum(ItemSuper item)
         {
@@ -186,7 +185,7 @@ namespace Item
             switch (name.ToString())
             {
                 case "Mask":
-                    Mask tmp_mask = Mask.MaskDefault;
+                    Mask tmp_mask = new Mask("不織布マスク", 200, 30);
                     tmp_mask._object = Resources.Load(tmp_mask._prefabName) as GameObject;
 
                     return tmp_mask;
@@ -194,7 +193,7 @@ namespace Item
 
 
                 case "ToiletPaper":
-                    ToiletPaper tmp_ToiletPaper = ToiletPaper.ToiletPaperDefault;
+                    ToiletPaper tmp_ToiletPaper = new ToiletPaper("トイレットペーパー", 100, 50);
                     tmp_ToiletPaper._object = Resources.Load(tmp_ToiletPaper._prefabName) as GameObject;
 
                     return tmp_ToiletPaper;
