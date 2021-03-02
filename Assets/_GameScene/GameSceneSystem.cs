@@ -13,8 +13,7 @@ public class GameSceneSystem : MonoBehaviour
     public bool IsGameTime;///ゲーム中か?(時間切れや勝利条件を満たしたならfalse)
     void Start()
     {
-        time = start_time;
-        timerui = GameObject.Find("TimerUI_Canvas/TimerUI").GetComponent<TimerUI>();
+        time = start_time; 
         IsGameTime = true;
         ChatSystem.userDatas = user;
     }
@@ -34,8 +33,7 @@ public class GameSceneSystem : MonoBehaviour
             {
                 IsGameTime = false;
                 return;
-            }
-            timerui.time = time;
+            } 
             //勝利条件/敗北条件を確認する----------------------
 
             if(false)//どちらかが勝ったらtrueになるif文をかく

@@ -5,6 +5,37 @@ using UnityEngine;
 public class AirPlaneCtrl : MonoBehaviour
 {
     Rigidbody rigidbody_;
+    public float Accel, Spin;
+    [Range(0,1)]
+    public float Buoyancy;
+    public Vector3 massCenter;
+
+    void Start()
+    {
+        rigidbody_ = GetComponent<Rigidbody>();
+    }
+     
+    void FixedUpdate()
+    { 
+        rigidbody_.AddRelativeForce(0, Accel * Accel * Time.deltaTime * Buoyancy, Accel * Time.deltaTime, ForceMode.Acceleration);
+        rigidbody_.AddRelativeTorque(Accel * Accel * Time.deltaTime * Buoyancy, Spin, 0, ForceMode.Acceleration);
+        rigidbody_.centerOfMass = Vector3.Scale(transform.forward, massCenter);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(Vector3.Scale(transform.forward, massCenter) + transform.position, 1.3f);
+    }
+}
+
+
+/*
+ using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AirPlaneCtrl : MonoBehaviour
+{
+    Rigidbody rigidbody_;
     public float Accel, Buoyancy;
 
     public float spin;
@@ -54,3 +85,7 @@ public class AirPlaneCtrl : MonoBehaviour
 
     }
 }
+
+     
+     
+     */
