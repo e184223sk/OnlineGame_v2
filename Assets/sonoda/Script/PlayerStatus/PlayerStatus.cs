@@ -8,9 +8,6 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
 
     public int ShowMoney;
 
-    public bool _isShop;
-
-    public Item.ItemSuper gettablItem;
 
     #endregion
 
@@ -35,7 +32,7 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     Inventry _inventry;
 
     //精算前に商品を入れるカゴ
-    Inventry _basket;
+    List<Item.ItemSuper> _basket = new List<Item.ItemSuper>();
 
     //現在入っている店の情報
     Shop _nowShop;
@@ -60,7 +57,7 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
 
         _wallet = new Wallet(100000);
 
-        _basket = new Inventry();
+        _inventry = new Inventry();
     }
 
     // Update is called once per frame
@@ -69,7 +66,6 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         ShowMoney = _wallet.GetMoney();
 
         Shopping();
-        _isShop = _nowShop != null;
         
 
     }
@@ -118,17 +114,28 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         _nowShop = null;
         int sumPrice = 0;
 
-        List<Item.ItemSuper> tmp_items = new List<Item.ItemSuper>();
-        foreach(var i in _basket._ItemList)
+        List<Item.ItemSuper> buyable_items = new List<Item.ItemSuper>();
+        foreach(var i in _basket)
         {
-            sumPrice += Item.ItemSuper.GetPriceSum(i);
-            tmp_items.Add(i);
-            if (!_wallet.IsBuyable(sumPrice)) break;
+            //代金以上のお金が財布に残っていたら
+            if( _wallet.IsBuyable(sumPrice + Item.ItemSuper.GetPriceSum(i)))
+            {
+                sumPrice += Item.ItemSuper.GetPriceSum(i);
+                buyable_items.Add(i);
+            }
+            else break;
         }
         _wallet.Pay(sumPrice);
-        foreach(var i in tmp_items)
+        foreach(var i in buyable_items)
         {
-            _inventry.AddItem(i);
+            Item.ItemSuper tmp_item = _inventry.AddItem(i, 0);
+            //アイテムがインベントリに収まらずあふれた時
+            if (tmp_item != Item.ItemSuper.Null)
+            {
+                //超過分のお金の払い戻し
+                _wallet.Receipt(Item.ItemSuper.GetPriceSum(tmp_item));
+                break;
+            }
         }
     }
        
@@ -148,7 +155,13 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
             {
 
                 Debug.Log(_nowShop.gameObject.name);
-                Item.ItemSuper item = _nowShop.NearestItem(gameObject.transform.position); //自分のアイテム以外にも働いちゃってる
+                Item.ItemSuper item = _nowShop.NearestItem(transform.position);
+                if (item == Item.ItemSuper.Null)
+                {
+                    Debug.Log("近くにないよ");
+                    return;
+                }
+                
 
                 //Debug.Log( item.GetName() +" : " + item._object.transform.position.ToString());
 
@@ -156,9 +169,8 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
                 if(GettableDis > Vector3.Distance(item._object.transform.position , gameObject.transform.position))
                 {
                     Debug.Log("gettableItem is : " + item._object.name);
-                    _basket.AddItem(item);
-                    gettablItem = item;
-                    //Destroy(item._object);
+                    _basket.Add(item);
+                    _nowShop.RemoveItem(item._object.name);
                 }
             }
         }

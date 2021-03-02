@@ -13,12 +13,11 @@ public class CloudSetting : MonoBehaviour
     { 
         var v = TimeData.TimePoint;
         var c = _material.GetColor("_Color");
-        _material.SetColor("_Color", new Color(c.r, c.g, c.b, emitter.Evaluate(v).grayscale));
+        _material.SetColor("_Color", new Color(c.r, c.g, c.b, _material.GetColor("_Color").a));
     }
 
-
 #if UNITY_EDITOR
-     
+
     void OnDrawGizmos() => Update();
 
 #endif

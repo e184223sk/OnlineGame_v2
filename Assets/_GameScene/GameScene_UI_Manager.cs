@@ -7,34 +7,39 @@ public class GameScene_UI_Manager : MonoBehaviour
 {
     public static GameScene_UI_Manager ui;
     public static bool FocusChatTextBox;
-    public Texture2D TeamIcon;
+    public Texture2D TeamIcon_Resaler, TeamIcon_Police; 
+    [Space(10), SerializeField,Range(0,1f)] float HpValue; 
+    [SerializeField] Gradient hpColor;  
+    [SerializeField, Range(0,99999999),Space(15)] long MoneyValue; 
+    [SerializeField] Gradient MoneyUiColor; 
+    [SerializeField] Texture2D[] num; 
+    [Space(35)] public GameScene_UI_CTRLUI ctrler; 
+    [SerializeField,Space(25)] public CTRLUI_Discription Ctrl_Discription; 
+    [Space(55), SerializeField] public WeaponUIData Weapon0;
+    [Space(15), SerializeField] public WeaponUIData Weapon1;
+    
 
-    [Space(10)]
-    [SerializeField,Range(0,1f)]
-    float HpValue;
 
-    public float hpValue
+    Slider HP;
+    WeaponUI_obj WeaponUI0, WeaponUI1;
+    RawImage[] money;
+    Image hpImg;
+    RawImage[] moneyCamma;
+    RectTransform moneyUiRoot;
+    GameObject chatBOX, ctrlerDiscription;
+    CTRLUI_Discription_TEXTUI ps4, ps5, xbox, keyboard;
+    RawImage TeamICON;
+    TimerUI timeCount;
+    GameSceneSystem mainSys;
+
+
+    public Texture2D[] getNum
     {
         get
         {
-            return HpValue;
-        }
-        set
-        {
-            HpValue = value > 1 ? 1 : (value < 0 ? 0 : value);
+            return num;
         }
     }
-
-    [SerializeField]
-    Gradient hpColor;
-
-    Slider HP;
-
-    Image hpImg;
-
-
-    [SerializeField, Range(0,99999999),Space(15)]
-    long MoneyValue;
 
     public long moneyValue
     {
@@ -49,43 +54,27 @@ public class GameScene_UI_Manager : MonoBehaviour
         }
     }
 
+    public float hpValue
+    {
+        get
+        {
+            return HpValue;
+        }
+        set
+        {
+            HpValue = value > 1 ? 1 : (value < 0 ? 0 : value);
+        }
+    }
 
-    [SerializeField]
-    Gradient MoneyUiColor;
 
-    [SerializeField]
-    Texture2D[] num;
-    public Texture2D[] getNum { get { return num; }  }
-    //[SerializeField]
-    RawImage[] money;
-
-    //[SerializeField]
-    RawImage[] moneyCamma;
-
-    //[SerializeField]
-    RectTransform moneyUiRoot;
-
-    [Space(35)]
-    public GameScene_UI_CTRLUI ctrler;
-
-    [SerializeField,Space(25)]
-    public CTRLUI_Discription Ctrl_Discription;
-
-    CTRLUI_Discription_TEXTUI ps4, ps5, xbox, keyboard;
-
-    [Space(55)]
-    [SerializeField] public WeaponUIData Weapon0;
-    [Space(15)]
-    [SerializeField] public WeaponUIData Weapon1;
-    WeaponUI_obj WeaponUI0, WeaponUI1;
-     
-    GameObject chatBOX, ctrlerDiscription;
-     
 
     void Start()
     {
-        ui = this;
-
+        mainSys = GetComponent<GameSceneSystem>();
+        ui = this; 
+        TeamICON = GameObject.Find("Canvas/teams").GetComponent<RawImage>();
+        timeCount = GameObject.Find("TimerUI_Canvas/TimerUI").GetComponent<TimerUI>();
+        //チームアイコンの割り振り
         HP = GameObject.Find("Canvas/BG_HP&MONEY/HPbar").GetComponent<Slider>();
         hpImg = GameObject.Find("Canvas/BG_HP&MONEY/HPbar/Fill Area/Fill").GetComponent<Image>();
 
@@ -111,6 +100,8 @@ public class GameScene_UI_Manager : MonoBehaviour
         ctrlerDiscription.active = gsui % 2 == 1;
         WeaponUI0 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI1"));
         WeaponUI1 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI1"));
+        chatBOX.active = false;
+        ctrlerDiscription.active = false;
     }
 
     void OnDestroy()
@@ -122,6 +113,9 @@ public class GameScene_UI_Manager : MonoBehaviour
 
     void Update()
     {
+        //時間の更新------------------------------------------------
+        timeCount.time = mainSys.time;
+
         //Input-------------------------------------------
         if (Key.FL.Down) chatBOX.active = !chatBOX.active;
         if (Key.FR.Down) ctrlerDiscription.active = !ctrlerDiscription.active;
@@ -164,6 +158,7 @@ public class GameScene_UI_Manager : MonoBehaviour
         int digit = moneyCamma[2].gameObject.active ? 3 : (moneyCamma[1].gameObject.active ? 2 : (moneyCamma[0].gameObject.active ? 1 : 0));
         for (var i = moneyValue; i >= 10; i /= 10) digit++;
         moneyUiRoot.localPosition = new Vector3( digit * 6.1f + -166.2f, -7.51f, 0);
+
         //Ctrler
         ps4?.Update(Ctrl_Discription);
         ps5?.Update(Ctrl_Discription);
@@ -182,9 +177,14 @@ public class GameScene_UI_Manager : MonoBehaviour
             case GameScene_UI_CTRLUI.Xbox: xbox.root.active = true; break;
             case GameScene_UI_CTRLUI.KEYBOARD: keyboard.root.active = true; break;
         }
+        //Timer
 
+        //Team ICON
+
+        //Weapon
         WeaponUI0.Update(Weapon0);
         WeaponUI1.Update(Weapon1);
+
     }
 
 
@@ -521,7 +521,7 @@ public class WeaponUI_obj
       //  Icon.texture = data.icon;
       //  Reload.value = data.reload;
         WeaponNumber.text = "Weapon" + data.weaponNumber;
-
+        Name.text = data.weaponName;
         int now = data.now < 0 ? 0 : (data.now > 999 ? 999 : data.now);
         int max = data.max < 0 ? 0 : (data.max > 999 ? 999: data.max);
 

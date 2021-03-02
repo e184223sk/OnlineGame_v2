@@ -13,7 +13,7 @@ public class Inventry : MonoBehaviour
     public readonly List<ItemSuper> _ItemList = new List<ItemSuper>();
 
     public int Length { get { return _slot; } }
-        
+
     #endregion
 
     #region Private Properties
@@ -35,7 +35,7 @@ public class Inventry : MonoBehaviour
                 count += (_ItemList[i] == ItemSuper.Null) ? 1 : 0;
             }
             return count;
-        }   
+        }
         set { }
     }
 
@@ -52,21 +52,30 @@ public class Inventry : MonoBehaviour
         for (int i = 0; i < _ItemList.Count; i++)
         {
             //itemsが_itemListより要素が少ないとき
-            if(i > items.Count - 1)  return;
-            _ItemList[i] =  items[i];
+            if (i > items.Count - 1) return;
+            _ItemList[i] = items[i];
         }
     }
 
-    public Inventry() { }
+    public Inventry()
+    {
+        _ItemList = new List<ItemSuper>();
+
+    }
 
     /// <summary>
-    /// アイテム追加処理　すでに持っているアイテムは数を増やすだけ　超過分は次のスロットに格納
+    /// //超過した分だけ　次のスロットに格納アイテム追加処理　すでに持っているアイテムは数を増やすだけ　超過分は次のスロットに格納　それでもあふれたアイテムを返す
     /// </summary>
-    public void AddItem(ItemSuper item, int num)
+    /// <param name="item">追加するアイテム</param>
+    /// <param name="num">使わぬ</param>
+    /// <returns>超過して入らなかったアイテム　超過しなかった場合はItemSuper.Nullが入る</returns>
+    public ItemSuper AddItem(ItemSuper item, int num)
     {
+        ItemSuper overflowItem = ItemSuper.Null;
         foreach (ItemSuper i in _ItemList)
         {
-            if (i.GetName() == item.GetName())
+
+            if (i.GetName() == item.GetName() && i._MaxNum != i.GetNum())
             {
                 int tmp_sum = i.GetNum() + item.GetNum(); ;         //とりあえず合計
                 int over_num = tmp_sum - i._MaxNum;     //とりあえず超過数
@@ -78,14 +87,22 @@ public class Inventry : MonoBehaviour
                     //空きスロットがあるなら アイテムをインベントリに追加
                     if (_remainSlot > 0)
                     {
-                        //超過した分だけ　次のスロットに格納
+                        
                         _ItemList[_slot - _remainSlot] = new ItemSuper(i.GetName(), i.GetPrice(), over_num);
+                        //非超過分を足す
+                        i.AddNum(remain_num);
+                    }
+                    else
+                    {
+                        //超過分を格納
+                        overflowItem = new ItemSuper(i.GetName(), i.GetPrice(), over_num);
                     }
                 }
-                //非超過分を足す
-                i.AddNum(remain_num);
             }
+
         }
+
+        return overflowItem;
     }
 
     /// <summary>
@@ -142,14 +159,14 @@ public class Inventry : MonoBehaviour
     /// <param name="num">減らす数</param>
     public void DeleteInventry(int num)
     {
-        for(int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             _ItemList.RemoveAt(_ItemList.Count - 1);
         }
         _slot -= num;
     }
 
-    
+
 
     #endregion
 
@@ -157,7 +174,7 @@ public class Inventry : MonoBehaviour
 
     public void DebugShowItems()
     {
-        foreach(var i in _ItemList)
+        foreach (var i in _ItemList)
         {
             Debug.Log(i);
         }
