@@ -59,8 +59,8 @@ public class Shop : MonoBehaviour
     [SerializeField, Range(50, 100)]
     private int _MaxSpawn;
 
-
-    private bool _IsStart =false;
+    //スポーン間隔保持用変数
+    private float _saveSpawnInterval;
 
     #endregion
 
@@ -83,9 +83,10 @@ public class Shop : MonoBehaviour
 
         //position　代入
         _position = this.transform.position;
+
+        _saveSpawnInterval = _SpawnInterval;
         //-------------------------------------　初期化終わり ------------------------------
 
-        int[] a = new int[1];
         //------------------------------------ 生成 ----------------------------------------
 
         for(int i = 0; i < _startItemNum; i++)
@@ -139,7 +140,7 @@ public class Shop : MonoBehaviour
         {
             player.LeaveShop();
         }
-
+        _SpawnInterval = _saveSpawnInterval;
         near_dis = 10000;
     }
 
@@ -159,6 +160,7 @@ public class Shop : MonoBehaviour
     {
         ItemSuper nearestItem = ItemSuper.Null;
 
+        if (_stock.Count == 1) return _stock[0];
 
         foreach (var i in _stock)
         {
@@ -166,9 +168,9 @@ public class Shop : MonoBehaviour
 
             
             float tmp_dis = Vector3.Distance(  i._object.transform.position, objPos);
-            Debug.Log(i._object.name);
-            Debug.Log(i._object.transform.position);
-            Debug.Log(i.GetName() + " : " + tmp_dis.ToString());
+            //Debug.Log(i._object.name);
+            //Debug.Log(i._object.transform.position);
+            //Debug.Log(i.GetName() + " : " + tmp_dis.ToString());
             //より近いアイテムがあったら
             if (near_dis > tmp_dis)
             {
@@ -186,6 +188,23 @@ public class Shop : MonoBehaviour
     public List<ItemSuper> GetStock()
     {
         return _stock;
+    }
+
+    /// <summary>
+    /// GameObject名と一致するアイテムをリストからもシーン上からも消す
+    /// </summary>
+    /// <param name="objname"></param>
+    public void RemoveItem(string objname)
+    {
+        for(int i = _stock.Count -1; i >= 0; i--)
+        {
+            if(_stock[i]._object.name == objname)
+            {
+                GameObject tmp_obj = _stock[i]._object;
+                _stock.RemoveAt(i);
+                Destroy(tmp_obj);
+            }
+        }
     }
 
     #endregion  ----------------------------------------------------------------------------
@@ -229,7 +248,7 @@ public class Shop : MonoBehaviour
         Vector3 pos = RandomPos();
 
         item._object = item.Init();
-        //item._object.transform.parent = _itemParent.transform;
+        item._object.transform.parent = _itemParent.transform;
         item._object.transform.position = pos;
         item._object.name += count++.ToString();
         _stock.Add(item);

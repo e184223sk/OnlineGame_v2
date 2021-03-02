@@ -308,6 +308,7 @@ MonoBehaviour:
   _isShop: 0
   gettablItem: {fileID: 0}
   GettableDis: 100
+  ITEMS: []
 --- !u!1 &51409348
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,9 +546,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _SpawnInterval: 1
   _startItemNum: 2
-  _stock: []
   _productArea: {x: 8.33, y: 1.8, z: 7}
-  _productCenter: {x: 2.94, y: 4.87, z: 2.91}
+  _productCenter: {x: 0, y: 1, z: 0}
   _itemParent: {fileID: 0}
   _MinSpawn: 0
   _MaxSpawn: 0
@@ -767,6 +767,7 @@ GameObject:
   - component: {fileID: 617168330}
   - component: {fileID: 617168329}
   - component: {fileID: 617168328}
+  - component: {fileID: 617168331}
   m_Layer: 0
   m_Name: shop (1)
   m_TagString: Untagged
@@ -783,7 +784,7 @@ BoxCollider:
   m_GameObject: {fileID: 617168327}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 10.06, y: 3.42, z: 9.8}
   m_Center: {x: 0, y: 1.77, z: -0.87}
@@ -801,7 +802,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _SpawnInterval: 1
   _startItemNum: 2
-  _stock: []
   _productArea: {x: 8.33, y: 1.8, z: 7}
   _productCenter: {x: 0, y: 0.91, z: 0}
   _itemParent: {fileID: 0}
@@ -826,6 +826,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &617168331
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617168327}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &669289993
 GameObject:
   m_ObjectHideFlags: 0

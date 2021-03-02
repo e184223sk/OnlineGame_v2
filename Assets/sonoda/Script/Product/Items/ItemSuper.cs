@@ -13,7 +13,7 @@ namespace Item
         public readonly int _MaxNum = 100;
 
         //初期値　空白のアイテム
-        public static readonly ItemSuper Null = new ItemSuper();
+        public static  ItemSuper Null = new ItemSuper();
 
 
         //アイテムのゲームオブジェクト
