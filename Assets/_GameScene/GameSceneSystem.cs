@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameSceneSystem : MonoBehaviour
-{
+{ 
     [System.NonSerialized]
     public float time;
     public static float start_time;
     TimerUI timerui;
     public ChatUSER user;
-     
+    public static GameSceneSystem system;
     public bool IsGameTime;///ゲーム中か?(時間切れや勝利条件を満たしたならfalse)
     void Start()
     {
+        system = this;
         time = start_time; 
         IsGameTime = true;
         ChatSystem.userDatas = user;

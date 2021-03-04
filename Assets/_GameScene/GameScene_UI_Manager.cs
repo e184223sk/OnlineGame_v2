@@ -28,7 +28,7 @@ public class GameScene_UI_Manager : MonoBehaviour
     RectTransform moneyUiRoot;
     GameObject chatBOX, ctrlerDiscription;
     CTRLUI_Discription_TEXTUI ps4, ps5, xbox, keyboard;
-    RawImage TeamICON;
+    public RawImage TeamICON;
     TimerUI timeCount;
     GameSceneSystem mainSys;
 
