@@ -5,10 +5,8 @@ using UnityEngine;
 public class TANK : MonoBehaviour
 {
     Rigidbody rigidbody_;
-    [SerializeField, Range(0, 1000000)]
-    float forwardSpeed;
-
-    float L_Speed, R_Speed;
+    public float forwardSpeed;
+     
     public ForceMode forceMODE;
     IsCaterpillarGrounding CL, CR;
     [System.NonSerialized]
@@ -23,6 +21,7 @@ public class TANK : MonoBehaviour
     Vector3 mas;
     public float masSens;
     public float Stability;
+    public float vect;
     void Start()
     {
         rigidbody_ = GetComponent<Rigidbody>();
@@ -34,63 +33,53 @@ public class TANK : MonoBehaviour
         caterpillar_R.Init(transform.Find("Body/CaterpillarR"));
         CL = transform.Find("Body/CaterpillarL").GetComponent<IsCaterpillarGrounding>();
         CR = transform.Find("Body/CaterpillarR").GetComponent<IsCaterpillarGrounding>();
-        //rigidbody_.centerOfMass -= transform.up * 0.3f;
+        //rigidbody_.centerOfMass -= transform.up * 0.3f;Key.JoyStickL.Get.x
         mas = rigidbody_.centerOfMass;
         //rigidbody_.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void Update()
     {
-        //------------------------------------------------------------
-        //  tss = Key.FL;
-        rigidbody_.centerOfMass = mas + Vector3.down * masSens;
+        if (CL.IsGround && CR.IsGround)
+        { 
+            rigidbody_.MovePosition(rigidbody_.position + transform.forward * Key.JoyStickL.Get.y * forwardSpeed * Time.deltaTime); 
+            rigidbody_.MoveRotation(rigidbody_.rotation *  Quaternion.Euler(0, Key.JoyStickL.Get.x * 360 * Torque * Time.deltaTime, 0));
+            caterpillar_L.Update(Key.JoyStickL.Get.x * 3+ Key.JoyStickL.Get.y);
+            caterpillar_R.Update(-Key.JoyStickL.Get.x * 3 + Key.JoyStickL.Get.y);
+        }
+        else if (!CL.IsGround && CR.IsGround)
+        {
+            rigidbody_.AddForceAtPosition(rigidbody_.position + transform.forward * Key.JoyStickL.Get.y * forwardSpeed * Time.deltaTime, caterpillar_R.root.position);
+            rigidbody_.MoveRotation(rigidbody_.rotation * Quaternion.Euler(0, Key.JoyStickL.Get.x * 360 * Torque * Time.deltaTime, 0)); 
+            caterpillar_R.Update(-Key.JoyStickL.Get.x * 3 + Key.JoyStickL.Get.y);
+        }
+        else if (CL.IsGround && !CR.IsGround)
+        {
+            rigidbody_.AddForceAtPosition(rigidbody_.position + transform.forward * Key.JoyStickL.Get.y * forwardSpeed * Time.deltaTime, caterpillar_L.root.position);
+            rigidbody_.MoveRotation(rigidbody_.rotation * Quaternion.Euler(0, Key.JoyStickL.Get.x * 360 * Torque * Time.deltaTime, 0)); 
+            caterpillar_R.Update(-Key.JoyStickL.Get.x * 3 + Key.JoyStickL.Get.y);
+        }
+        else
+        {
 
-        tsx += Time.deltaTime * Key.JoyStickR.Get.y;
+        }
 
-
-        L_Speed = Key.JoyStickL.GetRAW.y;
-        R_Speed = Key.JoyStickR.GetRAW.y;
-        bool FMC = Key.A.Down;
-        bool FSC = Key.B.Down;
-        //--------------------------------------------------------------
-
-
-        if (L_Speed > 1) L_Speed = 1; else if (L_Speed < -1) L_Speed = -1;
-
-        L_Speed *= -1;
-        caterpillar_L.Update(L_Speed);
-
-        if (R_Speed > 1) R_Speed = 1; else if (R_Speed < -1) R_Speed = -1;
-        R_Speed *= -1;
-        caterpillar_R.Update(-R_Speed);
-
-        Turret.Rotate(Vector3.up * Time.deltaTime * TurretSpinSpeed * tss * 360);
+        Turret.Rotate(Vector3.up * Time.deltaTime * TurretSpinSpeed * Key.JoyStickR.Get.x * 360);
 
         if (tsx < 0) tsx = 0; else if (tsx > 1) tsx = 1;
-        Cannon.localRotation =Quaternion.Euler(CannonRange.min + tsx * (CannonRange.max - CannonRange.min), 0, 0);
-         
-        var p = forwardSpeed * Time.deltaTime;//下記2行で使用する変数
-        if (CL.IsGround)
-        {
-            rigidbody_.AddForceAtPosition(L_Speed* p* (transform.forward - transform.right) * Time.deltaTime, caterpillar_R.Mesh.transform.position, forceMODE);
-        }
-        if (CR.IsGround)
-        {
-            rigidbody_.AddForceAtPosition(-R_Speed * p * (transform.forward + transform.right  ) * Time.deltaTime, caterpillar_L.Mesh.transform.position, forceMODE);  
-        }
+        var vectNOW = Key.JoyStickR.Get.y; 
+             Cannon.localRotation = Quaternion.Euler(CannonRange.min + Key.JoyStickR.Get.y  * (CannonRange.max - CannonRange.min), 0, 0);
+        vect = Key.JoyStickR.Get.y ;
 
-        rigidbody_.AddForce(Vector3.down* Stability * Time.deltaTime);
-        if (FMC)
+        if (Key.A.Down)
         {
             Debug.Log("fire");
         }
 
-        if (FSC)
+        if (Key.B.Down)
         {
             Debug.Log("sub fire");
-        }
-
-
+        } 
     }
 }
 
@@ -102,9 +91,10 @@ public class CaterpillarData
     public uint WheelCnt;
     public Transform[] Wheels;
     public MeshRenderer Mesh;
-
+    public Transform root;
     public void Init(Transform root)
     {
+        this.root = root;
         Mesh = root.GetComponent<MeshRenderer>();
         Wheels = new Transform[WheelCnt];
         for (int y = 0; y < WheelCnt; y++)
@@ -134,3 +124,5 @@ public class tank_weaponloader
 }
 
 //発射|サブ|se
+
+ 

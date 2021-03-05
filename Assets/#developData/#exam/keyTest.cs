@@ -13,9 +13,8 @@ public class keyTest : MonoBehaviour
     public bool JoyStick_R_Push;
 
     [Space(10)]
-    public float Triiger_TL;
-    public float Triiger_TR;
     public float Triiger;
+    public float Bumper;
 
     void Update()
     {
@@ -25,9 +24,8 @@ public class keyTest : MonoBehaviour
         JoyStick_R = Key.JoyStickR;
         JoyStick_L_Push = Key.JoyStickL.Push;
         JoyStick_R_Push = Key.JoyStickR.Push;
-        Triiger_TL = Key._Trigger_TL.Get;
-        Triiger_TR = Key._Trigger_TR.Get;
-        Triiger = Key._Trigger.Get;
+        Triiger = Key.Trigger.Get;
+        Bumper = Key.Bumper.Get;
         if (Key.A.Press) Debug.Log("A/×  Press");
         if (Key.B.Press) Debug.Log("B/〇  Press");
         if (Key.X.Press) Debug.Log("X/□  Press");

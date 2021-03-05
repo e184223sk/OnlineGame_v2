@@ -17,7 +17,7 @@ public class GameSceneUIController : MonoBehaviour
     }
 
 
-    public static void SetTeamIcon_Resealer() => GameScene_UI_Manager.ui.TeamICON.texture = GameScene_UI_Manager.ui.TeamIcon_Resaler;
+    public static void SetTeamIcon_Resealer() => GameScene_UI_Manager.ui.TeamICON.texture = GameScene_UI_Manager.ui.TeamIcon_Reseller;
     public static void SetTeamIcon_Police  () => GameScene_UI_Manager.ui.TeamICON.texture = GameScene_UI_Manager.ui.TeamIcon_Police;
 
     public WeaponUIData Weapon0
@@ -96,6 +96,5 @@ public class GameSceneUIController : MonoBehaviour
         get => GameScene_UI_Manager.ui.Ctrl_Discription.R_JoyStick;
         set => GameScene_UI_Manager.ui.Ctrl_Discription.R_JoyStick = value;
     }
-
-
+     
 }

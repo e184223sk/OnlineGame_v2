@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class GameScene_UI_Manager : MonoBehaviour
 {
+    public TeamType team;
     public static GameScene_UI_Manager ui;
     public static bool FocusChatTextBox;
-    public Texture2D TeamIcon_Resaler, TeamIcon_Police; 
+    public Texture2D TeamIcon_Reseller, TeamIcon_Police; 
     [Space(10), SerializeField,Range(0,1f)] float HpValue; 
     [SerializeField] Gradient hpColor;  
     [SerializeField, Range(0,99999999),Space(15)] long MoneyValue; 
@@ -28,10 +29,10 @@ public class GameScene_UI_Manager : MonoBehaviour
     RectTransform moneyUiRoot;
     GameObject chatBOX, ctrlerDiscription;
     CTRLUI_Discription_TEXTUI ps4, ps5, xbox, keyboard;
+    [System.NonSerialized]
     public RawImage TeamICON;
     TimerUI timeCount;
     GameSceneSystem mainSys;
-
 
     public Texture2D[] getNum
     {
@@ -74,20 +75,16 @@ public class GameScene_UI_Manager : MonoBehaviour
         ui = this; 
         TeamICON = GameObject.Find("Canvas/teams").GetComponent<RawImage>();
         timeCount = GameObject.Find("TimerUI_Canvas/TimerUI").GetComponent<TimerUI>();
-        //チームアイコンの割り振り
+        TeamICON.texture = team == TeamType.Police ? (TeamIcon_Police != null ? TeamIcon_Police : null) : (TeamIcon_Reseller != null ? TeamIcon_Reseller : null);
         HP = GameObject.Find("Canvas/BG_HP&MONEY/HPbar").GetComponent<Slider>();
-        hpImg = GameObject.Find("Canvas/BG_HP&MONEY/HPbar/Fill Area/Fill").GetComponent<Image>();
-
-
+        hpImg = GameObject.Find("Canvas/BG_HP&MONEY/HPbar/Fill Area/Fill").GetComponent<Image>(); 
         moneyUiRoot = GameObject.Find("Canvas/BG_HP&MONEY/Money").GetComponent<RectTransform>();
         money = new RawImage[12];
         for (int x = 0; x < 12; x++)
-            money[x] = GameObject.Find("Canvas/BG_HP&MONEY/Money/" + x).GetComponent<RawImage>();
-
+            money[x] = GameObject.Find("Canvas/BG_HP&MONEY/Money/" + x).GetComponent<RawImage>(); 
         moneyCamma = new RawImage[3];
         for (int x = 0; x < 3; x++)
-            moneyCamma[x] = GameObject.Find("Canvas/BG_HP&MONEY/Money/camma" + x).GetComponent<RawImage>();
-
+            moneyCamma[x] = GameObject.Find("Canvas/BG_HP&MONEY/Money/camma" + x).GetComponent<RawImage>(); 
         var c = GameObject.Find("Canvas/Discription").transform;
         ps4 = new CTRLUI_Discription_TEXTUI(c.Find("ps4").gameObject);
         ps5 = new CTRLUI_Discription_TEXTUI(c.Find("ps5").gameObject);
@@ -98,7 +95,7 @@ public class GameScene_UI_Manager : MonoBehaviour
         int gsui = PlayerPrefs.GetInt("GS-UI", 3);
         chatBOX.active = gsui /2 == 1;
         ctrlerDiscription.active = gsui % 2 == 1;
-        WeaponUI0 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI1"));
+        WeaponUI0 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI0"));
         WeaponUI1 = new WeaponUI_obj(GameObject.Find("Canvas/WeaponUI1"));
         chatBOX.active = false;
         ctrlerDiscription.active = false;
@@ -159,7 +156,7 @@ public class GameScene_UI_Manager : MonoBehaviour
         for (var i = moneyValue; i >= 10; i /= 10) digit++;
         moneyUiRoot.localPosition = new Vector3( digit * 6.1f + -166.2f, -7.51f, 0);
 
-        //Ctrler
+        //Ctrler -------------------------------------------------
         ps4?.Update(Ctrl_Discription);
         ps5?.Update(Ctrl_Discription);
         xbox?.Update(Ctrl_Discription);
@@ -177,11 +174,10 @@ public class GameScene_UI_Manager : MonoBehaviour
             case GameScene_UI_CTRLUI.Xbox: xbox.root.active = true; break;
             case GameScene_UI_CTRLUI.KEYBOARD: keyboard.root.active = true; break;
         }
-        //Timer
+        //Timer -------------------------------------
+        timeCount.time = GameSceneSystem.system.time;
 
-        //Team ICON
-
-        //Weapon
+        //Weapon -------------------------------------
         WeaponUI0.Update(Weapon0);
         WeaponUI1.Update(Weapon1);
 
@@ -518,20 +514,22 @@ public class WeaponUI_obj
     public void Update(WeaponUIData data)
     {
         root.active = data.enable;
-      //  Icon.texture = data.icon;
-      //  Reload.value = data.reload;
         WeaponNumber.text = "Weapon" + data.weaponNumber;
         Name.text = data.weaponName;
+        Reload.value = data.reload > 1 ? 1 : (data.reload < 0 ? 0 : data.reload);
+        Icon.texture = data.icon;
+
         int now = data.now < 0 ? 0 : (data.now > 999 ? 999 : data.now);
         int max = data.max < 0 ? 0 : (data.max > 999 ? 999: data.max);
 
         n2.texture = GameScene_UI_Manager.ui.getNum[now / 100];
-        n2.texture = GameScene_UI_Manager.ui.getNum[now % 100/10];
-        n2.texture = GameScene_UI_Manager.ui.getNum[now % 10];
+        n1.texture = GameScene_UI_Manager.ui.getNum[now % 100/10];
+        n0.texture = GameScene_UI_Manager.ui.getNum[now % 10];
 
         m2.texture = GameScene_UI_Manager.ui.getNum[max / 100];
-        m2.texture = GameScene_UI_Manager.ui.getNum[max % 100 / 10];
-        m2.texture = GameScene_UI_Manager.ui.getNum[max % 10];
+        m1.texture = GameScene_UI_Manager.ui.getNum[max % 100 / 10];
+        m0.texture = GameScene_UI_Manager.ui.getNum[max % 10];
+
     }
 
     /// <summary>
@@ -577,9 +575,10 @@ public class WeaponUI_obj
 
 
 
- 
 
 
- 
 
 
+
+
+public enum TeamType { Reseller = 0, Police = 0 }

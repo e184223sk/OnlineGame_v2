@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameSceneSystem : MonoBehaviour
-{ 
-    [System.NonSerialized]
+{
     public float time;
-    public static float start_time;
+    public float start_time;
     TimerUI timerui;
     public ChatUSER user;
     public static GameSceneSystem system;
@@ -24,26 +23,35 @@ public class GameSceneSystem : MonoBehaviour
     {
         if (IsGameTime)
         {
-            //終了の処理
-        }
-        else
-        {
             //時間制限の処理----------------------------------
             time -= Time.deltaTime;
             if (time <= 0)
             {
                 IsGameTime = false;
                 return;
-            } 
+            }
             //勝利条件/敗北条件を確認する----------------------
 
-            if(false)//どちらかが勝ったらtrueになるif文をかく
+            if (false)//どちらかが勝ったらtrueになるif文をかく
             {
                 IsGameTime = false;
                 return;
             }
         }
-        
-        
+        else
+        {　
+            //終了の処理
+        }
+
+
     }
+
+
+#if UNITY_EDITOR
+    void OnDrawGizmos() //ギズモではないが...
+    {
+        time = start_time;
+    }
+
+#endif
 }

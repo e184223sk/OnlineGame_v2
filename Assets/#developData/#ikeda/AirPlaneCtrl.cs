@@ -5,10 +5,17 @@ using UnityEngine;
 public class AirPlaneCtrl : MonoBehaviour
 {
     Rigidbody rigidbody_;
-    public float Accel, Spin;
-    [Range(0,1)]
+    [Range(0, 200)]
+    public float Accel;
+    [Range(0, 1)]
     public float Buoyancy;
-    public Vector3 massCenter;
+    public float PostureRetention;
+    public Vector2 power;
+    //public Vector3 massCenter;fff
+    public bool IsGround;
+
+    public Vector3 GroundCheckPoint;
+    public float CheckDistance;
 
     void Start()
     {
@@ -16,15 +23,63 @@ public class AirPlaneCtrl : MonoBehaviour
     }
      
     void FixedUpdate()
-    { 
-        rigidbody_.AddRelativeForce(0, Accel * Accel * Time.deltaTime * Buoyancy, Accel * Time.deltaTime, ForceMode.Acceleration);
-        rigidbody_.AddRelativeTorque(Accel * Accel * Time.deltaTime * Buoyancy, Spin, 0, ForceMode.Acceleration);
-        rigidbody_.centerOfMass = Vector3.Scale(transform.forward, massCenter);
-    }
-    private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(Vector3.Scale(transform.forward, massCenter) + transform.position, 1.3f);
+        Ray ray = new Ray();
+        RaycastHit hit;
+        IsGround = false;
+        if (Physics.Raycast(transform.position + GroundCheckPoint, -transform.up, out hit, CheckDistance))
+            if (transform.root != hit.transform.root)
+                IsGround = true;
+
+
+        if (IsGround)
+        {
+            var v = transform.rotation.x;
+            PostureRetention = Accel/((180 - Mathf.Abs(v)) / 10);
+            
+            float p = v > -90 && v < 0 ? (v + 90) / 90 : ((v < 90 && v > 0) ? (v - 90) / 90 : -1); //姿勢補間力ff
+            rigidbody_.AddRelativeForce
+            (
+                new Vector3()
+                {
+                    x = 0,
+                    y = Accel * Time.deltaTime * Buoyancy * (v > -90 && v < 90 ? -v / 90 : 0),
+                    z = Accel * Accel * Time.deltaTime,
+                },
+                ForceMode.Force
+            );
+            rigidbody_.AddRelativeTorque(0, power.x * Time.deltaTime, 0, ForceMode.Acceleration);
+            rigidbody_.AddRelativeTorque((Accel * -power.y + p * PostureRetention) * Time.deltaTime, 0, 0, ForceMode.Force); 
+        }
+        else
+        {
+            PostureRetention = 200 - Accel;
+            var v = transform.rotation.x;
+            float p = v > -90 && v < 0 ? (v + 90) / 90 : ((v < 90 && v > 0) ? (v - 90) / 90 : -1); //姿勢補間力ff
+            rigidbody_.AddRelativeForce
+            (
+                new Vector3()
+                {
+                    x = 0,
+                    y = Accel * Time.deltaTime * Buoyancy * (v > -90 && v < 90 ? -v / 90 : 0),
+                    z = Accel * Accel * Time.deltaTime,
+                },
+                ForceMode.Force
+            );
+            rigidbody_.AddRelativeTorque(0, power.x * Time.deltaTime, 0, ForceMode.Acceleration);
+            rigidbody_.AddRelativeTorque((Accel * -power.y + p * PostureRetention) * Time.deltaTime, 0, 0, ForceMode.Force); 
+        }
+
     }
+
+    private void OnDrawGizmos()
+    { 
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position + GroundCheckPoint, 0.1f);
+        Gizmos.DrawLine(transform.position + GroundCheckPoint, GroundCheckPoint - Vector3.down * CheckDistance);
+    }
+
+
 }
 
 

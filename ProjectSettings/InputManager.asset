@@ -470,38 +470,6 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Trigger_TL_xbox
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 3
-    dead: 0.2
-    sensitivity: 3
-    snap: 0
-    invert: 0
-    type: 2
-    axis: 3
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Trigger_TR_xbox
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 3
-    dead: 0.2
-    sensitivity: 3
-    snap: 0
-    invert: 0
-    type: 2
-    axis: 4
-    joyNum: 0
-  - serializedVersion: 3
     m_Name: Trigger_xbox
     descriptiveName: 
     descriptiveNegativeName: 
@@ -531,29 +499,61 @@ InputManager:
     snap: 0
     invert: 0
     type: 0
-    axis: 27
+    axis: 2
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Trigger_TL
+    m_Name: Trigger2
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: e
+    positiveButton: r
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Trigger2_ps4
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: joystick button 4
+    positiveButton: joystick button 5
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Trigger2_xbox
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: joystick button 4
+    positiveButton: joystick button 5
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Trigger_ps4_L
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: e
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Trigger_TR
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: r
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
@@ -562,14 +562,14 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
-    type: 0
-    axis: 0
+    type: 2
+    axis: 3
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Trigger_ps4
+    m_Name: Trigger_ps4_R
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: r
+    negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
@@ -578,38 +578,6 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
-    type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Trigger_TL_ps4
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: r
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Trigger_TR_ps4
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: r
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
+    type: 2
+    axis: 4
     joyNum: 0

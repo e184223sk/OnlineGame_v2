@@ -16,8 +16,7 @@ public class DynamicObjectBehavior : MonoBehaviour
        {
            if (c.gameObject.GetComponents<Collider>() != null)
                if (c.gameObject.GetComponent<DynamicObject>() == null)
-               {
-                    
+               { 
                     c.gameObject.AddComponent<DynamicObject>();
                     var r = c.gameObject.AddComponent<Rigidbody>();
                     if (r != null)
