@@ -96,6 +96,8 @@ public class Shop : MonoBehaviour
 
         //------------------------------------ 生成終わり ----------------------------------------
 
+        
+
     }
 
     // Update is called once per frame
@@ -207,6 +209,24 @@ public class Shop : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 商品の返品処理
+    /// </summary>
+    /// <param name="item"></param>
+    public void ReturnItem(ItemSuper item)
+    {
+        Vector3 pos = RandomPos();
+
+        item._object = item.Init();
+        item._object.transform.parent = _itemParent.transform;
+        item._object.transform.position = pos;
+        item._object.name += count++.ToString();
+        _stock.Add(item);
+
+        //ゲーム全体の在庫数に追加
+        item.AddShopDistribution(item.GetNum());
+    }
+
     #endregion  ----------------------------------------------------------------------------
 
     #region Private Methods ----------------------------------------------------------------------------
@@ -253,7 +273,9 @@ public class Shop : MonoBehaviour
         item._object.name += count++.ToString();
         _stock.Add(item);
 
-
+        //ゲーム全体の在庫数に追加
+        item.AddShopDistribution(item.GetNum());
+        
     }
 
 

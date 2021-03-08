@@ -122,6 +122,11 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
             {
                 sumPrice += Item.ItemSuper.GetPriceSum(i);
                 buyable_items.Add(i);
+
+                //プレイヤー全体の総所持数に追加
+                i.AddPlayerDistribution(i.GetNum());
+                //総在庫数からマイナス
+                i.SubShopDistribution(i.GetNum());
             }
             else break;
         }
@@ -134,6 +139,13 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
             {
                 //超過分のお金の払い戻し
                 _wallet.Receipt(Item.ItemSuper.GetPriceSum(tmp_item));
+
+
+                //プレイヤー全体の総所持数からマイナス
+                tmp_item.SubPlayerDistribution(tmp_item.GetNum());
+                //総在庫数に追加
+                _nowShop.ReturnItem(tmp_item);
+
                 break;
             }
         }
