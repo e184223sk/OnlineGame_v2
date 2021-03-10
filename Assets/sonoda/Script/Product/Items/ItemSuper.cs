@@ -40,6 +40,10 @@ namespace Item
         //生成したオブジェクトに付けるスクリプト
         protected ItemSuper _addComponent;
 
+        
+        //アイテムUIとして表示する2Dイメージ
+        [SerializeField]
+        protected Sprite _ItemImage;
 
         #endregion ----------------------------------------------------------------
 
@@ -92,8 +96,29 @@ namespace Item
         #region Getter---------------------------------------------------------
         public int GetPrice()
         {
+
+
             return _price;
         }
+
+        /// <summary>
+        /// プレイヤー間に出回るほど高く　店の在庫が増えるほど安くなる
+        /// </summary>
+        /// <returns>プレイヤーの買値</returns>
+        public int GetBuyPrice()
+        {
+            return _PlayerDistribution / _ShopDistribution * _price + _price;
+        }
+
+        /// <summary>
+        /// 買値＊
+        /// </summary>
+        /// <returns>プレイヤーの売値(色付き)</returns>
+        public int GetSellPrice()
+        {
+            return (int)((_ShopDistribution / _PlayerDistribution * _price + _price) * 1.2f);
+        }
+
         public int GetNum()
         {
             return _num;
@@ -113,6 +138,12 @@ namespace Item
         {
             return this;
         }
+
+        public Sprite GetSprite()
+        {
+            return _ItemImage;
+        }
+
         #endregion ----------------------------------------------------------
 
         #region Setter -------------------------------------------------

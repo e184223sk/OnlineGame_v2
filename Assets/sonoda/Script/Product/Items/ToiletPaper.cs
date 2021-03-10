@@ -14,6 +14,7 @@ namespace Item
             _price = price;
             _num = num;
             _prefabName = "TOILETPAPER";
+            _ItemImage = Resources.Load<Sprite>("TOILETPAPERIMAGE");
         }
 
 

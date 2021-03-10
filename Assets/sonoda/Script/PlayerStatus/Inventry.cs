@@ -5,7 +5,7 @@ using System.Linq;
 using Item;
 public class Inventry : MonoBehaviour
 {
-    #region Public Properties
+    #region Public Properties ------------------------------------------------------------------------------------
 
     /// <summary>
     /// アイテムを格納する配列　読み取り専用なのでアクセスはメソッドからお願いします
@@ -14,15 +14,24 @@ public class Inventry : MonoBehaviour
 
     public int Length { get { return _slot; } }
 
-    #endregion
+    #endregion ------------------------------------------------------------------------------------
 
-    #region Private Properties
+    #region Private Properties ------------------------------------------------------------------------------------
 
     //プレイヤーが所持するアイテム達　初期アイテムは全てnull
 
 
     //現在のインベントリのスロット数　デフォルトは 6 個
     private int _slot = 6;
+
+    [SerializeField]
+    //インベントリのUI　親オブジェクト
+    private GameObject _inventryUI;
+
+    //インベントリのUI　アイテムUIの親
+    private GameObject _products;
+
+    private ItemUI[] _itemUIs;
 
     //現在のインベントリの空きスロット数　スロットの数だけfor文回して空きがあるかを確認するゲッター
     private int _remainSlot
@@ -39,10 +48,10 @@ public class Inventry : MonoBehaviour
         set { }
     }
 
-    #endregion
+    #endregion ------------------------------------------------------------------------------------
 
 
-    #region Public Methods
+    #region Public Methods ------------------------------------------------------------------------------------
 
     public Inventry(List<ItemSuper> items)
     {
@@ -55,12 +64,13 @@ public class Inventry : MonoBehaviour
             if (i > items.Count - 1) return;
             _ItemList[i] = items[i];
         }
+        Set();
     }
 
     public Inventry()
     {
         _ItemList = new List<ItemSuper>();
-
+        Set();
     }
 
     /// <summary>
@@ -71,10 +81,15 @@ public class Inventry : MonoBehaviour
     /// <returns>超過して入らなかったアイテム　超過しなかった場合はItemSuper.Nullが入る</returns>
     public ItemSuper AddItem(ItemSuper item, int num)
     {
+        if (_ItemList.Count == 0)
+        {
+            _ItemList.Add(item);
+            return ItemSuper.Null;
+        }
         ItemSuper overflowItem = ItemSuper.Null;
         foreach (ItemSuper i in _ItemList)
         {
-
+            //同じアイテム名のアイテムが存在し、かつ上限まで入っていない時
             if (i.GetName() == item.GetName() && i._MaxNum != i.GetNum())
             {
                 int tmp_sum = i.GetNum() + item.GetNum(); ;         //とりあえず合計
@@ -87,7 +102,7 @@ public class Inventry : MonoBehaviour
                     //空きスロットがあるなら アイテムをインベントリに追加
                     if (_remainSlot > 0)
                     {
-                        
+
                         _ItemList[_slot - _remainSlot] = new ItemSuper(i.GetName(), i.GetPrice(), over_num);
                         //非超過分を足す
                         i.AddNum(remain_num);
@@ -98,6 +113,10 @@ public class Inventry : MonoBehaviour
                         overflowItem = new ItemSuper(i.GetName(), i.GetPrice(), over_num);
                     }
                 }
+            }
+            else
+            {
+                _ItemList.Add(item);
             }
 
         }
@@ -166,9 +185,75 @@ public class Inventry : MonoBehaviour
         _slot -= num;
     }
 
+    /// <summary>
+    /// インベントリを開く
+    /// </summary>
+    public void ShowInventryUI()
+    {
+        _inventryUI.SetActive(true);
+        for (int i = 0; i < _itemUIs.Length; i++)
+        {
+            //アイテムリストの外側を参照しようとしたら
+            if (i >= _ItemList.Count)
+            {
+                Debug.Log("呼びました");
+                _itemUIs[i].SetUI(ItemSuper.Null);
+            }
+            else
+            {
+                _itemUIs[i].SetUI(_ItemList[i]);
+            }
+        }
+
+    }
+
+    public void HideInventryUI()
+    {
+        _inventryUI.SetActive(false);
+    }
+
+
+    #endregion ------------------------------------------------------------------------------------
+
+    #region Private Methods ------------------------------------------------------------------------------------
+
+    private GameObject[] GetAllChildObj(Transform parent)
+    {
+        GameObject[] Objs = new GameObject[parent.childCount];
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Objs[i] = parent.GetChild(i).gameObject;
+        }
+
+        return Objs;
+
+    }
+
+    private void Set()
+    {
+        _inventryUI = GameObject.Find("InventryUI");
+        _products = GameObject.Find("Products");
+        GameObject[] tmp_objs = GetAllChildObj(_products.transform);
+        _itemUIs = new ItemUI[tmp_objs.Length];
+        for (int i = 0; i < _itemUIs.Length; i++)
+        {
+            _itemUIs[i] = tmp_objs[i].GetComponent<ItemUI>();
+        }
+        _inventryUI.SetActive(false);
+    }
+
+    #endregion ------------------------------------------------------------------------------------
+
+
+
+
+    #region Unity CallBacks ------------------------------------------------------------------------------------
 
 
     #endregion
+
+
+
 
     #region Debug Methods
 
@@ -181,5 +266,5 @@ public class Inventry : MonoBehaviour
     }
 
 
-    #endregion
+    #endregion ------------------------------------------------------------------------------------
 }
