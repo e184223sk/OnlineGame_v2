@@ -133,7 +133,7 @@
             this.MinimizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "インストーラー";
+            this.Text = "「CHAOS 19」　インストーラー";
             this.ResumeLayout(false);
             this.PerformLayout();
 
