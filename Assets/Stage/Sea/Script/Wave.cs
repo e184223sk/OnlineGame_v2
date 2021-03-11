@@ -79,8 +79,8 @@ public class Wave : MonoBehaviour
     static float WaveUp;
     public static Wave wave;  
     public static List<Transform> bubbleList = new List<Transform>();
-   
 
+    public Transform[] L, C;
     //エディタ用変数
     const bool IsActive = false;
     static int Len, st, en, cn; 
@@ -113,12 +113,39 @@ public class Wave : MonoBehaviour
 
         Vector3[] pointHeight = new Vector3[4]
         {
-            wave.vertexList[y * wave.VerticesToVector + x] + Vector3.up * (WaveUp + Wave.wave.transform.position.y),
-            wave.vertexList[y * wave.VerticesToVector + wx] + Vector3.up * (WaveUp + Wave.wave.transform.position.y),
-            wave.vertexList[wy * wave.VerticesToVector + x] + Vector3.up * (WaveUp + Wave.wave.transform.position.y),
-            wave.vertexList[wy * wave.VerticesToVector + wx] + Vector3.up * (WaveUp + Wave.wave.transform.position.y)
+            wave.vertexList[y * wave.VerticesToVector + x]  + Vector3.up* (WaveUp + Wave.wave.transform.position.y),
+            wave.vertexList[y * wave.VerticesToVector + wx]  + Vector3.up * (WaveUp + Wave.wave.transform.position.y),
+            wave.vertexList[wy * wave.VerticesToVector + x]  + Vector3.up * (WaveUp + Wave.wave.transform.position.y),
+            wave.vertexList[wy * wave.VerticesToVector + wx]  + Vector3.up * (WaveUp + Wave.wave.transform.position.y)
         };
 
+        Vector2 pointLen = new Vector2((ux - x) / (wx - x), (uy - y) / (wy - y));
+        Vector3[] LineHeight = new Vector3[4]
+        {
+            pointHeight[0] + (pointHeight[1]-pointHeight[0])*pointLen.x,
+            pointHeight[0] + (pointHeight[2]-pointHeight[0])*pointLen.y,
+            pointHeight[2] + (pointHeight[3]-pointHeight[2])*pointLen.x,
+            pointHeight[1] + (pointHeight[3]-pointHeight[1])*pointLen.y
+        };
+
+        var a = Vector3.Cross(pointHeight[1] - pointHeight[0], pointHeight[2] - pointHeight[0]).normalized;
+        Vector2 za, zb;
+
+
+
+        za = new Vector2(Mathf.Abs(LineHeight[2].x - LineHeight[0].x), LineHeight[2].y - LineHeight[0].y);
+        zb = new Vector2(Mathf.Abs(LineHeight[3].x - LineHeight[1].x), LineHeight[3].y - LineHeight[1].y);
+
+        float ta, tb;
+
+        ta = Mathf.Atan(za.x / za.y);
+        tb = Mathf.Atan(zb.x / zb.y);
+
+        ta =  90-(ta * 180 / Mathf.PI);
+        tb = 90 - (tb * 180 / Mathf.PI);
+
+
+        return Quaternion.Euler(ta,0,tb);
         //float ez = Mathf.Asin(Mathf.Abs(pointHeight[1].y - pointHeight[2].y) / Vector3.Distance(pointHeight[1], pointHeight[2]));
         //float ex = Mathf.Asin(Mathf.Abs(pointHeight[0].y - pointHeight[3].y) / Vector3.Distance(pointHeight[0], pointHeight[3]));
 
@@ -161,7 +188,7 @@ public class Wave : MonoBehaviour
     /// </summary>
     /// <param name="d">座標(y軸無視)</param> 
     /// <returns></returns>
-    public static float GetSurfaceHeight(Vector3 d)
+    public static float GetSurfaceHeight(Vector3 d, bool deb = false)
     {
         float w = wave.VerticesToVector * wave.WaveArea / 2;
         Vector3 c1 = wave.transform.position - new Vector3(w / 2, 0, w / 2);
@@ -199,8 +226,17 @@ public class Wave : MonoBehaviour
             pointHeight[2] + (pointHeight[3]-pointHeight[2])*pointLen.x,
             pointHeight[1] + (pointHeight[3]-pointHeight[1])*pointLen.y
         };
-
-
+        if (deb)
+        { 
+        wave.L[0].position = LineHeight[0];
+        wave.L[1].position = LineHeight[1];
+        wave.L[2].position = LineHeight[2];
+        wave.L[3].position = LineHeight[3];
+        wave.C[0].position = pointHeight[0];
+        wave.C[1].position = pointHeight[1];
+        wave.C[2].position = pointHeight[2];
+        wave.C[3].position = pointHeight[3];
+        }
 
         // Vector3 AveX = LineHeight[0] + (LineHeight[2] - LineHeight[0]) * pointLen.y;
         // Vector3 AveY = LineHeight[1] + (LineHeight[3] - LineHeight[1]) * pointLen.x;
@@ -226,7 +262,16 @@ public class Wave : MonoBehaviour
         AveXとAveYの値は実質同じ（もしくは差は極小的なもの）であるため
         AveXとAveYの値の平均に海面フェースを座標的に動かしているWaveUp変数の値を足したものを
         高度として使用する。
-         */ 
+         */
+        //return (pointHeight[3] - pointHeight[0]).y*(Vector2.Distance(new Vector2(d.x,d.z), new Vector2(pointHeight[0].x, pointHeight[0].z)/ Vector2.Distance(new Vector2(pointHeight[3].x, pointHeight[3].z), new Vector2(pointHeight[0].x, pointHeight[0].z)))) + pointHeight[0].y;
+        //pointHeight/pointLen
+        float Ay = pointHeight[0].y;
+        float By = pointHeight[1].y;
+        float Cy = pointHeight[2].y;
+        float Dy = pointHeight[3].y;
+        float W = pointLen.x;
+        float H = pointLen.y;
+        return (((Dy-Cy)*W+Cy)   -  ((By-Ay)*W+Ay))*H + ((By - Ay) * W + Ay);
         return ((LineHeight[0] + LineHeight[1] + LineHeight[2] + LineHeight[3]) / 4).y;
     }
 

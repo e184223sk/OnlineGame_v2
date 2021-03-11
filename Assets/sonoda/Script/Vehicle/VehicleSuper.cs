@@ -17,24 +17,36 @@ public class VehicleSuper : MonoBehaviour
     //バックの最高速度のゲッター変数
     public int _getMinSpeed { get { return _MinSpeed; } }
 
-    public float Power = 5;
-    public float PowerTorque = 5;
 
     #endregion
 
     #region Private Variables
-    //アクセルカーブのどこにいるか
-    [SerializeField]
-    private float _accelCurveRate = 0;
 
-    private float _decelCurveRate = 0;
-
-    [Range(0,1), SerializeField]
-    private float _fadingSpeed = 0.05f;
-
-    private float _accel = 0;
-
+    //リジッドボディ
     private Rigidbody _rigidbody;
+
+
+    //加速に加える力
+    [SerializeField]
+    private float _AccelPower = 5;
+
+    //加速に加える力
+    [SerializeField]
+    private float _DecelPower = 5;
+
+
+    //回転に加える力
+    [SerializeField]
+    private float _TurnPower = 5;
+
+
+    //完全静止状態のvelocity.magnitudeの閾値  要るのか？
+    [SerializeField,Range(1,5)]
+    private float _stopThre = 5;
+
+    //
+    private Collider _collider;
+
     #endregion
 
     #region Protected Variables
@@ -43,14 +55,6 @@ public class VehicleSuper : MonoBehaviour
     [SerializeField]
     protected float _speed;
 
-    //乗り物の加速度
-    [SerializeField]
-    protected AnimationCurve _accelCurve = null;
-
-
-    //乗り物の減速度
-    [SerializeField]
-    protected AnimationCurve _decelCurve = null; 
 
     //乗り物の最大速度
     [Range(0,150),SerializeField]
@@ -60,20 +64,9 @@ public class VehicleSuper : MonoBehaviour
     [Range(-50,0),SerializeField]
     protected int _MinSpeed;
 
-    //曲がりやすさ
-    [Range(0,100),SerializeField]
-    protected float _steering;
-
-    //滑りにくさ
-    [Range(0,100),SerializeField]
-    protected float _slippery;
-
-    //自然に減速する量
-    [Range(0, 5), SerializeField]
-    protected float _inertia;
-
-    [Range(0, 1), SerializeField]
-    protected float _fliction;
+    [SerializeField]
+    protected Vector3 _CenterOfMass;
+    
 
     #endregion
 
@@ -83,42 +76,52 @@ public class VehicleSuper : MonoBehaviour
     protected void Initialized()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody.centerOfMass = _CenterOfMass;
         //mass以外は固定
     }
 
     protected void Drive()
     {
-        //減速処理  速度が0.001を下回ったら停止
+
+        //前進後退
+        MoveFB();
+
+
+        //左右に曲がる
+        TurnLR();
+
+
+        _speed = _rigidbody.velocity.magnitude;
         
-        if (!Input.GetKey(KeyCode.W) && _speed > 0) 
-            _speed = _speed > 0.01 ? _speed -_inertia * Time.deltaTime : 0;
-        if(!Input.GetKey(KeyCode.S) && _speed < 0)
-            _speed = _speed < -0.01 ? _speed + _inertia * Time.deltaTime : 0;
-
-
-        //前進
-        if (Input.GetKey(KeyCode.W))
-            MoveF();
-        //後退
-        if (Input.GetKey(KeyCode.S))
-            MoveB();
-
-        //左に曲がる
-        if (Input.GetKey(KeyCode.A))
-            TurnLeft();
-
-        //右に曲がる
-        if (Input.GetKey(KeyCode.D))
-            TurnRight();
-        _rigidbody.AddRelativeForce(Vector3.forward *  _speed * Power * Time.deltaTime, ForceMode.Acceleration); 
     }
 
     #endregion
 
     #region Private Methods
     //前進
-    private void MoveF()
+    private void MoveFB()
     {
+        Vector2 vertical = Key.JoyStickL.Get;
+
+        //入力がないときに減速処理
+        if (Key.JoyStickL.Get.magnitude == 0)
+        {
+            _rigidbody.AddRelativeForce(new Vector3(0, 0, -vertical.y) * _DecelPower * Time.deltaTime, ForceMode.Acceleration);
+        }
+
+        //最高速を上回ったら加速しない
+        if (_rigidbody.velocity.magnitude > _MaxSpeed && vertical.y > 0)
+            return;
+
+        //最低速を下回ったら減速しない
+        if (_rigidbody.velocity.magnitude < _MinSpeed && vertical.y < 0)
+            return;
+            
+
+        _rigidbody.AddRelativeForce(new Vector3(0, 0, vertical.y) * _AccelPower * Time.deltaTime, ForceMode.Acceleration);
+
+
+        /*
         //最高速度に対して今どのくらいの速度なのかの割合
         _accelCurveRate = _speed / _MaxSpeed;
 
@@ -129,53 +132,37 @@ public class VehicleSuper : MonoBehaviour
         //最大速度を超えないように
         if (_speed > _MaxSpeed)
             _speed = (float)_MaxSpeed;
+        */
     }
 
-    //バック
-    private void MoveB()
+
+
+    private void TurnLR()
     {
-        if(_speed > 0)
-        {
-            _decelCurveRate = _speed / _MaxSpeed;
-            float breakDis = (_speed * _speed) / (254 * _fliction);
+        if (_rigidbody.velocity.magnitude < _stopThre) return;
 
-            float a = _speed / (breakDis * 2);
+        Vector2 horizontal = Key.JoyStickL.Get;
 
 
-            //現在の速度に応じて減速度を増やす
-            _speed = _speed > 0.01 ? _speed - a  /*/ _decelCurve.Evaluate(_decelCurveRate)*/: 0;
+        //_rigidbody.AddForce(-Vector3.up * 500* Time.deltaTime,ForceMode.Acceleration);
+        _rigidbody.AddRelativeTorque(Vector3.up * horizontal.x * _TurnPower * Time.deltaTime, ForceMode.Acceleration);
 
-        }
-            
-        else
-        {
-            _accel = Mathf.Clamp(_accelCurveRate - _fadingSpeed, 0f, 1f) * 5;
-            _speed -= _accel * Time.deltaTime;
-        }
-
-        if(_speed < _MinSpeed)
-        {
-            _speed = _MinSpeed;
-        }
     }
 
-    //左に曲がる
-    private void TurnLeft()
+    #endregion
+
+
+    #region Unity Callbacks
+
+    private void OnDrawGizmos()
     {
-        if (_speed == 0)
-            return;
-        //_rigidbody.AddRelativeForce(-transform.right * (_speed / _slippery) * Time.deltaTime);
-        _rigidbody.AddRelativeTorque(Vector3.up * -_steering * PowerTorque * Time.deltaTime, ForceMode.Acceleration);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(_CenterOfMass, 0.5f);
+
+
     }
 
-    //右に曲がる
-    private void TurnRight()
-    {
-        if (_speed == 0)
-            return;
-        //_rigidbody.AddRelativeForce(transform.right * (_speed / _slippery)  * Time.deltaTime);
-        _rigidbody.AddRelativeTorque(Vector3.up * _steering * PowerTorque * Time.deltaTime, ForceMode.Acceleration); 
-    }
+
 
     #endregion
 }

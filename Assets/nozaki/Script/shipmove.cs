@@ -11,6 +11,7 @@ public class shipmove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.LogError("dd");
         //操作
         if (Input.GetKey(KeyCode.UpArrow)) transform.Translate(speed * Vector3.forward * Time.deltaTime, Space.Self) ;
         if (Input.GetKey(KeyCode.DownArrow)) transform.Translate(speed * Vector3.back *Time.deltaTime, Space.Self);
