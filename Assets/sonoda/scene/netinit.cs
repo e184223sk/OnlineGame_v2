@@ -17,6 +17,6 @@ public class netinit : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // if(Input.GetKeyDown(KeyCode.S)) MonobitNetwork.Instantiate("Sphere", new Vector3(0, 0, -5), Quaternion.identity, 0);
+        if(Input.GetKeyDown(KeyCode.S)) MonobitNetwork.Instantiate("Capsule", new Vector3(0, 0, -5), Quaternion.identity, 0);
     }
 }
