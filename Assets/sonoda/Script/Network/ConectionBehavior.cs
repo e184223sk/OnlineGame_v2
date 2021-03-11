@@ -13,7 +13,7 @@ using MonobitEngine;
 public class ConectionBehavior : MonobitEngine.MonoBehaviour
 {
 
-    public void OnDrawGizmos()
+   /* public void OnDrawGizmos()
     {
         MonobitAnimatorView a = GetComponent<MonobitAnimatorView>();
         if (GetComponent<Animator>() != null && a == null) a = gameObject.AddComponent<MonobitEngine.MonobitAnimatorView>();
@@ -40,7 +40,7 @@ public class ConectionBehavior : MonobitEngine.MonoBehaviour
         {
             _monobitView = GetComponent<MonobitView>();
         }
-    }
+    }*/
 
     MonobitView _monobitView;
 
