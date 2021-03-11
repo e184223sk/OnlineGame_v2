@@ -8,25 +8,33 @@ using UnityEngine;
 using MonobitEngine;
 
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
+
+ 
 public class ConectionBehavior : MonobitEngine.MonoBehaviour
 {
-
-   /* public void OnDrawGizmos()
+#if UNITY_EDITOR
+ 
+    public void OnDrawGizmos()
     {
+        Debug.Log("aaa");
         MonobitAnimatorView a = GetComponent<MonobitAnimatorView>();
         if (GetComponent<Animator>() != null && a == null) a = gameObject.AddComponent<MonobitEngine.MonobitAnimatorView>();
 
         MonobitTransformView t = GetComponent<MonobitTransformView>();
         if (t == null) t = gameObject.AddComponent<MonobitEngine.MonobitTransformView>();
-         
+
         if (GetComponent<MonobitView>() == null)
         {
+           
             _monobitView = gameObject.AddComponent<MonobitView>();
             _monobitView.ObservedComponents.Add(a);
             _monobitView.ObservedComponents.Add(t);
-        } 
+        }
 
         //
 
@@ -40,7 +48,10 @@ public class ConectionBehavior : MonobitEngine.MonoBehaviour
         {
             _monobitView = GetComponent<MonobitView>();
         }
-    }*/
+    }
+
+
+#endif
 
     MonobitView _monobitView;
 
