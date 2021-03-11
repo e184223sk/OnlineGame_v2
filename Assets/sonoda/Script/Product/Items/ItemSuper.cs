@@ -39,6 +39,12 @@ namespace Item
 
         //生成したオブジェクトに付けるスクリプト
         protected ItemSuper _addComponent;
+
+        
+        //アイテムUIとして表示する2Dイメージ
+        [SerializeField]
+        protected Sprite _ItemImage;
+
         #endregion ----------------------------------------------------------------
 
         #region Private Properties
@@ -48,6 +54,21 @@ namespace Item
 
         #endregion
 
+        #region Static Properties ----------------------------------------------------------------
+
+        //プレイヤーが所持しているアイテムの総量
+        protected static int _PlayerDistribution;
+
+
+        //店が保有する在庫の総数
+        protected static int _ShopDistribution;
+
+        //流通量に応じて変動する価格の計算式は
+        //買値が _PlayerDistribution / _ShopDistribution   * price + price;    プレイヤーの所持数　/　在庫の総数　×　値段　+　値段
+        //売値が _ShopDistribution   / _PlayerDistribution * price + price;    在庫の総数　/　プレイヤーの所持数　×　値段　+　値段
+
+
+        #endregion ----------------------------------------------------------------
 
         #region Unity Callbacks
         // Start is called before the first frame update
@@ -75,8 +96,29 @@ namespace Item
         #region Getter---------------------------------------------------------
         public int GetPrice()
         {
+
+
             return _price;
         }
+
+        /// <summary>
+        /// プレイヤー間に出回るほど高く　店の在庫が増えるほど安くなる
+        /// </summary>
+        /// <returns>プレイヤーの買値</returns>
+        public int GetBuyPrice()
+        {
+            return _PlayerDistribution / _ShopDistribution * _price + _price;
+        }
+
+        /// <summary>
+        /// 買値＊
+        /// </summary>
+        /// <returns>プレイヤーの売値(色付き)</returns>
+        public int GetSellPrice()
+        {
+            return (int)((_ShopDistribution / _PlayerDistribution * _price + _price) * 1.2f);
+        }
+
         public int GetNum()
         {
             return _num;
@@ -96,6 +138,12 @@ namespace Item
         {
             return this;
         }
+
+        public Sprite GetSprite()
+        {
+            return _ItemImage;
+        }
+
         #endregion ----------------------------------------------------------
 
         #region Setter -------------------------------------------------
@@ -141,9 +189,47 @@ namespace Item
         {
             return "商品名：" + _name + "    個数：" + _num.ToString() + "　　　値段：" + _price;
         }
+
+
+        /// <summary>
+        /// 各店の在庫の総数に追加
+        /// </summary>
+        /// <param name="num"></param>
+        public  void AddShopDistribution(int num)
+        {
+            _ShopDistribution += num;
+        }
+
+        /// <summary>
+        /// 各店の在庫の総数から除く
+        /// </summary>
+        /// <param name="num"></param>
+        public  void SubShopDistribution(int num)
+        {
+            _ShopDistribution += num;
+        }
+
+        /// <summary>
+        /// プレイヤーの総所持数に追加
+        /// </summary>
+        /// <param name="num"></param>
+        public  void AddPlayerDistribution(int num)
+        {
+            _PlayerDistribution += num;
+        }
+
+        /// <summary>
+        /// プレイヤーの総所持数から除く
+        /// </summary>
+        /// <param name="num"></param>
+        public  void SubPlayerDistribution(int num)
+        {
+            _PlayerDistribution += num;
+        }
+
         #endregion -------------------------------------------------------------------------------
 
-        #region Static Properties -------------------------------------------------------------------
+        #region Static Methods -------------------------------------------------------------------
 
         /// <summary>
         /// 引数で指定したアイテムを指定した分だけ買ったときの合計金額を返す
@@ -202,6 +288,7 @@ namespace Item
 
             return ItemSuper.Null;
         }
+
 
 
         public static bool operator == (ItemSuper a , ItemSuper b)

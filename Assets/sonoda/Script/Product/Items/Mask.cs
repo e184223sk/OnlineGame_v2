@@ -15,6 +15,7 @@ namespace Item
             _price = price;
             _num = num;
             _prefabName = "MASK";
+            _ItemImage = Resources.Load<Sprite>("MASKIMAGE");
         }
     }
 }

@@ -93,3 +93,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 2477121213396642410}
+  _ItemImage: {fileID: 21300000, guid: a8c5039d3161d16408c7dc020c954924, type: 3}

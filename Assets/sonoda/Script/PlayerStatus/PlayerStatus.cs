@@ -41,9 +41,11 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     [SerializeField]
     float GettableDis;
 
+    //インベントリを開いているか
+    private bool _IsOpen = false;
 
     [SerializeField]
-    List<Item.ItemSuper> ITEMS;
+    List<Item.ItemSuper> ITEMS = new List<Item.ItemSuper>();
     #endregion
 
 
@@ -66,8 +68,15 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         ShowMoney = _wallet.GetMoney();
 
         Shopping();
-        
 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (_IsOpen) _inventry.ShowInventryUI();
+            else _inventry.HideInventryUI();
+            _IsOpen = !_IsOpen;
+        }
+
+        ITEMS = _inventry._ItemList;
     }
 
     #endregion
@@ -102,7 +111,6 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         //Debug.Log(_nowShop.name);
        // Debug.Log("配列の要素数" + _nowShop.GetStock().Count);
 
-        ITEMS = _nowShop.GetStock();
         /*foreach(var i in _nowShop.GetStock())
         {
             Debug.Log(i._object.name +  i._object.transform.position);
@@ -122,6 +130,11 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
             {
                 sumPrice += Item.ItemSuper.GetPriceSum(i);
                 buyable_items.Add(i);
+
+                //プレイヤー全体の総所持数に追加
+                i.AddPlayerDistribution(i.GetNum());
+                //総在庫数からマイナス
+                i.SubShopDistribution(i.GetNum());
             }
             else break;
         }
@@ -129,11 +142,19 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         foreach(var i in buyable_items)
         {
             Item.ItemSuper tmp_item = _inventry.AddItem(i, 0);
+
             //アイテムがインベントリに収まらずあふれた時
             if (tmp_item != Item.ItemSuper.Null)
             {
                 //超過分のお金の払い戻し
                 _wallet.Receipt(Item.ItemSuper.GetPriceSum(tmp_item));
+
+
+                //プレイヤー全体の総所持数からマイナス
+                tmp_item.SubPlayerDistribution(tmp_item.GetNum());
+                //総在庫数に追加
+                _nowShop.ReturnItem(tmp_item);
+
                 break;
             }
         }
@@ -174,6 +195,9 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
                 }
             }
         }
+
+        Quaternion a = Wave.GetSurfaceNormal(transform.position);
+        a = new Quaternion(a.x, 0, a.z, a.w);
     }
 
     #endregion

@@ -9,6 +9,7 @@ public class ship : MonoBehaviour
 
     void Update()
     {
+        Debug.LogError("cc");
         //操作部分
         if (Input.GetKey(KeyCode.UpArrow   )) transform.Translate(speed * Time.deltaTime * Vector3.forward, Space.Self);
         if (Input.GetKey(KeyCode.DownArrow )) transform.Translate(speed * Time.deltaTime * Vector3.back, Space.Self);

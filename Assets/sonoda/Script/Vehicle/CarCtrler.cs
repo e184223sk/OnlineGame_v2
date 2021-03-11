@@ -13,10 +13,10 @@ public class CarCtrler : VehicleSuper
         _MaxSpeed = 120;
         _MinSpeed = -30;
         _speed = 0;
-        _steering = 30;
+        /*_steering = 30;
         _slippery = 50;
         _inertia = 3f;
-        _fliction = 0.7f;
+        _fliction = 0.7f;*/
     }
 
     // Update is called once per frame

@@ -13,7 +13,8 @@ public class Shop : MonoBehaviour
     [Range(0, 180)]
     public float _SpawnInterval;
 
-
+    //デバッグ中か否か
+    public bool _IsDebug = false;
     #endregion
 
     #region Private Properties
@@ -62,6 +63,9 @@ public class Shop : MonoBehaviour
     //スポーン間隔保持用変数
     private float _saveSpawnInterval;
 
+    //最近接アイテム距離保存用変数
+    private float _nearDis = 10000;
+
     #endregion
 
 
@@ -73,7 +77,7 @@ public class Shop : MonoBehaviour
         //------------------------------------- 初期化 ---------------------------------------
         //在庫の初期化
 
-        
+
 
         //アイテムの親オブジェクト　初期化
         _itemParent = new GameObject();
@@ -89,12 +93,14 @@ public class Shop : MonoBehaviour
 
         //------------------------------------ 生成 ----------------------------------------
 
-        for(int i = 0; i < _startItemNum; i++)
+        for (int i = 0; i < _startItemNum; i++)
         {
             GenerateItem();
         }
 
         //------------------------------------ 生成終わり ----------------------------------------
+
+
 
     }
 
@@ -140,8 +146,11 @@ public class Shop : MonoBehaviour
         {
             player.LeaveShop();
         }
-        _SpawnInterval = _saveSpawnInterval;
-        near_dis = 10000;
+
+        //デバッグ中ならスポーン間隔は短く
+        _SpawnInterval = _IsDebug ? 1 : _saveSpawnInterval;
+
+        _nearDis = 10000;
     }
 
 
@@ -150,35 +159,32 @@ public class Shop : MonoBehaviour
 
     #region Public Methods ----------------------------------------------------------------------------
 
-    private float near_dis = 10000;
     /// <summary>
     /// あるオブジェクトに一番近いアイテムの位置を返す
     /// </summary>
     /// <param name="objPos">対象のオブジェクト</param>
-    /// <returns>一番近い</returns>
+    /// <returns>一番近いアイテム</returns>
     public ItemSuper NearestItem(Vector3 objPos)
     {
         ItemSuper nearestItem = ItemSuper.Null;
 
+        //在庫が1個しかなかったらそれを返す
         if (_stock.Count == 1) return _stock[0];
 
         foreach (var i in _stock)
         {
             if (i == ItemSuper.Null) continue;
 
-            
-            float tmp_dis = Vector3.Distance(  i._object.transform.position, objPos);
-            //Debug.Log(i._object.name);
-            //Debug.Log(i._object.transform.position);
-            //Debug.Log(i.GetName() + " : " + tmp_dis.ToString());
+
+            float tmp_dis = Vector3.Distance(i._object.transform.position, objPos);
             //より近いアイテムがあったら
-            if (near_dis > tmp_dis)
+            if (_nearDis > tmp_dis)
             {
                 nearestItem = i;
 
-                near_dis = tmp_dis;
+                _nearDis = tmp_dis;
             }
-            
+
         }
         return nearestItem;
 
@@ -196,15 +202,33 @@ public class Shop : MonoBehaviour
     /// <param name="objname"></param>
     public void RemoveItem(string objname)
     {
-        for(int i = _stock.Count -1; i >= 0; i--)
+        for (int i = _stock.Count - 1; i >= 0; i--)
         {
-            if(_stock[i]._object.name == objname)
+            if (_stock[i]._object.name == objname)
             {
                 GameObject tmp_obj = _stock[i]._object;
                 _stock.RemoveAt(i);
                 Destroy(tmp_obj);
             }
         }
+    }
+
+    /// <summary>
+    /// 商品の返品処理
+    /// </summary>
+    /// <param name="item"></param>
+    public void ReturnItem(ItemSuper item)
+    {
+        Vector3 pos = RandomPos();
+
+        item._object = item.Init();
+        item._object.transform.parent = _itemParent.transform;
+        item._object.transform.position = pos;
+        item._object.name += count++.ToString();
+        _stock.Add(item);
+
+        //ゲーム全体の在庫数に追加
+        item.AddShopDistribution(item.GetNum());
     }
 
     #endregion  ----------------------------------------------------------------------------
@@ -229,22 +253,18 @@ public class Shop : MonoBehaviour
             //あらかじめ設定した値を追加するように
             GenerateItem();
 
-            //これだと追加した後の変更が利かない　_objectの設定がうまくいってないと思われる
-            /*_stock.AddItem(ItemSuper.RandomItemName());
-            GameObject tmp_obj = _stock._ItemList[_stock._ItemList.Count - 1].Init(RandomPos());
-            tmp_obj.transform.parent = _itemParent.transform;
-            //tmp_obj.tra
-            */
             _time = 0;
         }
 
     }
 
-
+    /// <summary>
+    /// ランダムなアイテムを自動生成
+    /// </summary>
     private void GenerateItem()
     {
         ItemSuper item = ItemSuper.RandomItem();
-        
+
         Vector3 pos = RandomPos();
 
         item._object = item.Init();
@@ -253,6 +273,8 @@ public class Shop : MonoBehaviour
         item._object.name += count++.ToString();
         _stock.Add(item);
 
+        //ゲーム全体の在庫数に追加
+        item.AddShopDistribution(item.GetNum());
 
     }
 
@@ -270,7 +292,7 @@ public class Shop : MonoBehaviour
 
 
 
-        return new Vector3(x, y, z)　+ transform.position;
+        return new Vector3(x, y, z) + transform.position;
     }
 
     #endregion  ----------------------------------------------------------------------------
