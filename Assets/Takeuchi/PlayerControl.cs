@@ -1,4 +1,5 @@
 ﻿//using MonobitEngine;//動かすときはコメントアウト消す
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,15 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
     public float defaultSpeed = 5f;
     public float speed = 5f;//移動速度
     public float jumpForce = 100f;//ジャンプ力
-    public float climbForce = 10f;
+    public float climbForce = 70f;
     public bool NoClimb = true;
     private bool Ground = true;
     private float angle = 0;
     private GameObject PL;
     private CapsuleCollider playercharacter;
     private Animator animator;
-    private Vector3 target = new Vector3(0,2,2);
+    private Climb climbScript;
+    public List<ClimbTargetObject> climbT;
 
     void Start()
     {
@@ -25,21 +27,21 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
         animator = GetComponent<Animator>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         playercharacter= PL.GetComponent<CapsuleCollider>();
+        climbScript = this.GetComponent<Climb>();
+        climbT = climbScript.targetObj;
 
     }
     void Update()
     {
         Move();
         Jump();
-        Climb();
+        ClimbPr();
 
         if (Input.GetMouseButton(1))
         {
             rb.AddForce(transform.up * climbForce);
             transform.position += transform.forward * speed * Time.deltaTime * 10;
         }
-
-
     }
     public void Move()
     {
@@ -149,25 +151,21 @@ public class PlayerControl : MonoBehaviour //動かすときはMonobitEngine.を
         }
     }
     ///　崖上り
-    public void Climb()
+    public void ClimbPr()
     {
-        if (Input.GetKey(KeyCode.E))
-        {
-            animator.SetBool("Key_E", true);
-        }
-        else
-        {
-            animator.SetBool("Key_E", false);
-        }
-        /*if (NoClimb == false && Input.GetKey(KeyCode.E))//崖登りしない設定がオフになっていてかつEキーが押された時崖を登る（条件は仮置きです）
+        climbT.Sort();  //リストのソート
+        climbT.Reverse();   //逆転させて降順に
+
+        if (climbT[0].priority >= 0.8 && Input.GetKey(KeyCode.E))//一番大きいpriorityが0.8以上かつEキーを押すと崖を登る
         {
             animator.SetBool("Key_E",true);
             float step = climbForce * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, target, step);
+            Vector3 climbPoint=climbT[0].point; //移動後のVector3を一旦保存
+            transform.position = Vector3.MoveTowards(transform.position,climbPoint,step);
         }
         else
         {
             animator.SetBool("Key_E", false);
-        }*/
+        }
     }
   }
