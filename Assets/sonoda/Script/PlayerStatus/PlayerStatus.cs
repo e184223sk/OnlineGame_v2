@@ -195,6 +195,9 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
                 }
             }
         }
+
+        Quaternion a = Wave.GetSurfaceNormal(transform.position);
+        a = new Quaternion(a.x, 0, a.z, a.w);
     }
 
     #endregion

@@ -390,6 +390,9 @@ MonoBehaviour:
   JoyStick_L_Push: 0
   JoyStick_R: {x: 0, y: 0}
   JoyStick_R_Push: 0
+  Triiger_TL: 0
+  Triiger_TR: 0
+  Triiger: 0
 --- !u!4 &1158054193
 Transform:
   m_ObjectHideFlags: 0
@@ -433,6 +436,7 @@ MonoBehaviour:
   jumpForce: 300
   climbForce: 10
   NoClimb: 0
+  climbT: []
 --- !u!114 &1306259883
 MonoBehaviour:
   m_ObjectHideFlags: 0

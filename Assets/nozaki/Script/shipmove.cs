@@ -10,6 +10,7 @@ public class shipmove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.LogError("dd");
         //操作
         if (Input.GetKey(KeyCode.UpArrow))
         {
