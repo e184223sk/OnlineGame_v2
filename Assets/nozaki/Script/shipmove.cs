@@ -3,7 +3,7 @@
 public class shipmove : MonoBehaviour
 {
     public float speed = 30;
-    private float AngleY;
+    public float AngleY;
     public float posy;
     public float turnspeed;
 
