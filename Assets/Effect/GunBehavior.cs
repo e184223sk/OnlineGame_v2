@@ -160,7 +160,7 @@ public class GunBehavior : MonoBehaviour
 
 
 
-    void Start()
+    public void Start()
     {
         RejectCartridgePoint = transform.Find("RejectCartridgePoint");
         BalletSpawnPoint = transform.Find("BalletSpawnPoint");
@@ -170,7 +170,7 @@ public class GunBehavior : MonoBehaviour
 
 
 
-    void Update()
+    public void Update()
     {
         if (IsActive && DoTASK)
         {
@@ -267,7 +267,7 @@ public class GunBehavior : MonoBehaviour
 
 
 #if UNITY_EDITOR
-    void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         if (transform.Find("BalletSpawnPoint") == null)
         {
