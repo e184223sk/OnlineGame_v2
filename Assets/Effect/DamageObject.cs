@@ -46,7 +46,7 @@ public class DamageObject : MonoBehaviour
                     Ray ray = new Ray(f, Vector3.Cross(f, c.transform.position));
                     if (c.Raycast(ray, out hit, 30f))
                     {
-                        Penetration -= Vector3.Distance(hit.point, c.transform.position) * 2;
+                     //   Penetration -= Vector3.Distance(hit.point, c.transform.position) * 2;
                         if (Penetration <= 0)
                             Destroy(gameObject);
                     }

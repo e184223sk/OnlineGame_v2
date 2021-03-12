@@ -9,11 +9,11 @@ public class BulletCtrl : BulletBehaviour
         {
             EffectGenerator.CreateEffect(EffectType.GunDamageBlood, collision.ClosestPoint(transform.position)).transform.LookAt(transform.position);
         }
-        else
+        else if(collision.transform.root.transform.GetComponent<EffectLimitter>() == null)
         {
-            var r = (Instantiate(Resources.Load("GUN/holes"), collision.ClosestPoint(transform.position), Quaternion.identity) as GameObject);
-            r.transform.LookAt(transform.position);
-            r.GetComponent<EffectLimitter>().SetLifeTime(5);
+            //    var r = (Instantiate(Resources.Load("GUN/holes"), collision.ClosestPoint(transform.position), Quaternion.identity) as GameObject);
+            //    r.transform.rotation = transform.rotation;
+            //    r.GetComponent<EffectLimitter>().SetLifeTime(5);
         }
         Destroy(gameObject);
     }
