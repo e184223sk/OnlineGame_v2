@@ -16,24 +16,16 @@ public class ppap : SyncNetWorkBehavior
         _monobitView = GetComponent<MonobitEngine.MonobitView>();
 
 
-        _myID = MonobitEngine.MonobitNetwork.player.ID;
+        _myID = MonobitEngine.MonobitNetwork.playerList.Length;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_monobitView.isMine)
+        Debug.Log("自分のID？" + _myID);
+        if (Input.GetKeyDown(KeyCode.O))
         {
-           // if (MonobitEngine.MonobitNetwork.player.ID == Random.Range(0,MonobitEngine.MonobitNetwork.playerList.Length))
-            {
-                Debug.Log("自分のID？" + _myID);
-                if (Input.GetKeyDown(KeyCode.O))
-                {
-                    MonobitEngine.MonobitNetwork.Instantiate("CUBE", new Vector3(0, 7.6f, 1), Quaternion.identity, 0);
-                }
-            }
-
-
+            MonobitEngine.MonobitNetwork.Instantiate("Cube", new Vector3(0, 7.6f, 1), Quaternion.identity, 0);
         }
 
     }
