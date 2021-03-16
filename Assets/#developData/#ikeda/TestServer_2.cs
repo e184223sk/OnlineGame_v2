@@ -15,6 +15,6 @@ public class TestServer_2 : MonoBehaviour
         {
             Debug.Log(NetData.server.GetText(NetData.Get__LOG_TXT));
             read_log = false;
-        }
+        } 
     }
 }
