@@ -9,6 +9,9 @@ public class ppap : SyncNetWorkBehavior
 
     private MonobitEngine.MonobitView _monobitView;
 
+    [SerializeField]
+    public string _greeting;
+
     // Start is called before the first frame update
     void Start()
     {
