@@ -33,7 +33,7 @@ public class shipmove : MonoBehaviour
 
         //角度
         Quaternion rot = Wave.GetSurfaceNormal(transform.position);
-        rot = new Quaternion(rot.x, AngleY, rot.z, rot.w);
+        rot = Quaternion.Euler(rot.x, AngleY, rot.z);
         transform.rotation = rot;
 
     }

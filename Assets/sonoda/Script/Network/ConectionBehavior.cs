@@ -14,40 +14,41 @@ using UnityEditor;
 
 
 
- 
+
 public class ConectionBehavior : MonobitEngine.MonoBehaviour
 {
 #if UNITY_EDITOR
- 
+
     public void OnDrawGizmos()
     {
-        Debug.Log("aaa");
-        MonobitAnimatorView a = GetComponent<MonobitAnimatorView>();
-        if (GetComponent<Animator>() != null && a == null) a = gameObject.AddComponent<MonobitEngine.MonobitAnimatorView>();
-
-        MonobitTransformView t = GetComponent<MonobitTransformView>();
-        if (t == null) t = gameObject.AddComponent<MonobitEngine.MonobitTransformView>();
-
-        if (GetComponent<MonobitView>() == null)
-        {
-           
+        _monobitView = GetComponent<MonobitView>();
+        if (_monobitView == null)
             _monobitView = gameObject.AddComponent<MonobitView>();
-            _monobitView.ObservedComponents.Add(a);
-            _monobitView.ObservedComponents.Add(t);
-        }
+        
+        Debug.Log("aaa");
+       
+        //MonobitTransformViewを追加------------------------
+        MonobitTransformView t = GetComponent<MonobitTransformView>();
+        if (t == null)   t = gameObject.AddComponent<MonobitEngine.MonobitTransformView>();
+        _monobitView.ObservedComponents = new List<Component>();
+        _monobitView.ObservedComponents.Add(t);
 
-        //
+        //MonobitAnimatorViewを追加------------------------
+        MonobitAnimatorView a = GetComponent<MonobitAnimatorView>();
+        if (GetComponent<Animator>() != null && a == null)
+            a = gameObject.AddComponent<MonobitEngine.MonobitAnimatorView>(); 
+        if (a != null) _monobitView.ObservedComponents.Add(a);
+        //自作クラスの実装
 
-        // 親オブジェクトに存在しない場合、すべての子オブジェクトに対して MonobitView コンポーネントを検索する
-        else if (GetComponentInChildren<MonobitView>() != null)
+        var sn = GetComponents<SyncNetWorkBehavior>();
+        foreach (var snc in sn)
         {
-            _monobitView = GetComponentInChildren<MonobitView>();
+            _monobitView.ObservedComponents.Add(snc); 
         }
-        // 親子オブジェクトに存在しない場合、自身のオブジェクトに対して MonobitView コンポーネントを検索して設定する
-        else
-        {
-            _monobitView = GetComponent<MonobitView>();
-        }
+       
+        if(_monobitView != null)
+        _monobitView?.UpdateSerializeViewMethod();
+      
     }
 
 
@@ -120,3 +121,4 @@ public class ConectionBehavior : MonobitEngine.MonoBehaviour
         }
     }
 }
+
