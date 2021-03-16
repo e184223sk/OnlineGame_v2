@@ -17,7 +17,6 @@ public class ppap : SyncNetWorkBehavior
 
 
         _myID = ID;
-
         ID++;
     }
 
@@ -28,6 +27,7 @@ public class ppap : SyncNetWorkBehavior
         {
             if (_monobitView.ownerId == _myID)
             {
+                Debug.Log("自分のID？" + _monobitView.ownerId);
                 if (Input.GetKeyDown(KeyCode.O))
                 {
                     MonobitEngine.MonobitNetwork.Instantiate("CUBE", new Vector3(0, 7.6f, 1), Quaternion.identity, 0);
