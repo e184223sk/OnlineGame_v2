@@ -16,8 +16,7 @@ public class ppap : SyncNetWorkBehavior
         _monobitView = GetComponent<MonobitEngine.MonobitView>();
 
 
-        _myID = ID;
-        ID++;
+        _myID = MonobitEngine.MonobitNetwork.player.ID;
     }
 
     // Update is called once per frame
@@ -25,9 +24,9 @@ public class ppap : SyncNetWorkBehavior
     {
         if (_monobitView.isMine)
         {
-            if (_monobitView.ownerId == _myID)
+           // if (MonobitEngine.MonobitNetwork.player.ID == Random.Range(0,MonobitEngine.MonobitNetwork.playerList.Length))
             {
-                Debug.Log("自分のID？" + _monobitView.ownerId);
+                Debug.Log("自分のID？" + _myID);
                 if (Input.GetKeyDown(KeyCode.O))
                 {
                     MonobitEngine.MonobitNetwork.Instantiate("CUBE", new Vector3(0, 7.6f, 1), Quaternion.identity, 0);
