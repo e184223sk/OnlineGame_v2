@@ -5,28 +5,31 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/_LogoScene/LogoScene.unity
     guid: be190d5532f163c4ca6a2137e6dd8a60
-  - enabled: 1
+  - enabled: 0
     path: Assets/_TitleScene/TitleScene.unity
     guid: eef94b6108649464ba825d91738ee0e9
-  - enabled: 1
+  - enabled: 0
     path: Assets/_SelectScene/SelectScene.unity
     guid: 17bbabe3efd7cb5438d82685d2d2adfc
-  - enabled: 1
+  - enabled: 0
     path: Assets/_TutorialScene/TutorialScene.unity
     guid: 105c67f6c5164f14faf028d90434cc7c
-  - enabled: 1
+  - enabled: 0
     path: Assets/_MakeAvator/MakeAvatorScene.unity
     guid: 8dd85f688e3e22d4d9e0c45d8d3bb8bd
-  - enabled: 1
+  - enabled: 0
     path: Assets/_OptionScene/OptionScene.unity
     guid: cd5f96d50606e594985ef02a22b90369
-  - enabled: 1
+  - enabled: 0
     path: Assets/_GO_Scene/GO_Scene.unity
     guid: 348b7006744808c49832eed1d1ed3da6
-  - enabled: 1
+  - enabled: 0
     path: Assets/GameScene.unity
     guid: 1edf41ed676434e438dbdf834f1e4d37
+  - enabled: 1
+    path: Assets/sonoda/scene/SendTest.unity
+    guid: f13a81bb5ef9fe44bbb5c703e2602c86
   m_configObjects: {}
