@@ -10,7 +10,7 @@ public class Inventry : MonoBehaviour
     /// <summary>
     /// アイテムを格納する配列　読み取り専用なのでアクセスはメソッドからお願いします
     /// </summary>
-    public readonly List<ItemSuper> _ItemList = new List<ItemSuper>();
+    public  List<ItemSuper> _ItemList = new List<ItemSuper>();
 
     public int Length { get { return _slot; } }
 
@@ -53,6 +53,12 @@ public class Inventry : MonoBehaviour
 
     #region Public Methods ------------------------------------------------------------------------------------
 
+    #region Constructer ----------------------------------------
+    
+    /// <summary>
+    /// 生成と同時に代入するとき
+    /// </summary>
+    /// <param name="items"></param>
     public Inventry(List<ItemSuper> items)
     {
         _ItemList = new List<ItemSuper>(_slot);
@@ -64,14 +70,28 @@ public class Inventry : MonoBehaviour
             if (i > items.Count - 1) return;
             _ItemList[i] = items[i];
         }
-        Set();
+        UISet();
     }
 
+    //何も指定せず生成
     public Inventry()
     {
         _ItemList = new List<ItemSuper>();
-        Set();
+        UISet();
     }
+
+    //インベントリのスロット数を指定して生成
+    public Inventry(int slot)
+    {
+
+        _ItemList = new List<ItemSuper>(_slot);
+        _ItemList.AddRange(Enumerable.Repeat(ItemSuper.Null, _slot));
+        UISet();
+    }
+
+    #endregion ----------------------------------------------------
+
+
 
     /// <summary>
     /// //超過した分だけ　次のスロットに格納アイテム追加処理　すでに持っているアイテムは数を増やすだけ　超過分は次のスロットに格納　それでもあふれたアイテムを返す
@@ -110,16 +130,13 @@ public class Inventry : MonoBehaviour
                     else
                     {
                         //超過分を格納
-                        overflowItem = new ItemSuper(i.GetName(), i.GetPrice(), over_num);
+                        item = new ItemSuper(i.GetName(), i.GetPrice(), over_num);
                     }
                 }
             }
-            else
-            {
-                _ItemList.Add(item);
-            }
-
         }
+
+        _ItemList.Add(item);
 
         return overflowItem;
     }
@@ -229,7 +246,7 @@ public class Inventry : MonoBehaviour
 
     }
 
-    private void Set()
+    private void UISet()
     {
         _inventryUI = GameObject.Find("InventryUI");
         _products = GameObject.Find("Products");

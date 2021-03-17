@@ -46,6 +46,10 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
 
     [SerializeField]
     List<Item.ItemSuper> ITEMS = new List<Item.ItemSuper>();
+
+    [SerializeField]
+    GameObject img;
+
     #endregion
 
 
@@ -55,6 +59,7 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         _ID = MonobitNetwork.player.ID;
 
         _wallet = new Wallet(100000);
@@ -158,6 +163,7 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
                 break;
             }
         }
+        _basket.Clear();
     }
        
 
@@ -171,23 +177,29 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
         //入店時のみ処理
         if(_nowShop != null)
         {
-            // A(仮) が押されたら　ボタンは後で変更
-            if (Key.A.Down || Input.GetKeyDown(KeyCode.Space))
+            // A(仮) が押されたら　ボタンは後で変更     キーボードは「 Z 」
+            if (Key.A.Down)
             {
 
                 Debug.Log(_nowShop.gameObject.name);
                 Item.ItemSuper item = _nowShop.NearestItem(transform.position);
+
+                //アイテムを取得したときお金が足りなくなるなら買えない
+                if (!_wallet.IsBuyable(GetBasketSum() + Item.ItemSuper.GetPriceSum(item)))
+                {
+                    Debug.Log("お金足りないぞ");
+                    return;
+                }
                 if (item == Item.ItemSuper.Null)
                 {
                     Debug.Log("近くにないよ");
                     return;
                 }
-                
 
                 //Debug.Log( item.GetName() +" : " + item._object.transform.position.ToString());
 
                 //取得可能な距離にいたら
-                if(GettableDis > Vector3.Distance(item._object.transform.position , gameObject.transform.position))
+                if (GettableDis > Vector3.Distance(item._object.transform.position , gameObject.transform.position))
                 {
                     Debug.Log("gettableItem is : " + item._object.name);
                     _basket.Add(item);
@@ -196,8 +208,22 @@ public class PlayerStatus :MonobitEngine.MonoBehaviour
             }
         }
 
-        Quaternion a = Wave.GetSurfaceNormal(transform.position);
-        a = new Quaternion(a.x, 0, a.z, a.w);
+    }
+
+    /// <summary>
+    /// カゴの中のアイテムの総購入金額
+    /// </summary>
+    /// <returns></returns>
+    private int GetBasketSum()
+    {
+        //カゴの中身が空なら 0円
+        if (_basket.Count == 0) return 0;
+        
+        //カゴの中のアイテムの総購入金額
+        int sum = 0;
+        foreach (var i in _basket) sum += Item.ItemSuper.GetPriceSum(i);
+
+        return sum;
     }
 
     #endregion

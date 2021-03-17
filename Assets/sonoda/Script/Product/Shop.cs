@@ -146,6 +146,7 @@ public class Shop : MonoBehaviour
         {
             player.LeaveShop();
         }
+        
 
         //デバッグ中ならスポーン間隔は短く
         _SpawnInterval = _IsDebug ? 1 : _saveSpawnInterval;

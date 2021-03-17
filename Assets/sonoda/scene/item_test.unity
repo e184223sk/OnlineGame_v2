@@ -237,6 +237,7 @@ MonoBehaviour:
   jumpForce: 100
   climbForce: 10
   NoClimb: 1
+  climbT: []
 --- !u!4 &43406787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 1c396bf710eea554d92378db6b1a2674,
@@ -307,6 +308,7 @@ MonoBehaviour:
   ShowMoney: 0
   GettableDis: 100
   ITEMS: []
+  img: {fileID: 4915686274814517546, guid: ef91bf6855fa4a346927f510c9f88103, type: 3}
 --- !u!1 &51409348
 GameObject:
   m_ObjectHideFlags: 0

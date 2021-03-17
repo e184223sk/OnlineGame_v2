@@ -250,9 +250,12 @@ namespace Item
 
         }*/
 
+        ///<summary>
+        ///アイテムの購入金額    買値 ＊　個数
+        ///</summary>
         public static int GetPriceSum(ItemSuper item)
         {
-            return item.GetPrice() * item.GetNum();
+            return item.GetBuyPrice() * item.GetNum();
         }
 
 
