@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowMoney: 0
-  GettableDis: 100
+  GettableDis: 500
   ITEMS: []
   img: {fileID: 4915686274814517546, guid: ef91bf6855fa4a346927f510c9f88103, type: 3}
 --- !u!1 &51409348
