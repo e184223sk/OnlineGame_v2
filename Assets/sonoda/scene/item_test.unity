@@ -305,10 +305,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96343b2f2ab34c742947d24c7a55f719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowMoney: 0
   GettableDis: 500
-  ITEMS: []
-  img: {fileID: 4915686274814517546, guid: ef91bf6855fa4a346927f510c9f88103, type: 3}
+  _profitRate: 0
+  ShowMoney: 0
 --- !u!1 &51409348
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,14 +617,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea91e970777c4554a89c686947b3895b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SpawnInterval: 1
-  _IsDebug: 0
-  _startItemNum: 2
   _productArea: {x: 8.33, y: 1.8, z: 7}
   _productCenter: {x: 0, y: 1, z: 0}
   _itemParent: {fileID: 0}
-  _MinSpawn: 0
+  _IsSalesShop: 1
+  _SpawnInterval: 1
+  _startItemNum: 2
   _MaxSpawn: 0
+  _MinSpawn: 0
+  _IsDebug: 0
 --- !u!65 &460730216
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -875,14 +875,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea91e970777c4554a89c686947b3895b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SpawnInterval: 1
-  _IsDebug: 0
-  _startItemNum: 2
   _productArea: {x: 8.33, y: 1.8, z: 7}
   _productCenter: {x: 0, y: 0.91, z: 0}
   _itemParent: {fileID: 0}
-  _MinSpawn: 0
+  _IsSalesShop: 0
+  _SpawnInterval: 1
+  _startItemNum: 2
   _MaxSpawn: 0
+  _MinSpawn: 0
+  _IsDebug: 0
 --- !u!4 &617168330
 Transform:
   m_ObjectHideFlags: 0

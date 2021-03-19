@@ -56,13 +56,12 @@ public class Inventry : MonoBehaviour
     #region Constructer ----------------------------------------
     
     /// <summary>
-    /// 生成と同時に代入するとき
+    /// 生成と同時に代入するとき    使わないかも  デフォルトのサイズ6を超えたら入れない
     /// </summary>
     /// <param name="items"></param>
     public Inventry(List<ItemSuper> items)
     {
-        _ItemList = new List<ItemSuper>(_slot);
-        _ItemList.AddRange(Enumerable.Repeat(ItemSuper.Null, _slot));
+        InitList(_slot);
 
         for (int i = 0; i < _ItemList.Count; i++)
         {
@@ -83,9 +82,7 @@ public class Inventry : MonoBehaviour
     //インベントリのスロット数を指定して生成
     public Inventry(int slot)
     {
-
-        _ItemList = new List<ItemSuper>(_slot);
-        _ItemList.AddRange(Enumerable.Repeat(ItemSuper.Null, _slot));
+        InitList(slot);
         UISet();
     }
 
@@ -173,12 +170,20 @@ public class Inventry : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// アイテムを全て削除する
+    /// </summary>
+    public void ClearItems()
+    {
+        int tmp_slot = _ItemList.Count;
+        InitList(tmp_slot);
+    }
 
     /// <summary>
     /// インベントリの最大数を増やすメソッド　ItemSuper.Nullが最後尾に追加される
     /// </summary>
     /// <param name="num">増やす数</param>
-    public void AddInventry(int num)
+    public void AddInventrySlot(int num)
     {
         for (int i = 0; i < num; i++)
         {
@@ -193,7 +198,7 @@ public class Inventry : MonoBehaviour
     /// インベントリの最大数を減らすメソッド　後ろから消していくが、すでにアイテムがある場合も問答無用で消す
     /// </summary>
     /// <param name="num">減らす数</param>
-    public void DeleteInventry(int num)
+    public void DeleteInventrySlot (int num)
     {
         for (int i = 0; i < num; i++)
         {
@@ -257,6 +262,12 @@ public class Inventry : MonoBehaviour
             _itemUIs[i] = tmp_objs[i].GetComponent<ItemUI>();
         }
         _inventryUI.SetActive(false);
+    }
+
+    private void InitList(int slot)
+    {
+        _ItemList = new List<ItemSuper>(slot);
+        _ItemList.AddRange(Enumerable.Repeat(ItemSuper.Null, slot));
     }
 
     #endregion ------------------------------------------------------------------------------------
