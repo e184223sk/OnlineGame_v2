@@ -39,8 +39,9 @@ public class PlayerStatus : MonobitEngine.MonoBehaviour
 
     //----------------------------- 売るときの倍率　-------------------------------------
     [SerializeField, Lang_Jp("利益率")]
-    private float _profitRate;
+    private float _profitRate = 1.2f;
 
+    private InventryUI _basketUI;
 
     #endregion
 
@@ -62,10 +63,7 @@ public class PlayerStatus : MonobitEngine.MonoBehaviour
 
         _inventry = new Inventry();
 
-
-
-        float f = 50f / 150f;
-        Debug.Log( f);
+        _basketUI = new InventryUI("BasketUI");
     }
 
     // Update is called once per frame
@@ -77,10 +75,16 @@ public class PlayerStatus : MonobitEngine.MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            _IsOpen = !_IsOpen;
             if (_IsOpen) _inventry.ShowInventryUI();
             else _inventry.HideInventryUI();
-            _IsOpen = !_IsOpen;
         }
+
+
+
+        if (_nowShop)   _basketUI.ShowInventryUI(_basket);
+        else            _basketUI.HideInventryUI();
+
     }
 
     #endregion

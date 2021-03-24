@@ -11,7 +11,7 @@ public class CarCtrler : VehicleSuper
         Initialized();
         //_accel = 10;
         _MaxSpeed = 120;
-        _MinSpeed = -30;
+        _MinSpeed = 30;
         _speed = 0;
         /*_steering = 30;
         _slippery = 50;
