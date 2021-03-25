@@ -6,52 +6,32 @@ using UnityEngine.UI;
 
 public class ItemUI : MonoBehaviour
 {
-
-    #region 
-    
-    //商品名
-    private Text _name;
-
     //商品の個数
     private Text _num;
 
-    private Image _image;   
+    private Image _image;
 
-    #endregion
-
-    #region Public Methods
+    private Sprite _rockImage;
 
     public void SetUI(ItemSuper item)
     {
         if(item == ItemSuper.Null)
         {
-            _name.text = "";
             _num.text = "";
+            _image.sprite = _rockImage;
         }
         else
         {
-            _name.text = item.GetName();
-            _num.text = "×" + item.GetNum().ToString();
-            Debug.Log(item.GetSprite().name);
+            _num.text = item.GetNum().ToString();
             _image.sprite = item.GetSprite();
-
         }
     }
 
 
-    #endregion
-
-    // Start is called before the first frame update
-    void Start()
+    public void Initialize()
     {
+        _rockImage = Resources.Load("Rocked") as Sprite;
         _image = GetComponent<Image>();
-        _name = transform.GetChild(0).GetComponent<Text>();
-        _num = transform.GetChild(1).GetComponent<Text>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _num = transform.GetChild(0).GetComponent<Text>();
     }
 }

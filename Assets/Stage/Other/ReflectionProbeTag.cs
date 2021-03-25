@@ -17,14 +17,14 @@ public class ReflectionProbeTag : MonoBehaviour
 #if UNITY_EDITOR
 public class ReflectionProbeTagManager
 {
-    [InitializeOnLoadMethod]
-    static void init() { EditorApplication.update += UPDATE; }
+   /* [InitializeOnLoadMethod]
+    static void init() { EditorApplication.update += UPDATE; }*/
     static uint sd;
     static void UPDATE()
     {
         if (EditorApplication.isPlaying) return;
         sd = 0;
-        foreach (GameObject o in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
+        /*foreach (GameObject o in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
         {
             // シーン上に存在するオブジェクトならば処理.
             if (o.activeInHierarchy)
@@ -44,7 +44,7 @@ public class ReflectionProbeTagManager
                     }
                 }
             }
-        } 
+        } */
     }
 }
 

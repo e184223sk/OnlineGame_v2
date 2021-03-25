@@ -7,86 +7,75 @@ using Item;
 /// </summary>
 public class Shop : MonoBehaviour
 {
-    #region Public Properties
 
-    //アイテムが自動で生成される間隔　〇秒
-    [Range(0, 180)]
-    public float _SpawnInterval;
+    #region Shop Properties 
 
-    //デバッグ中か否か
-    public bool _IsDebug = false;
-    #endregion
-
-    #region Private Properties
-
-    //初期のアイテム生成個数
-    [SerializeField, Range(2, 10)]
-    private int _startItemNum = 2;
-
-    //アイテム最大出現個数
-    private int _maxItemNum = 10;
-
-
-    //この店の在庫
-    private List<ItemSuper> _stock = new List<ItemSuper>();
-
-    //商品を配置する範囲
+    //----------------------- 商品を配置する範囲 ----------------------------
     [SerializeField]
     private Vector3 _productArea;
 
-
-    //商品を配置する範囲の中心
+    //----------------------- 商品を配置する範囲の中心 ---------------------
     [SerializeField]
     private Vector3 _productCenter;
 
-    //店の座標
-    private Vector3 _position;
-
-    //店のトランスフォーム
-    private Transform _transform;
-
-    //アイテムの親オブジェクト　（空）
+    //----------------------- アイテムの親オブジェクト　（空） ---------------------
     [SerializeField]
     private GameObject _itemParent;
 
-    //経過時間
+    //-----------------------プレイヤーが商品を買う店なのか、売る店なのか    true = 買う店、false = 売る店
+    public bool _IsSalesShop;
+
+    //----------------------- 経過時間 ---------------------------------------
     private float _time;
 
-    //最低生成個数
-    [SerializeField, Range(0, 50)]
-    private int _MinSpawn;
+    //------------------------ スポーン間隔　〇秒 -----------------------------------------------
+    [Range(0, 180)]
+    public float _SpawnInterval;
 
-    //最大生成個数
-    [SerializeField, Range(50, 100)]
-    private int _MaxSpawn;
-
-    //スポーン間隔保持用変数
+    // ----------------------- スポーン間隔保持用変数 -----------------------------------------
     private float _saveSpawnInterval;
 
-    //最近接アイテム距離保存用変数
+    //------------------------- 最近接アイテム距離保存用変数 -------------------------------
     private float _nearDis = 10000;
 
-    #endregion
+    #endregion  
+    #region Item Properties 
+
+    //-------------------------- 初期のアイテム生成個数 ---------------------------------
+    [SerializeField, Range(2, 10)]
+    private int _startItemNum = 2;
+
+    //--------------------------- この店の在庫 -----------------------------------------
+    private List<ItemSuper> _stock = new List<ItemSuper>();
+
+    //--------------------------- 最大生成個数 ----------------------------------------
+    [SerializeField, Range(10, 100)]
+    private int _MaxSpawn;
+
+    //--------------------------- 最低生成個数 ----------------------------------------
+    [SerializeField, Range(0, 10)]
+    private int _MinSpawn;
 
 
-    #region Unity Callbacks ----------------------------------------------------------------------------
+    #endregion  
+
+    //#region Debug Properties 
+    //-------------------------- デバッグ中か否か ---------------------------------------
+    public bool _IsDebug = false;
+    //#endregion  
+
+
+    #region Unity Callbacks 
 
     // Start is called before the first frame update
     void Start()
     {
         //------------------------------------- 初期化 ---------------------------------------
-        //在庫の初期化
-
-
-
         //アイテムの親オブジェクト　初期化
         _itemParent = new GameObject();
         _itemParent.name = "ItemParent" + this.gameObject.name;
         _itemParent.transform.parent = this.transform;
         _itemParent.transform.position = transform.TransformPoint(Vector3.zero);
-
-        //position　代入
-        _position = this.transform.position;
 
         _saveSpawnInterval = _SpawnInterval;
         //-------------------------------------　初期化終わり ------------------------------
@@ -97,11 +86,7 @@ public class Shop : MonoBehaviour
         {
             GenerateItem();
         }
-
         //------------------------------------ 生成終わり ----------------------------------------
-
-
-
     }
 
     // Update is called once per frame
@@ -147,49 +132,16 @@ public class Shop : MonoBehaviour
             player.LeaveShop();
         }
 
+
         //デバッグ中ならスポーン間隔は短く
         _SpawnInterval = _IsDebug ? 1 : _saveSpawnInterval;
 
         _nearDis = 10000;
     }
 
-
-
     #endregion ----------------------------------------------------------------------------
 
-    #region Public Methods ----------------------------------------------------------------------------
-
-    /// <summary>
-    /// あるオブジェクトに一番近いアイテムの位置を返す
-    /// </summary>
-    /// <param name="objPos">対象のオブジェクト</param>
-    /// <returns>一番近いアイテム</returns>
-    public ItemSuper NearestItem(Vector3 objPos)
-    {
-        ItemSuper nearestItem = ItemSuper.Null;
-
-        //在庫が1個しかなかったらそれを返す
-        if (_stock.Count == 1) return _stock[0];
-
-        foreach (var i in _stock)
-        {
-            if (i == ItemSuper.Null) continue;
-
-
-            float tmp_dis = Vector3.Distance(i._object.transform.position, objPos);
-            //より近いアイテムがあったら
-            if (_nearDis > tmp_dis)
-            {
-                nearestItem = i;
-
-                _nearDis = tmp_dis;
-            }
-
-        }
-        return nearestItem;
-
-    }
-
+    #region Accessor 
 
     public List<ItemSuper> GetStock()
     {
@@ -231,11 +183,47 @@ public class Shop : MonoBehaviour
         item.AddShopDistribution(item.GetNum());
     }
 
-    #endregion  ----------------------------------------------------------------------------
+    #endregion  
 
-    #region Private Methods ----------------------------------------------------------------------------
+    #region ItemInfo Methods  
+    /// <summary>
+    /// あるオブジェクトに一番近いアイテムの位置を返す
+    /// </summary>
+    /// <param name="objPos">対象のオブジェクト</param>
+    /// <returns>一番近いアイテム</returns>
+    public ItemSuper NearestItem(Vector3 objPos)
+    {
+        ItemSuper nearestItem = ItemSuper.Null;
+
+        //在庫が1個しかなかったらそれを返す
+        if (_stock.Count == 1) return _stock[0];
+
+        foreach (var i in _stock)
+        {
+            if (i == ItemSuper.Null) continue;
 
 
+            float tmp_dis = Vector3.Distance(i._object.transform.position, objPos);
+            //より近いアイテムがあったら
+            if (_nearDis > tmp_dis)
+            {
+                nearestItem = i;
+
+                _nearDis = tmp_dis;
+            }
+
+        }
+        return nearestItem;
+
+    }
+
+    #endregion 
+
+    
+    
+    #region Generate Item Methods
+
+    //------------------------- 命名用の変数 〇 + count.ToString() ----------------------------
     private int count = 1;
 
     /// <summary>
@@ -246,16 +234,14 @@ public class Shop : MonoBehaviour
         _time += Time.deltaTime;
 
         //最大出現個数を上回ったら生成しない
-        if (_stock.Count >= _maxItemNum) _time = 0f;
+        if (_stock.Count >= _MaxSpawn) _time = 0f;
 
         if (_time > _SpawnInterval)
         {
             //あらかじめ設定した値を追加するように
             GenerateItem();
-
             _time = 0;
         }
-
     }
 
     /// <summary>
@@ -278,7 +264,6 @@ public class Shop : MonoBehaviour
 
     }
 
-
     /// <summary>
     /// 商品を生成する位置をランダムで生成   （ローカル）
     /// </summary>
@@ -295,5 +280,5 @@ public class Shop : MonoBehaviour
         return new Vector3(x, y, z) + transform.position;
     }
 
-    #endregion  ----------------------------------------------------------------------------
+    #endregion  
 }

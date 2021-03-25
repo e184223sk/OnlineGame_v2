@@ -8,14 +8,14 @@ using UnityEngine;
 
 public class ScreenConfigModeSetting : MonoBehaviour
 {
-    [InitializeOnLoadMethod]
+    /*[InitializeOnLoadMethod]
     static void EDITOR_SET()
     {
         EditorApplication.update += delegate ()
         {   
             //
         };
-    }
+    }*/
 
      
 }

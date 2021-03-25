@@ -73,13 +73,13 @@ public class AudioSystem : MonoBehaviour
     public const float None = 0.7f;
 
 #if UNITY_EDITOR
-    [InitializeOnLoadMethod]
+   /* [InitializeOnLoadMethod]
     private static void Editors_()
     {
         EditorApplication.update += () =>
         {
             if (EditorApplication.isPlaying) return;
-            foreach (GameObject obj in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
+           /* foreach (GameObject obj in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
             {
                 // シーン上に存在するオブジェクトならば処理.
                 if (obj.activeInHierarchy)
@@ -104,7 +104,7 @@ public class AudioSystem : MonoBehaviour
                 }
             }
         };
-    } 
+    } */
     //自動設置
 #endif
  
