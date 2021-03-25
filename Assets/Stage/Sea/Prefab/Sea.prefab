@@ -141,6 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bcf47abc818ee247a081f2c6bf436a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 
+  GO_MakePolygon: 0
   VerticesToVector: 160
   WaveSpeed: 0.004
   WaveHeight: -0.2
