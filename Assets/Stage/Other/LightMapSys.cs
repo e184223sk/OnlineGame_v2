@@ -106,7 +106,7 @@ public class MakeLight
 
                 if (co != null)
                 {
-                    uint cc = o.GetComponent<ReflectionProbeTag>().TAG;
+                   // uint cc = o.GetComponent<ReflectionProbeTag>().TAG;
 
                     //Texture2D.  = co.texture;
                      

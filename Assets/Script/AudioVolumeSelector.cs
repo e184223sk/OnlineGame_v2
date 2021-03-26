@@ -72,39 +72,34 @@ public class AudioSystem : MonoBehaviour
     static float bgm = None, se = None, voice = None, sys = None, master = None;
     public const float None = 0.7f;
 
-#if UNITY_EDITOR
-   /* [InitializeOnLoadMethod]
-    private static void Editors_()
-    {
-        EditorApplication.update += () =>
+#if UNITY_EDITOR 
+    public static void UPDATE__()
+    { 
+        foreach (GameObject obj in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
         {
-            if (EditorApplication.isPlaying) return;
-           /* foreach (GameObject obj in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
+            // シーン上に存在するオブジェクトならば処理.
+            if (obj.activeInHierarchy)
             {
-                // シーン上に存在するオブジェクトならば処理.
-                if (obj.activeInHierarchy)
+                var as_ = obj.GetComponent<AudioSource>();
+                if (as_ != null)
                 {
-                    var as_ = obj.GetComponent<AudioSource>();
-                    if (as_ != null)
+                    if (obj.GetComponent<AudioVolumeSelector>() == null)
+                        obj.AddComponent<AudioVolumeSelector>();
+                    if (obj.GetComponent<AudioVolumeSelector>().audioType == AudioType.None)
                     {
-                        if (obj.GetComponent<AudioVolumeSelector>() == null)
-                            obj.AddComponent<AudioVolumeSelector>();
-                        if (obj.GetComponent<AudioVolumeSelector>().audioType == AudioType.None)
+                        string path = obj.transform.gameObject.name;
+                        Transform parent = obj.transform.parent;
+                        while (parent != null)
                         {
-                            string path = obj.transform.gameObject.name;
-                            Transform parent = obj.transform.parent;
-                            while (parent != null)
-                            {
-                                path = parent.name + "/" + path;
-                                parent = parent.parent;
-                            }
-                            Debug.LogError("オーディオタイプが設定されていません!! [AudioVolumeSelector] ::: Object Name (" + path + ")");
+                            path = parent.name + "/" + path;
+                            parent = parent.parent;
                         }
-                    } 
+                        Debug.LogError("オーディオタイプが設定されていません!! [AudioVolumeSelector] ::: Object Name (" + path + ")");
+                    }
                 }
             }
-        };
-    } */
+        }
+    }
     //自動設置
 #endif
  

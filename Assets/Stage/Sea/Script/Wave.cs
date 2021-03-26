@@ -15,9 +15,7 @@ using UnityEditor;
 
 
 public class Wave : MonoBehaviour
-{
-    [Multiline(100)]
-    public string log = "";
+{ 
     [SerializeField] bool GO_MakePolygon;
     [Header("◆ポリゴン数の１辺の数")]
     [Space(30)]
@@ -488,8 +486,9 @@ public class Wave : MonoBehaviour
         WaveUp = WaveHeight / 22 * Mathf.Sin(Cnt);
         Cnt += Time.deltaTime * WaveSpeed;
         Debug.Log(Sin(Cnt));
-        float ccx = Cnt * WaveInterval;
-        log = "";
+        float ccx = Cnt * WaveInterval * Mathf.PI;
+        float cntSIN = WaveInterval * Mathf.Sin(Cnt) * WaveRing * Mathf.PI;
+
         for (int x = 0; x < VerticesToVector - 1; x++)
           {
               for (int z = 0; z < VerticesToVector - 1; z++)
@@ -497,21 +496,18 @@ public class Wave : MonoBehaviour
                 
                    int i = z * VerticesToVector + x;
                    var v = vertexList[i];
-                   
-                  float d = ((float)(x - VerticesToVector / 2) * (float)(x - VerticesToVector / 2) + (float)(z - VerticesToVector / 2) * (float)(z - VerticesToVector / 2)) ;
-                  float sinx = Sin(ccx * x );
-                  float sinz = Sin(ccx * z); 
 
-                //log += "#" + ((int)((WaveInterval * x * Cnt) % 1 * 1000) + ":" + (int)((WaveInterval * z * Cnt) % 1 * 1000));
-                //ここで波を加工 -----------------------------
-                v.y = WaveHeight * (d / VerticesToVector + 1) * 
-                  (
-                      sinx* sinx * Waveheight_PlaneAxis.x + sinz * sinz * Waveheight_PlaneAxis.z +
-                      Sin((int)(WaveInterval * (d + 1) * WaveRing * Sin(Cnt) )) * WaveRingHeight
-                  );
-                  //-------------------------------------------- 
-                vertexList[i] = v;
-               
+                   float d = ((float)(x - VerticesToVector / 2) * (x - VerticesToVector / 2) + (float)(z - VerticesToVector / 2) * (z - VerticesToVector / 2));
+                   float sinx = Sin(ccx*x);
+                   float sinz = Sin(ccx*z);  
+                   v.y =
+                   WaveHeight * (d / VerticesToVector + 1) *
+                   ( 
+                        sinx * sinx * Waveheight_PlaneAxis.x +
+                        sinz * sinz * Waveheight_PlaneAxis.z + 
+                        Sin((d + 1) * cntSIN) * WaveRingHeight
+                   );
+                   vertexList[i] = v; 
             }
         }
        mesh.SetVertices(vertexList); 

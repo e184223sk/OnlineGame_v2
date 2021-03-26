@@ -6,7 +6,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+/*
  
 public class ReflectionProbeTag : MonoBehaviour
 {
@@ -17,14 +17,17 @@ public class ReflectionProbeTag : MonoBehaviour
 #if UNITY_EDITOR
 public class ReflectionProbeTagManager
 {
-   /* [InitializeOnLoadMethod]
-    static void init() { EditorApplication.update += UPDATE; }*/
+    [RuntimeInitializeOnLoadMethod] static void FLAGDOWM() { flag = true; }
+    static bool flag;
+
+    [InitializeOnLoadMethod]
+    static void init() { EditorApplication.update += UPDATE; } 
     static uint sd;
     static void UPDATE()
     {
-        if (EditorApplication.isPlaying) return;
+        if (EditorApplication.isPlaying || !flag) return;
         sd = 0;
-        /*foreach (GameObject o in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
+        foreach (GameObject o in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
         {
             // シーン上に存在するオブジェクトならば処理.
             if (o.activeInHierarchy)
@@ -44,10 +47,11 @@ public class ReflectionProbeTagManager
                     }
                 }
             }
-        } */
+        }  
     }
 }
 
 #endif
 
 
+    */
