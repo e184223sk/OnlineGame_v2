@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 2685698297563465574}
   - component: {fileID: 2685698297563465597}
   - component: {fileID: 439259729840472434}
-  - component: {fileID: 6131783537659960413}
+  - component: {fileID: 1785980533518032623}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -468,7 +468,7 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
---- !u!114 &6131783537659960413
+--- !u!114 &1785980533518032623
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -488,8 +488,9 @@ MonoBehaviour:
   m_IsEncrypt: 1
   InternalObservedComponents: []
   ObservedComponents:
+  - {fileID: 5941566312544823429}
+  - {fileID: 2685698297563465575}
   - {fileID: 439259729840472434}
-  - {fileID: 2685698298028214284}
   ownerId: 0
   group: 0
   prefixBackup: -1
@@ -846,32 +847,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.72, y: 1.65, z: 0.77}
   m_Center: {x: 0, y: 0.77, z: -0.05}
---- !u!114 &1983089185113159134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2685698298028117815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e43095d0b31c5c4da5d336507b33fe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SyncPosition:
-    m_EnableSync: 1
-    m_EnableInterpolate: 1
-    m_LerpRate: 10
-  m_SyncRotation:
-    m_EnableSync: 1
-    m_EnableInterpolate: 0
-    m_LerpRate: 5
-  m_SyncScale:
-    m_EnableSync: 0
-    m_EnableInterpolate: 0
-    m_LerpRate: 1
-  m_SnapEnabled: 1
-  m_SnapThreshold: 3
 --- !u!114 &2685698298028214284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,6 +879,46 @@ MonoBehaviour:
     target: {fileID: 2685698296532455017}
     weight: 0
   animator: {fileID: 2685698298018741591}
+--- !u!114 &5941566312544823429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2685698298028117815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a212333f0fad40b429ea9c65549ab6de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 2685698298018741591}
+  m_Controller: {fileID: 9100000, guid: 45ce645119ff5ec408656ebcd501a14b, type: 2}
+  m_SyncAnimLayers:
+  - m_Index: 0
+    m_Name: Base Layer
+    m_EnableSync: 1
+  - m_Index: 1
+    m_Name: Attack Layer
+    m_EnableSync: 1
+  m_SyncAnimParams:
+  - m_Type: 4
+    m_Name: _WALK_
+    m_EnableSync: 1
+  - m_Type: 4
+    m_Name: _JUMP_
+    m_EnableSync: 1
+  - m_Type: 4
+    m_Name: _SQUAT_
+    m_EnableSync: 1
+  - m_Type: 4
+    m_Name: AL_SETTING_GUN
+    m_EnableSync: 1
+  - m_Type: 4
+    m_Name: AL_SETTING_LAUNCHER
+    m_EnableSync: 1
+  - m_Type: 4
+    m_Name: AL_SETTING_CONBAT_BIGSIZE
+    m_EnableSync: 1
 --- !u!64 &2685698296582514519
 MeshCollider:
   m_ObjectHideFlags: 0
