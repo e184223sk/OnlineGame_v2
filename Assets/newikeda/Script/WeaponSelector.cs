@@ -40,7 +40,9 @@ public class WeaponSelector : MonoBehaviour
 
     public void UpdateUserID()
     {
-        var id = GetComponent<PLAYERS>().userID;
+
+        var id = MonobitEngine.MonobitNetwork.player.ID.ToString();
+        GetComponent<PLAYERS>().userID = id;
         if (weaponA.GetComponent<WeaponBehavior>() != null) weaponA.GetComponent<WeaponBehavior>().userID = id;
         if (weaponB.GetComponent<WeaponBehavior>() != null) weaponB.GetComponent<WeaponBehavior>().userID = id; 
             

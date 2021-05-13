@@ -9,11 +9,13 @@ public class targetPointer : MonoBehaviour
     MeshRenderer render;
     [System.NonSerialized]
     public Vector3 targetingPOINT;
-    void Start()
+    public void Start()
     { 
         player.transform.GetComponent<WeaponSelector>();
         render = GetComponent<MeshRenderer>();
     }
+
+    
 
     void Update()
     {
