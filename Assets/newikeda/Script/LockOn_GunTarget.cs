@@ -19,8 +19,8 @@ public class LockOn_GunTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 xx = targetMarker.GetComponent<targetPointer>().targetingPOINT;
         targetMarker = GameObject.Find("target").transform;
+        Vector3 xx = targetMarker.GetComponent<targetPointer>().targetingPOINT;
         weaponSelector.SetTargetPoint(this);
 
         bool xxv = !(!Look && !Debeg_LOOK);
