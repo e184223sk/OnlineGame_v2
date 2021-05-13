@@ -65,10 +65,7 @@ namespace UnityChan
 		{
 			isKeepFace = true;
 			current = 1;
-            if(anim != null)
-            {
-                anim.CrossFade(str, 0);
-            }
-        }
+			anim.CrossFade (str, 0);
+		}
 	}
 }

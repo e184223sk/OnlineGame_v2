@@ -8,7 +8,7 @@ public class EffectGenerator : MonoBehaviour
         {
             switch (type)
             {
-                case EffectType.Splash          : LifeTime = 05.00f; break;
+                case EffectType.Splash          : LifeTime = 03.00f; break;
                 case EffectType.Smoke           : LifeTime = 12.00f; break; 
                 case EffectType.LargeBlood      : LifeTime = 03.00f; break;
                 case EffectType.SlashBlood      : LifeTime = 03.00f; break;

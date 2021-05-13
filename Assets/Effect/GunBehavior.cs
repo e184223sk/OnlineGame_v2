@@ -15,11 +15,12 @@ using UnityEngine;
 
 
 
-public class GunBehavior : MonoBehaviour
+public class GunBehavior : WeaponBehavior
 {
     [Space(10)]
-     
 
+    public moverTES mover;
+    public PLAYERS player;
     /// <summary>
     /// アクティブかどうか? 外部クラスの制御用
     /// </summary>
@@ -36,9 +37,10 @@ public class GunBehavior : MonoBehaviour
     public bool AutoReload;
 
     public MagazineData Loaded, Spare;
+     
 
     public float FireScale;
-
+    public LockOn_GunTarget gunTarget;
     /// <summary>
     /// 弾丸の発射速度
     /// </summary>
@@ -56,11 +58,14 @@ public class GunBehavior : MonoBehaviour
     /// </summary>
     public bool DoTASK;
 
-    [Range(1, 10)]
+    [Range(1, 100)]
     public float BulletSpeed = 2;
     [Range(1, 40)]
     public float LifeTime = 2;
 
+    [Range(0, 3)]
+    public float StartFireDelay;
+    
     [Space(20)]
     [SerializeField] protected string Bullet_Prefab;//弾丸のPrefab 
     [SerializeField] protected string Reject_Prefab;   //薬莢のPrefab
@@ -72,6 +77,8 @@ public class GunBehavior : MonoBehaviour
     public int bulletsPerShot = 1;
     [Range(0.1f,2)]
     public float Radius = 1;
+
+    bool semi__isFire;
 
     public bool IsSemiAuto
     {
@@ -158,6 +165,7 @@ public class GunBehavior : MonoBehaviour
 
 
 
+    public float cnt_SFD;
 
 
     public void Start()
@@ -166,31 +174,91 @@ public class GunBehavior : MonoBehaviour
         BalletSpawnPoint = transform.Find("BalletSpawnPoint");
         FireSe = transform.Find("FireSe").GetComponent<AudioSource>();
         ReloadSe = transform.Find("ReloadSe").GetComponent<AudioSource>();
-    }
-
-
-
-    public void Update()
-    {
-        if (IsActive && DoTASK)
+        try
         {
-            if (Loaded.now > 0 && !IsReload)
-            {
-                WaitFireCnt += fireSpeed * Time.deltaTime;
-                if (WaitFireCnt >= 1) WaitFireCnt = 0;
-                ISFIRE = WaitFireCnt == 0;
+            player = transform.root.GetComponent<PLAYERS>();
+            mover = transform.root.GetComponent<moverTES>();
+        }
+        catch (System.Exception)
+        {
 
-                if (ISFIRE)
+        }
+    }
+     
+
+    void Update()
+    {
+        if (IsActive && !DoTASK)
+        {
+            bool x = ((FireKey_Full && (GunModeAuto == GunMode_Automatic.SemiAuto)) || (FireKey_Full && (GunModeAuto == GunMode_Automatic.FullAuto)));
+
+            mover.animator.SetLayerWeight(1, x ? 1 : 0);
+            if (x != mover.animator.GetBool(animations))
+                mover.animator.SetBool(animations, x);
+
+            gunTarget.Look = x;
+            gunTarget.LeftGun  = x && hand == HasHand.LEFT;
+            gunTarget.RightGun = x && hand == HasHand.RIGHT;
+
+            if (Loaded.now > 0 && !IsReload )
+            { 
+                if (GunModeAuto == GunMode_Automatic.FullAuto)
                 {
+                    if (x) cnt_SFD += Time.deltaTime;
+                    else cnt_SFD = 0;
+                    if (cnt_SFD >= 1)
+                    {
+                        WaitFireCnt += fireSpeed * Time.deltaTime;
+                        if (WaitFireCnt >= 1) WaitFireCnt = 0;
+
+                        if (WaitFireCnt == 0 && FireKey_Full) Fire();
+                    }
+                }
+                else
+                {
+                    if (semi__isFire)
+                    {
+                        cnt_SFD += Time.deltaTime;
+                        if (cnt_SFD > 1)
+                        {
+                            cnt_SFD = 0;
+                            semi__isFire = false;
+                            Fire();
+                        }
+                    }
+                    else if (FireKey_Semi)
+                        semi__isFire = true;  
+                }
+                // else if (!x) cnt_SFD = 0; 
+
+
+                /*
+             WaitFireCnt += fireSpeed * Time.deltaTime;
+                if (WaitFireCnt >= 1) WaitFireCnt = 0;
+
+                Debug.Log("b0");
+                if (WaitFireCnt == 0) //カウントが1周したら...
+                {
+                    Debug.Log("b1");
                     if (GunModeAuto == GunMode_Automatic.FullAuto)
                     {
-                        if (FireKey_Full) Fire();
+                        if (FireKey_Full) GO_Fire();
+                        else cnt_SFD = 0;
                     }
                     else
                     {
-                        if (FireKey_Semi) Fire();
+                        if (Input.GetKeyDown(KeyCode.X))
+                        {
+                            Debug.Log("FireKey_Semi is True");
+                            GO_Fire();
+                        }
+                        else cnt_SFD = 0;
                     }
                 }
+               // else if (!x) cnt_SFD = 0; 
+                        
+             
+             */
             }
 
 
@@ -198,10 +266,14 @@ public class GunBehavior : MonoBehaviour
 
 
             //リロード関連 ----------------------------------
-            if (!IsReload && Loaded.now < Loaded.max)
+            if (!IsReload && Loaded.now < Loaded.max && !FireKey_Semi && !FireKey_Full)
             {
                 IsReload = FireKey_Reload;
-                if (ReloadSe.clip != null) ReloadSe?.PlayOneShot(ReloadSe.clip);// 音
+                if (IsReload)
+                {
+                    if (ReloadSe.clip != null)
+                        ReloadSe?.PlayOneShot(ReloadSe.clip);// 音
+                }
             }
 
 
@@ -223,51 +295,55 @@ public class GunBehavior : MonoBehaviour
         }
     }
 
-    void FIREEFFECT()
-    {
-        Debug.Log("log - F");
-        Loaded.now--;
-        if (FireSe.clip != null) FireSe?.PlayOneShot(FireSe.clip);// 音
-        GameObject f1 = MakeBullet().gameObject;
-        GameObject f2 = Instantiate(Resources.Load("GUN/" + Reject_Prefab) as GameObject); //薬莢排出
-        f2.transform.position = RejectCartridgePoint.position;
-        f2.transform.rotation = RejectCartridgePoint.rotation;
-        EffectGenerator.CreateEffect(EffectType.GunFire, BalletSpawnPoint.position, BalletSpawnPoint.rotation).transform.localScale *= FireScale;
+     
 
-    }
+
     void Fire()
     {
-        FIREEFFECT();
-        if (bulletsPerShot <= 0) bulletsPerShot = 1;
-        if (bulletsPerShot == 1)
-            MakeBullet();
-        else 
+        if (FireSe.clip != null) FireSe?.PlayOneShot(FireSe.clip);// 音
+        if (Reject_Prefab != "")
+        {
+            GameObject f2 = Instantiate(Resources.Load("GUN/" + Reject_Prefab) as GameObject); //薬莢排出
+            f2.transform.position = RejectCartridgePoint.position;
+            f2.transform.rotation = RejectCartridgePoint.rotation;
+        }
+        EffectGenerator.CreateEffect(EffectType.GunFire, BalletSpawnPoint.position, BalletSpawnPoint.rotation).transform.localScale *= FireScale;
+         
+
+
+        bulletsPerShot = bulletsPerShot <= 0 ? 1 : bulletsPerShot;
+
+        if (bulletsPerShot == 1) MakeBullet();
+        else
             for (int v = 0; v < bulletsPerShot; v++)
-            {
-                 //ショットガン発車
-            } 
+                if (Loaded.now > 0)
+                    MakeBullet().Rotate(Random.Range(Radius / 4 * -45, Radius / 4 * 45), 0, Random.Range(Radius / 4 * -45, Radius / 4 * 45));    
+  
     }
 
     Transform MakeBullet()
     {
+        Loaded.now--;
         GameObject f1 = Instantiate(Resources.Load("GUN/" + Bullet_Prefab) as GameObject); //発射
         f1.transform.position = BalletSpawnPoint.position;
         f1.transform.rotation = BalletSpawnPoint.rotation;
 
         BulletBehaviour bc = f1.GetComponent<BulletBehaviour>();
-        bc.INIT(transform.root.name, LifeTime, BulletSpeed); 
+        bc.INIT(player.userID, LifeTime, BulletSpeed);
+
+        f1.GetComponent<DamageObject>().playerStatus = player;
         return bc.transform;
     }
 
 
     //キー入力関連
-    bool FireKey_Semi { get { return Input.GetKeyDown(KeyCode.Q); } }
-    bool FireKey_Full { get { return Input.GetKey(KeyCode.Q); } }
-    bool FireKey_Reload { get { return Input.GetKeyDown(KeyCode.E); } }
+    bool FireKey_Semi   => Key.B.Down;
+    bool FireKey_Full   => Key.B.Press;
+    bool FireKey_Reload => Key.X.Down;
 
 
 #if UNITY_EDITOR
-    public void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         if (transform.Find("BalletSpawnPoint") == null)
         {
@@ -307,8 +383,8 @@ public class GunBehavior : MonoBehaviour
                 {
                     Vector3 vps = new Vector3(Mathf.Sin(2 * Mathf.PI / 12 * v), 0, Mathf.Cos(2 * Mathf.PI / 12 * v)) * Radius;
                     Vector3 vns = new Vector3(Mathf.Sin(2 * Mathf.PI / 12 * (v + 1)), 0, Mathf.Cos(2 * Mathf.PI / 12 * (v + 1))) * Radius;
-                    Vector3 FP = BalletSpawnPoint.up * vps.y + BalletSpawnPoint.forward * vps.z + BalletSpawnPoint.right * vps.x + BalletSpawnPoint.up * LifeTime;
-                    Vector3 FN = BalletSpawnPoint.up * vns.y + BalletSpawnPoint.forward * vns.z + BalletSpawnPoint.right * vns.x + BalletSpawnPoint.up * LifeTime;
+                    Vector3 FP = BalletSpawnPoint.up * vps.y + BalletSpawnPoint.forward * vps.z + BalletSpawnPoint.right * vps.x + BalletSpawnPoint.up * LifeTime * BulletSpeed;
+                    Vector3 FN = BalletSpawnPoint.up * vns.y + BalletSpawnPoint.forward * vns.z + BalletSpawnPoint.right * vns.x + BalletSpawnPoint.up * LifeTime * BulletSpeed;
                     Gizmos.DrawLine(BalletSpawnPoint.position, BalletSpawnPoint.position + FP);
                     Gizmos.DrawLine(BalletSpawnPoint.position + FP, BalletSpawnPoint.position + FN);
                 }
@@ -317,8 +393,8 @@ public class GunBehavior : MonoBehaviour
             {
                 Gizmos.color = Color.black;
                 Gizmos.DrawWireSphere(BalletSpawnPoint.position, 0.1f);
-                Gizmos.DrawLine(BalletSpawnPoint.position, BalletSpawnPoint.position + BalletSpawnPoint.up * LifeTime);
-                Gizmos.DrawWireSphere(BalletSpawnPoint.position + BalletSpawnPoint.up * LifeTime, 0.05f);
+                Gizmos.DrawLine(BalletSpawnPoint.position, BalletSpawnPoint.position + BalletSpawnPoint.up * LifeTime * BulletSpeed);
+                Gizmos.DrawWireSphere(BalletSpawnPoint.position + BalletSpawnPoint.up * LifeTime * BulletSpeed, 0.05f);
             }
         }
         

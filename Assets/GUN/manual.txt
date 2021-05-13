@@ -1,0 +1,32 @@
+
+銃の作成　＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+1.空のオブジェクトにGun Controllerを設置します。
+2.子階層に銃のモデルデータを配置(銃口が+Z軸を向くように)
+3.空のゲームオブジェクト "ReloadSe" "FireSe" "BalletSpawnPoint" "RejectCartridgePoint"　を設置
+4. 3で作成したオブジェクト"ReloadSe" "FireSe"にAudioSourceを追加、ReloadSeオブジェクトにリロード音を、FireSeに発射音をセット
+5. 3で作成したオブジェクト"BalletSpawnPoint" を銃弾の生成位置に配置(※あたり判定の関係上、銃口内ではなく、銃口から銃弾３つ分くらいあけて配置)
+6. 3で作成したオブジェクト"RejectCartridgePoint"を薬莢を排出する地点に配置
+7.1で追加したGun Controllerのパラメータを設定
+
+弾丸の作成方法　＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+1.オブジェクトにコライダを設置(IsTriggerはtrueに)
+2.RigidBodyを設置し、重力はfalse, IsKinematicはtrueに
+3.BulletCtrlを設置し、SpeedとGravityを設定
+4.DamageObjectを設置、IsDamageをtrueにして、IsDestroyをtrue(爆発系ならfalse), Penetrationは３くらい,　Damagesはmanual_DamageObject.txtを参照
+5. GUN/Resources/に名前が他のとかぶらない様にして追加
+6.レイヤーを弾丸なら"bullets", 爆発系なら"missile"に変更
+
+薬莢の作成方法　＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+1.モデルデータにコライダは付けず、可能な限り軽量化する
+2.Reject Bullet Controllerを追加
+3.パラメータを調整(Raisingは上に跳ね上がる量、 Bounceは横にはねる量を示す。Rotation Powerは回り具合)
+※１～３の工程は軽量化の為である。全て0にして物理エンジンでやってもいいが大量に生成しない場合のみに限る
+
+
+
+
+
+
+//-----------------------------------------------
+・Layerを忘れず２つ作る 弾丸制作の工程6のため
+・上と同じ理由で、弾丸同士があたらない様に

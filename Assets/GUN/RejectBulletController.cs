@@ -3,21 +3,25 @@
 public class RejectBulletController : BulletBehaviour
 {
     float v;
-    Vector3 z;
+    Vector3 moveXZ;
     public float bounce,raising;
+    public Vector3 rotationPower;
     const float PI = 2 * Mathf.PI;
-
+    Vector3 direction;
     void Start()
     {
-        INIT("", 0.5f,0);
+        INIT("",1.5f,0);
         var x = Random.Range(0f, 2f);
-        z = new Vector3 ( Mathf.Sin(x * PI), 0, Mathf.Cos(x * PI));    
+        moveXZ = new Vector3 ( Mathf.Sin(x * PI), 0, Mathf.Cos(x * PI));
+
+        direction = transform.forward;
     }
 
     public override void UPDATE()
     {
-        v += Time.deltaTime;
-        transform.Translate (z *(v > 0.5 ? 0: v) * bounce * Time.deltaTime, Space.Self);
-        transform.Translate(Vector3.down * ((v > 0.5f ? 0: (Mathf.Sin(v) * raising)) -  Gravity) * Time.deltaTime, Space.World);
+        v += Time.deltaTime; 
+        float vv = Mathf.Pow(Mathf.Cos((v > 0.5f ? 0 : v) / 2), 2);  
+        transform.rotation *= Quaternion.Euler(rotationPower * 180 * Time.deltaTime); 
+        transform.position += Time.deltaTime * ((Vector3.Scale(direction, moveXZ) * bounce * vv)/*横はね処理*/ +  (Vector3.down * (Gravity - vv * raising))/*落下/跳ね上がり処理*/);
     }
 }

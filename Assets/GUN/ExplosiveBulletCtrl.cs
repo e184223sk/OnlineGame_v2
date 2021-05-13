@@ -12,7 +12,7 @@ public class ExplosiveBulletCtrl : BulletBehaviour
     int v;
 
 
-    public override void HittingObject(Collider c) => v = 1;
+    public override void HittingObject(Collider c, bool k) => v = 1;
 
 
     void Start()

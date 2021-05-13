@@ -2,18 +2,28 @@
 
 public class BulletCtrl : BulletBehaviour
 {
-     
-    public override void HittingObject(Collider collision)
+    Vector3 point;
+    private void Start()
     {
-        if (collision.transform.root.transform.GetComponent<PLAYERS>())
+        GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        point = transform.position;
+    }
+
+    public override void HittingObject(Collider collision, bool k)
+    {
+        Debug.Log("call override hit methods!!");
+        Vector3 ww = point;
+        if (k)
         {
-            EffectGenerator.CreateEffect(EffectType.GunDamageBlood, collision.ClosestPoint(transform.position)).transform.LookAt(transform.position);
+            Debug.Log("create blood splash");
+            EffectGenerator.CreateEffect(EffectType.GunDamageBlood, collision.ClosestPoint(transform.position)).transform.LookAt(ww);
         }
-        else if(collision.transform.root.transform.GetComponent<EffectLimitter>() == null)
+        else
         {
-            //    var r = (Instantiate(Resources.Load("GUN/holes"), collision.ClosestPoint(transform.position), Quaternion.identity) as GameObject);
-            //    r.transform.rotation = transform.rotation;
-            //    r.GetComponent<EffectLimitter>().SetLifeTime(5);
+            Debug.Log("create holes");
+            var r = (Instantiate(Resources.Load("GUN/holes"), collision.ClosestPoint(transform.position), Quaternion.identity) as GameObject);
+            r.transform.LookAt(ww);
+            r.GetComponent<EffectLimitter>().SetLifeTime(5);
         }
         Destroy(gameObject);
     }

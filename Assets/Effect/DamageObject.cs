@@ -11,9 +11,9 @@ public class DamageObject : MonoBehaviour
     [Space(10)]
     public bool  IsDestroy;
     public float Penetration = 3;
-     
 
-    PLAYERS playerStatus;
+
+    public PLAYERS playerStatus;
 
     public void Set(PLAYERS p)
     {
@@ -21,38 +21,31 @@ public class DamageObject : MonoBehaviour
     }
 
     void OnTriggerStay(Collider c)
-    {
-        Debug.Log("A:" + c.transform.root.gameObject.name);
+    { 
         if (IsDamage)
         { 
-            Debug.Log("B:" + c.transform.root.gameObject.name);
-            var tp = c.transform.root.GetComponent<PLAYERS>();
+            var tp = c.transform.GetComponent<PLAYERS>();
+            if(tp == null) tp = c.transform.root.GetComponent<PLAYERS>();
             if (tp != playerStatus)
             {
-
-                Debug.Log("C:" + c.transform.root.gameObject.name);
-                if (tp != null)
-                {
-
-                    Debug.Log("D:" + c.transform.root.gameObject.name);
-                    tp.HP -= Damages - tp.DefensePoint;  
-                }
-
-
+                Debug.Log("a1");
+                var ee = c.transform.root.gameObject; 
                 if (IsDestroy)
                 {
-                    RaycastHit hit;
-                    var f = transform.position - c.transform.position;
-                    Ray ray = new Ray(f, Vector3.Cross(f, c.transform.position));
-                    if (c.Raycast(ray, out hit, 30f))
-                    {
-                     //   Penetration -= Vector3.Distance(hit.point, c.transform.position) * 2;
-                        if (Penetration <= 0)
-                            Destroy(gameObject);
-                    }
+                    Penetration -= Time.deltaTime;
+                    if (Penetration <= 0)
+                        Destroy(gameObject);
                 }
-
-            } 
+                if (tp != null)
+                {
+                    Debug.Log(playerStatus == tp ? "PS=tp" : "PS!=tp");
+                    Debug.Log("a4");
+                    Debug.Log("hit damage __ " + tp.transform.root.name);
+                    Debug.Log("ax" + (Damages - tp.DefensePoint));
+                    tp.HP -= Damages - tp.DefensePoint;
+                    if (tp.HP < 0) tp.HP = 0;
+                }
+            }
         }
 
     } 

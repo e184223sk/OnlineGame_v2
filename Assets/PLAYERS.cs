@@ -3,5 +3,6 @@
 public class PLAYERS : MonoBehaviour
 {
     public float HP;
-    public DamageData DefensePoint;
+    public string userID;
+    public DamageData DefensePoint; 
 }

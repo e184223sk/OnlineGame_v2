@@ -70,12 +70,9 @@ namespace UnityChan
 
 		private void Start ()
 		{
-			if( child != null )
-			{
-				springLength = Vector3.Distance(trs.position, child.position);
-				currTipPos = child.position;
-				prevTipPos = child.position;
-			}
+			springLength = Vector3.Distance (trs.position, child.position);
+			currTipPos = child.position;
+			prevTipPos = child.position;
 		}
 
 		public void UpdateSpring ()
