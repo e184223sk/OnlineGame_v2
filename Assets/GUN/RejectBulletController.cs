@@ -8,6 +8,12 @@ public class RejectBulletController : BulletBehaviour
     public Vector3 rotationPower;
     const float PI = 2 * Mathf.PI;
     Vector3 direction;
+
+    public void INIT(float cc)
+    {
+        transform.Rotate(Random.Range(cc / 4 * -45, cc / 4 * 45), 0, Random.Range(cc / 4 * -45, cc / 4 * 45));
+    }
+
     void Start()
     {
         INIT("",1.5f,0);
