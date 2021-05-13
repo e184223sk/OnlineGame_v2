@@ -14,7 +14,7 @@ public class LockOn_GunTarget : MonoBehaviour
     {
         
     }
-    void FixedUpdate() => Look = false;
+    //void FixedUpdate() => Look = false;
 
     // Update is called once per frame
     void Update()
