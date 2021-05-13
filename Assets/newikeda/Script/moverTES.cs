@@ -35,6 +35,9 @@ public class moverTES : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GetComponent<ConectionBehavior>()._monobitView.isMine)
+            return;
+
         if (UsingCamera == null)
         {
             UsingCamera = GameObject.Find("Camera").transform;

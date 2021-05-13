@@ -19,6 +19,9 @@ public class targetPointer : MonoBehaviour
 
     void Update()
     {
+        if (!GetComponent<ConectionBehavior>()._monobitView.isMine)
+            return;
+
         transform.position = cameraTransform.position;
         transform.rotation = cameraTransform.rotation;
 

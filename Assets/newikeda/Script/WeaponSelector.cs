@@ -29,6 +29,9 @@ public class WeaponSelector : MonoBehaviour
 
     void Update()
     {
+        if (!GetComponent<ConectionBehavior>()._monobitView.isMine)
+            return;
+
         UpdateUserID();
         if (Key.Y.Down)
         {

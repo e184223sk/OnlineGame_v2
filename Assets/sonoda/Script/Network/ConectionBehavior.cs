@@ -54,7 +54,7 @@ public class ConectionBehavior : MonobitEngine.MonoBehaviour
 
 #endif
 
-    MonobitView _monobitView;
+    public MonobitView _monobitView;
 
     [MunRPC]
     static void Receive(object a)
