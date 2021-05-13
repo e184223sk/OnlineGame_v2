@@ -1141,7 +1141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 46.35
-  userID: user01
+  userID: 
   DefensePoint:
     Slash: 0.01
     Batting: 0.01
@@ -2381,6 +2381,11 @@ PrefabInstance:
       propertyPath: animations
       value: AL_SETTING_GUN
       objectReference: {fileID: 0}
+    - target: {fileID: 654370599917370553, guid: ba35d8c841a8f844da5d1bb09c11fc02,
+        type: 3}
+      propertyPath: useAnimetion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 654370599917370558, guid: ba35d8c841a8f844da5d1bb09c11fc02,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2498,7 +2503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 46.35
-  userID: user02
+  userID: 
   DefensePoint:
     Slash: 0.01
     Batting: 0.01

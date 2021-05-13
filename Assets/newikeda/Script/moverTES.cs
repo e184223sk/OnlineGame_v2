@@ -108,7 +108,7 @@ public class moverTES : MonoBehaviour
             if (vv > FallDamageThreshold)
             {
                 float damage = vv - FallDamageThreshold;
-                GetComponent<PLAYERS>().HP -= damage;
+              //  GetComponent<PLAYERS>().HP -= damage;
             } 
 
             failedPoint = transform.position;

@@ -33,6 +33,7 @@ public class LockOn_GunTarget : MonoBehaviour
             weaponSelector.weaponA.transform.localRotation = Quaternion.Euler(weaponSelector.weaponA.GetComponent<GunBehavior>().layoutAngle);
             weaponSelector.weaponB.transform.localRotation = Quaternion.Euler(weaponSelector.weaponB.GetComponent<GunBehavior>().layoutAngle);
         }
+
         IK_Driver.handL.enable = xxv && LeftGun;
         IK_Driver.handL.weight = 1;
         if (LeftGun)
