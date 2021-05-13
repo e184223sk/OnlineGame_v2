@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponBehavior : MonoBehaviour
+public class WeaponBehavior : MonobitEngine.MonoBehaviour
 {
     public string animations;
     public bool useAnimetion;
