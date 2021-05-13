@@ -11,7 +11,8 @@ public class targetPointer : MonoBehaviour
     public Vector3 targetingPOINT;
     public void Start()
     { 
-        player.transform.GetComponent<WeaponSelector>();
+        
+        selector = player.transform.GetComponent<WeaponSelector>();
         render = GetComponent<MeshRenderer>();
     }
 
@@ -19,8 +20,13 @@ public class targetPointer : MonoBehaviour
 
     void Update()
     {
-        if (!GetComponent<ConectionBehavior>()._monobitView.isMine)
-            return;
+
+
+        if(player == null)
+        {
+            player = GameObject.Find("Player").transform;
+            Start();
+        }
 
         transform.position = cameraTransform.position;
         transform.rotation = cameraTransform.rotation;

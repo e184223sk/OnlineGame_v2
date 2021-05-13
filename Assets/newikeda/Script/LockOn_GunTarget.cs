@@ -20,6 +20,7 @@ public class LockOn_GunTarget : MonoBehaviour
     void Update()
     {
         Vector3 xx = targetMarker.GetComponent<targetPointer>().targetingPOINT;
+        targetMarker = GameObject.Find("target").transform;
         weaponSelector.SetTargetPoint(this);
 
         bool xxv = !(!Look && !Debeg_LOOK);

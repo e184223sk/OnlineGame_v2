@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class moverTES : MonoBehaviour
+using MonobitEngine;
+public class moverTES : MonobitEngine.MonoBehaviour
 { 
     public bool IsCtrl;
     public bool DoWalk;
@@ -30,12 +30,14 @@ public class moverTES : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
-    } 
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        if (!GetComponent<ConectionBehavior>()._monobitView.isMine)
+        
+        if (!GetComponent<MonobitView>().isMine)
             return;
 
         if (UsingCamera == null)

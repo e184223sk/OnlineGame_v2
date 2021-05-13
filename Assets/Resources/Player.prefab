@@ -463,12 +463,6 @@ MonoBehaviour:
   InternalObservedComponents: []
   ObservedComponents:
   - {fileID: 439259729840472434}
-  - {fileID: 2685698296532455017}
-  - {fileID: 2685698296720014963}
-  - {fileID: 2685698297894904627}
-  - {fileID: 2685698297932516095}
-  - {fileID: 2685698296452900760}
-  - {fileID: 2685698297819471628}
   ownerId: 0
   group: 0
   prefixBackup: -1
