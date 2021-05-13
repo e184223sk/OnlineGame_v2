@@ -35,6 +35,11 @@ public class moverTES : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (UsingCamera == null)
+        {
+            UsingCamera = GameObject.Find("Camera").transform;
+            UsingCamera.GetComponent<CameraMove>().target = transform;
+        }
         rigid.centerOfMass = Vector3.up * massPoint;
         if (!IsCtrl)//ユーザ操作不能時
         {

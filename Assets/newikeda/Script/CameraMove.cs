@@ -67,6 +67,8 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
+        if (target == null) return;
+
         transform.position = target.position;
 
         if (IsReset)
