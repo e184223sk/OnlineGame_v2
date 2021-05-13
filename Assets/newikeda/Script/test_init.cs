@@ -30,7 +30,7 @@ public class test_init : MonobitEngine.MonoBehaviour
                                 Quaternion.identity,
                                 0);
 
-                _player.GetComponent<targetPointer>().Start();
+                GameObject.Find("target").GetComponent<targetPointer>().Start();
             }
         }
     }
