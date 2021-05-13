@@ -216,7 +216,7 @@ public class GunBehavior : WeaponBehavior
                         WaitFireCnt += fireSpeed * Time.deltaTime;
                         if (WaitFireCnt >= 1) WaitFireCnt = 0;
 
-                        if (WaitFireCnt == 0 && FireKey_Full) Fire();
+                        if (WaitFireCnt == 0 && FireKey_Full) view.RPC("Fire", MonobitEngine.MonobitTargets.All);
                     }
                 }
                 else
@@ -228,7 +228,7 @@ public class GunBehavior : WeaponBehavior
                         {
                             cnt_SFD = 0;
                             semi__isFire = false;
-                            Fire();
+                            view.RPC("Fire", MonobitEngine.MonobitTargets.All);
                         }
                     }
                     else if (FireKey_Semi)
@@ -302,7 +302,7 @@ public class GunBehavior : WeaponBehavior
 
      
 
-
+    [MunRPC]
     void Fire()
     {
         if (FireSe.clip != null) FireSe?.PlayOneShot(FireSe.clip);// 音
@@ -318,14 +318,13 @@ public class GunBehavior : WeaponBehavior
 
         bulletsPerShot = bulletsPerShot <= 0 ? 1 : bulletsPerShot;
 
-        if (bulletsPerShot == 1) MakeBullet();
+        if (bulletsPerShot == 1) view.RPC("MakeBullet", MonobitEngine.MonobitTargets.All);
         else
             for (int v = 0; v < bulletsPerShot; v++)
                 if (Loaded.now > 0)
-                    MakeBullet().Rotate(Random.Range(Radius / 4 * -45, Radius / 4 * 45), 0, Random.Range(Radius / 4 * -45, Radius / 4 * 45));    
-  
+                    view.RPC("MakeBullet", MonobitEngine.MonobitTargets.All);
     }
-
+    [MunRPC]
     Transform MakeBullet()
     {
         Loaded.now--;
@@ -337,8 +336,14 @@ public class GunBehavior : WeaponBehavior
         bc.INIT(player.userID, LifeTime, BulletSpeed);
 
         f1.GetComponent<DamageObject>().playerStatus = player;
+
+        transform.Rotate(Random.Range(Radius / 4 * -45, Radius / 4 * 45), 0, Random.Range(Radius / 4 * -45, Radius / 4 * 45));
+
+
         return bc.transform;
     }
+
+
 
 
     //キー入力関連
