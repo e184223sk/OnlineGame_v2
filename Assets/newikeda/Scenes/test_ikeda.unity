@@ -1628,7 +1628,7 @@ MonoBehaviour:
   near: 1.59
   far: 0.24
   distance: 1.4
-  upper: 0.07
+  upper: 0.33
   scaleAdj: 0.12
   DrawUpper: 0
   cameraTransform: {fileID: 1087827069}
