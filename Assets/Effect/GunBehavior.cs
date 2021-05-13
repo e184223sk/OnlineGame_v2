@@ -189,7 +189,7 @@ public class GunBehavior : WeaponBehavior
 
     void Update()
     {
-        if (view == null) GameObject.Find("Player").GetComponent<MonobitEngine.MonobitView>();
+        if (view == null) view = player.GetComponent<MonobitEngine.MonobitView>();
 
         if (!view.isMine) return;
 
