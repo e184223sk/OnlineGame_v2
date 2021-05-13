@@ -15,11 +15,17 @@ public class LockOn_GunTarget : MonoBehaviour
         
     }
     //void FixedUpdate() => Look = false;
+    MonobitEngine.MonobitView view;
 
     // Update is called once per frame
     void Update()
     {
-        if(targetMarker == null)    targetMarker = GameObject.Find("target").transform;
+        if (GetComponent<MonobitEngine.MonobitView>() == null)
+            view = GetComponent<MonobitEngine.MonobitView>();
+
+        if (!view.isMine) return;
+
+        if (targetMarker == null)    targetMarker = GameObject.Find("target").transform;
         Vector3 xx = targetMarker.GetComponent<targetPointer>().targetingPOINT;
         weaponSelector.SetTargetPoint(this);
 
