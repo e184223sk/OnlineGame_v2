@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 2685698297563465574}
   - component: {fileID: 2685698297563465597}
   - component: {fileID: 439259729840472434}
-  - component: {fileID: 1785980533518032623}
+  - component: {fileID: 2300902478565556056}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -468,7 +468,7 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
---- !u!114 &1785980533518032623
+--- !u!114 &2300902478565556056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -488,13 +488,13 @@ MonoBehaviour:
   m_IsEncrypt: 1
   InternalObservedComponents: []
   ObservedComponents:
-  - {fileID: 5941566312544823429}
-  - {fileID: 2685698297563465575}
-  - {fileID: 439259729840472434}
   - {fileID: 2685698298028214284}
+  - {fileID: 5941566312544823429}
+  - {fileID: 439259729840472434}
+  - {fileID: 2685698297563465575}
   ownerId: 0
   group: 0
-  prefixBackup: 0
+  prefixBackup: -1
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!1 &2685698297819471629
