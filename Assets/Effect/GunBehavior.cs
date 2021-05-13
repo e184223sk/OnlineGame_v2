@@ -185,16 +185,20 @@ public class GunBehavior : WeaponBehavior
         }
     }
 
-    MonobitEngine.MonobitView view;
+   public  MonobitEngine.MonobitView view;
 
     void Update()
     {
         if (view == null) view = player.GetComponent<MonobitEngine.MonobitView>();
+        Debug.Log("0");
 
         if (!view.isMine) return;
 
+        Debug.Log("1");
+
         if (IsActive && !DoTASK)
         {
+            Debug.Log("2");
             bool x = ((FireKey_Full && (GunModeAuto == GunMode_Automatic.SemiAuto)) || (FireKey_Full && (GunModeAuto == GunMode_Automatic.FullAuto)));
 
             mover.animator.SetLayerWeight(1, x ? 1 : 0);
@@ -215,8 +219,12 @@ public class GunBehavior : WeaponBehavior
                     {
                         WaitFireCnt += fireSpeed * Time.deltaTime;
                         if (WaitFireCnt >= 1) WaitFireCnt = 0;
-
-                        if (WaitFireCnt == 0 && FireKey_Full) view.RPC("Fire", MonobitEngine.MonobitTargets.All);
+                        Debug.Log("3");
+                        if (WaitFireCnt == 0 && FireKey_Full)
+                        {
+                            view.RPC("Fire", MonobitEngine.MonobitTargets.All);
+                            Debug.Log("4");
+                        }
                     }
                 }
                 else
@@ -228,6 +236,7 @@ public class GunBehavior : WeaponBehavior
                         {
                             cnt_SFD = 0;
                             semi__isFire = false;
+                            Debug.Log("5");
                             view.RPC("Fire", MonobitEngine.MonobitTargets.All);
                         }
                     }
@@ -303,12 +312,14 @@ public class GunBehavior : WeaponBehavior
      
 
     [MunRPC]
-    void Fire()
+    public void Fire()
     {
+        Debug.Log("fire");
+
         if (FireSe.clip != null) FireSe?.PlayOneShot(FireSe.clip);// 音
         if (Reject_Prefab != "")
         {
-            GameObject f2 = Instantiate(Resources.Load("GUN/" + Reject_Prefab) as GameObject); //薬莢排出
+            GameObject f2 = Instantiate(Resources.Load("GUN/" + Reject_Prefab) as GameObject); //発射
             f2.transform.position = RejectCartridgePoint.position;
             f2.transform.rotation = RejectCartridgePoint.rotation;
         }
@@ -318,17 +329,18 @@ public class GunBehavior : WeaponBehavior
 
         bulletsPerShot = bulletsPerShot <= 0 ? 1 : bulletsPerShot;
 
-        if (bulletsPerShot == 1) view.RPC("MakeBullet", MonobitEngine.MonobitTargets.All);
+        if (bulletsPerShot == 1) MakeBullet();
         else
             for (int v = 0; v < bulletsPerShot; v++)
                 if (Loaded.now > 0)
-                    view.RPC("MakeBullet", MonobitEngine.MonobitTargets.All);
+                    MakeBullet();                        //view.RPC("MakeBullet", MonobitEngine.MonobitTargets.All);
     }
     [MunRPC]
     Transform MakeBullet()
     {
+        Debug.Log("ファイア");
         Loaded.now--;
-        GameObject f1 = Instantiate(Resources.Load("GUN/" + Bullet_Prefab) as GameObject); //発射
+        GameObject f1 = Instantiate(Resources.Load( "GUN/" + Bullet_Prefab) as GameObject); //発射
         f1.transform.position = BalletSpawnPoint.position;
         f1.transform.rotation = BalletSpawnPoint.rotation;
 
@@ -337,7 +349,8 @@ public class GunBehavior : WeaponBehavior
 
         f1.GetComponent<DamageObject>().playerStatus = player;
 
-        transform.Rotate(Random.Range(Radius / 4 * -45, Radius / 4 * 45), 0, Random.Range(Radius / 4 * -45, Radius / 4 * 45));
+        if(bulletsPerShot != 1)
+            transform.Rotate(Random.Range(Radius / 4 * -45, Radius / 4 * 45), 0, Random.Range(Radius / 4 * -45, Radius / 4 * 45));
 
 
         return bc.transform;
