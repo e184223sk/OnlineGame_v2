@@ -29,7 +29,7 @@ public class WeaponSelector : MonoBehaviour
 
     void Update()
     {
-        if (GetComponent< MonobitEngine.MonobitView >().isMine)
+        if (!GetComponent< MonobitEngine.MonobitView >().isMine)
             return;
 
 
