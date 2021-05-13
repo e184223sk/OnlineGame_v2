@@ -184,10 +184,15 @@ public class GunBehavior : WeaponBehavior
 
         }
     }
-     
+
+    MonobitEngine.MonobitView view;
 
     void Update()
     {
+        if (view == null) GameObject.Find("Player").GetComponent<MonobitEngine.MonobitView>();
+
+        if (!view.isMine) return;
+
         if (IsActive && !DoTASK)
         {
             bool x = ((FireKey_Full && (GunModeAuto == GunMode_Automatic.SemiAuto)) || (FireKey_Full && (GunModeAuto == GunMode_Automatic.FullAuto)));

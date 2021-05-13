@@ -20,7 +20,7 @@ public class LockOn_GunTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GetComponent<MonobitEngine.MonobitView>() == null)
+        if (view == null)
             view = GetComponent<MonobitEngine.MonobitView>();
 
         if (!view.isMine) return;
