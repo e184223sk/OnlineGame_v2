@@ -187,8 +187,8 @@ GameObject:
   - component: {fileID: 2685698297563465575}
   - component: {fileID: 2685698297563465574}
   - component: {fileID: 2685698297563465597}
-  - component: {fileID: 5116301024771037849}
   - component: {fileID: 439259729840472434}
+  - component: {fileID: 6131783537659960413}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -442,32 +442,6 @@ MonoBehaviour:
   RightGun: 0
   IK_Driver: {fileID: 2685698298028214284}
   weaponSelector: {fileID: 2685698297563465575}
---- !u!114 &5116301024771037849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2685698297563465573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_viewIdField: 0
-  m_IsDontDestroyOnRoom: 0
-  m_IsInstantiated: 0
-  m_ObjectStreamCheckTime: 0
-  m_ObjectStreamSendBytes: 
-  m_IsEncrypt: 1
-  InternalObservedComponents: []
-  ObservedComponents:
-  - {fileID: 439259729840472434}
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  ownershipTransfer: 0
-  compressedStream: 0
 --- !u!114 &439259729840472434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,6 +468,33 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!114 &6131783537659960413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2685698297563465573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_viewIdField: 0
+  m_IsDontDestroyOnRoom: 0
+  m_IsInstantiated: 0
+  m_ObjectStreamCheckTime: 0
+  m_ObjectStreamSendBytes: 
+  m_IsEncrypt: 1
+  InternalObservedComponents: []
+  ObservedComponents:
+  - {fileID: 439259729840472434}
+  - {fileID: 2685698298028214284}
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  ownershipTransfer: 0
+  compressedStream: 0
 --- !u!1 &2685698297819471629
 GameObject:
   m_ObjectHideFlags: 0
