@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WeaponBehavior : MonobitEngine.MonoBehaviour
 {
+    public string WeaponName;
+    public Texture2D icon;
     public string animations;
     public bool useAnimetion;
     public string userID;

@@ -7,6 +7,7 @@ public class SkySetting : MonoBehaviour
     public Gradient SunColor; 
     void Update() => Draw();
     public float Tilt = -30;
+    public float sensivirity;
     [Range(0,1)]
     public float alpha = 0;
 
@@ -92,7 +93,7 @@ public class SkySetting : MonoBehaviour
             SunLight = GameObject.Find("Sun Light").GetComponent<Light>();
         SunLight.transform.rotation = Quaternion.Euler(360 * v - 90, Tilt, 0);
         SunLight.color = t;
-        SunLight.intensity = (1- SunLight.color.grayscale) * alpha;
+        SunLight.intensity = (1- SunLight.color.grayscale) * alpha * sensivirity;
         RenderSettings.skybox = skyMaterial;
         var c = RenderSettings.skybox;
         c.SetColor("_Tint",new Color(t.r,t.g,t.b,alpha));

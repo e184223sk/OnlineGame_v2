@@ -42,8 +42,8 @@ public class DamageObject : MonoBehaviour
                     Debug.Log("a4");
                     Debug.Log("hit damage __ " + tp.transform.root.name);
                     Debug.Log("ax" + (Damages - tp.DefensePoint));
-                    tp.HP -= Damages - tp.DefensePoint;
-                    if (tp.HP < 0) tp.HP = 0;
+                    tp.hp -= Damages - tp.DefensePoint;
+                    if (tp.hp < 0) tp.hp = 0;
                 }
             }
         }

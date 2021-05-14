@@ -20,13 +20,13 @@ public class GameSceneUIController : MonoBehaviour
     public static void SetTeamIcon_Resealer() => GameScene_UI_Manager.ui.TeamICON.texture = GameScene_UI_Manager.ui.TeamIcon_Reseller;
     public static void SetTeamIcon_Police  () => GameScene_UI_Manager.ui.TeamICON.texture = GameScene_UI_Manager.ui.TeamIcon_Police;
 
-    public WeaponUIData Weapon0
+    public static WeaponUIData Weapon0
     {
         get => GameScene_UI_Manager.ui.Weapon0;
         set => GameScene_UI_Manager.ui.Weapon0 = value;
     }
 
-    public WeaponUIData Weapon1
+    public static WeaponUIData Weapon1
     {
         get => GameScene_UI_Manager.ui.Weapon1;
         set => GameScene_UI_Manager.ui.Weapon1 = value;

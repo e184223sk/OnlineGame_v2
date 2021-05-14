@@ -9,24 +9,19 @@ public class targetPointer : MonoBehaviour
     MeshRenderer render;
     [System.NonSerialized]
     public Vector3 targetingPOINT;
-    public void Start()
-    { 
-        
+   
+
+    public void INIT(Transform t)
+    {
+        player = t;
         selector = player.transform.GetComponent<WeaponSelector>();
         render = GetComponent<MeshRenderer>();
+        cameraTransform = GameObject.Find("Camera/Main Camera").transform;
     }
 
-    
-
     void Update()
-    {
-
-
-        if(player == null)
-        {
-            player = GameObject.Find("Player").transform;
-            Start();
-        }
+    { 
+        if (player == null) return; 
 
         transform.position = cameraTransform.position;
         transform.rotation = cameraTransform.rotation;

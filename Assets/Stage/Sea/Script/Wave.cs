@@ -335,20 +335,7 @@ public class Wave : MonoBehaviour
             {
                 if (obj.activeInHierarchy)
                 {
-                    if (wave.transform.position.y - 1 > obj.transform.position.y)
-                    {
-                        if (obj.GetComponent<MeshRenderer>() != null)
-                        {
-                            if (obj.GetComponent<NonCastSeaShadowObject>() == null)
-                            {
-                                if (obj.GetComponent<CastSeaShadowObject>() == null)
-                                {
-                                    obj.gameObject.AddComponent<CastSeaShadowObject>();
-                                }
-                            } 
-                        }
-                    }
-                    else if (obj.GetComponent<CastSeaShadowObject>() != null)
+                    if (obj.GetComponent<CastSeaShadowObject>() != null)
                     {
                         DestroyImmediate(obj.GetComponent<CastSeaShadowObject>());
                     }

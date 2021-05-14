@@ -84,25 +84,7 @@ public class LOD_Manager : LOD_Conig
 
             init = true;
         }
-        /*
-        Debug.Log 
-            (
-            FLAG.ToString().PadRight(5,' ') + "::" + cnt_.ToString().PadLeft(2,'0') + "/"+ 
-            Vector3.Distance(_camera.position, LastLodPosition).ToString().PadRight(14,' ')+"::"+
-            transform.position.ToString().PadRight(18, ' ') + ":" + 
-            LastLodPosition.ToString().PadRight(18, ' '));
-        */
-        /*
-        if (_camera.transform.position.y < AdjustedMiniimumAltitude)
-        {
-            _camera.transform.position = new Vector3
-            (
-                _camera.transform.position.x,
-                AdjustedMiniimumAltitude,
-                _camera.transform.position.z
-             );
-        }
-        else*/
+       
         if (_camera.transform.position.y > AdjustedMaximumAltitude)
         {
             _camera.transform.position = new Vector3
@@ -118,7 +100,8 @@ public class LOD_Manager : LOD_Conig
         //カメラの移動量でLODするか決める
         //カメラが移動していないなら更新しなくていいから
         if (FLAG)
-        { 
+        {
+            FLAG = false;
             if (Vector3.Distance(_camera.position, LastLodPosition) > MovementThresholdForUpdate)
             {
                  FLAG = false;
@@ -129,9 +112,9 @@ public class LOD_Manager : LOD_Conig
             //高度を0.0f～1.0fに変換
             h_1 = (_camera.position.y-AdjustedMiniimumAltitude) / AdjustedFULL;
             //H/M/Lの値を作成
-            High = HLR2 * S_H;
-            Mid = MLR2 * S_M;
-            Low = LLR2 * S_L;
+            High = HLR2;// * S_H;
+            Mid = MLR2;// * S_M;
+            Low = LLR2;// * S_L;
             //UpdatesPerWhatFrameのフレームで１周するような値を作成
             //min,min2はfor文の先頭に,max,max2は終わりに指定する
             bool ee = (cnt_ - 1 < 0);
@@ -151,30 +134,10 @@ public class LOD_Manager : LOD_Conig
                    (objList[v].ROOT.position.y - _camera.position.y) * (objList[v].ROOT.position.y - _camera.position.y) +
                    (objList[v].ROOT.position.z - _camera.position.z) * (objList[v].ROOT.position.z - _camera.position.z);
 
-                if (d2 < High)//ここで高さ計算
-                {
-                    objList[v].HIGH.gameObject.active = true;
-                    objList[v].MID.gameObject.active = false;
-                    objList[v].LOW.gameObject.active = false;
-                }
-                else if (d2 < Mid)
-                {
-                    objList[v].HIGH.gameObject.active = false;
-                    objList[v].MID.gameObject.active = true;
-                    objList[v].LOW.gameObject.active = false;
-                }
-                else if (d2 < Low)
-                {
-                    objList[v].HIGH.gameObject.active = false;
-                    objList[v].MID.gameObject.active = false;
-                    objList[v].LOW.gameObject.active = true;
-                }
-                else
-                {
-                    objList[v].HIGH.gameObject.active = false;
-                    objList[v].MID.gameObject.active = false;
-                    objList[v].LOW.gameObject.active = false;
-                }
+                if (d2 < High) SETLOD(v, true, false, false);//ここで高さ計算 
+                else if (d2 < Mid) SETLOD(v, false, true, false); 
+                else if (d2 < Low) SETLOD(v, true, false, true);  
+                else SETLOD(v, false, false, false); 
             }
               
             //objHL[min～max]のLOD処理(表示or非表示)を行う
@@ -203,6 +166,14 @@ public class LOD_Manager : LOD_Conig
 
 
 
+    }
+
+
+    void SETLOD(int v, bool pH, bool pM, bool pL)
+    {
+        objList[v].HIGH.gameObject.active = pH;
+        objList[v].MID.gameObject.active  = pM;
+        objList[v].LOW.gameObject.active  = pL;
     }
 
     float S_H { get { return (1 - h_1 * 2) < 0 ? 0 : (1 - h_1 * 2); } }

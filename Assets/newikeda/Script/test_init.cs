@@ -24,13 +24,8 @@ public class test_init : MonobitEngine.MonoBehaviour
             // プレイヤーキャラクタが未登場の場合に登場させる
             if (_player == null)
             {
-                _player = MonobitNetwork.Instantiate(
-                                "Player",
-                                new Vector3(-306.3319f, -147.632f, 191.9695f),
-                                Quaternion.identity,
-                                0);
-
-                GameObject.Find("target").GetComponent<targetPointer>().Start();
+                _player = MonobitNetwork.Instantiate("Player", transform.position,Quaternion.identity,0);
+                GameObject.Find("target").GetComponent<targetPointer>().INIT(_player.transform);
             }
         }
     }

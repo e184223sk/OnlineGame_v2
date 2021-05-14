@@ -72,6 +72,8 @@ public class GunBehavior : WeaponBehavior
 
     [SerializeField, Range(0, 1)] protected float ReloadCnt;
 
+    public float ReloadingF { get => ReloadCnt; }
+
     [Header("ショットガン用のパラメータ")]
     [Range(1,20)]
     public int bulletsPerShot = 1;
@@ -186,7 +188,7 @@ public class GunBehavior : WeaponBehavior
     }
 
    public  MonobitEngine.MonobitView view;
-
+    bool IsRTIN;
     void Update()
     {
         if (view == null) view = player.GetComponent<MonobitEngine.MonobitView>();
@@ -199,7 +201,10 @@ public class GunBehavior : WeaponBehavior
         if (IsActive && !DoTASK)
         {
             Debug.Log("2");
-            bool x = ((FireKey_Full && (GunModeAuto == GunMode_Automatic.SemiAuto)) || (FireKey_Full && (GunModeAuto == GunMode_Automatic.FullAuto)));
+            bool ee = (FireKey_Full && (GunModeAuto == GunMode_Automatic.SemiAuto)) || (FireKey_Full && (GunModeAuto == GunMode_Automatic.FullAuto));
+            if (IsReload && ee) IsRTIN = true;
+            if (!IsReload && !ee) IsRTIN = false;
+            bool x = !IsReload && ee && !IsRTIN;
 
             mover.animator.SetLayerWeight(1, x ? 1 : 0);
             if (x != mover.animator.GetBool(animations))

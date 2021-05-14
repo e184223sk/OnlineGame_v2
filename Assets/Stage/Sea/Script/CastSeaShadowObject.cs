@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CastSeaShadowObject : MonoBehaviour
 {  
-    void Start()
+    void Staxrt()
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
         if (mr != null)
@@ -21,5 +21,11 @@ public class CastSeaShadowObject : MonoBehaviour
 
         }
         Destroy(this);
-    } 
+    }
+
+    private void OnDrawGizmos()
+    {
+        DestroyImmediate(this);
+    }
 }
+
