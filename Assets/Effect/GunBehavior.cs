@@ -343,7 +343,8 @@ public class GunBehavior : WeaponBehavior
     [MunRPC]
     Transform MakeBullet()
     {
-        Debug.Log("ファイア");
+        
+        Debug.Log("ファイア:_:" + Bullet_Prefab);
         Loaded.now--;
         GameObject f1 = Instantiate(Resources.Load( "GUN/" + Bullet_Prefab) as GameObject); //発射
         f1.transform.position = BalletSpawnPoint.position;
