@@ -42,7 +42,34 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         handR.Update(animator);
         footL.Update(animator);
         footR.Update(animator);
-    } 
+    }
+
+    //送信する情報をキューに追加
+    public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
+    {
+        stream.Enqueue(Active);
+
+        stream.Enqueue(lookAtObject.position);
+        stream.Enqueue(lookAtObject.rotation);
+
+        stream.Enqueue(waist.position);
+        stream.Enqueue(waist.rotation);
+    }
+
+    public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
+    {
+        Active = (bool)stream.Dequeue();
+
+        lookAtObject.position =  (Vector3)stream.Dequeue();
+        lookAtObject.rotation = (Quaternion)stream.Dequeue();
+
+        waist.position = (Vector3)stream.Dequeue();
+        waist.rotation = (Quaternion)stream.Dequeue();
+
+
+
+
+    }
 }
 
 
@@ -86,6 +113,8 @@ public class IKDATA
             Weight -= Time.deltaTime;
         }
         
-    }
+    }   
+
+
 }
 
