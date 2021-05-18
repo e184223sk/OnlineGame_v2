@@ -71,8 +71,8 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
     {
         stream.Enqueue(Active);
 
-        stream.Enqueue(lookAtObject.position);
-        stream.Enqueue(lookAtObject.rotation);
+        stream.Enqueue(lookAtObject.localPosition);
+        stream.Enqueue(lookAtObject.localRotation);
 
         stream.Enqueue(waist.localPosition);
         stream.Enqueue(waist.localRotation);
@@ -94,11 +94,11 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
     {
         Active = (bool)stream.Dequeue();
 
-        lookAtObject.position =  (Vector3)stream.Dequeue();
-        lookAtObject.rotation = (Quaternion)stream.Dequeue();
+        lookAtObject.localPosition =  (Vector3)stream.Dequeue();
+        lookAtObject.localRotation = (Quaternion)stream.Dequeue();
 
         waist.localPosition = (Vector3)stream.Dequeue();
-        waist.rotation = (Quaternion)stream.Dequeue();
+        waist.localRotation = (Quaternion)stream.Dequeue();
         handL.enable = (bool)stream.Dequeue();
         handR.enable = (bool)stream.Dequeue();
         footL.enable = (bool)stream.Dequeue();
