@@ -6,6 +6,8 @@ using MonobitEngine;
 
 public class MoveJoint :MonobitEngine.MonoBehaviour
 {
+
+    public bool[] IKS;
     public bool Active;
     public Transform lookAtObject = null;
     public Transform waist = null;
@@ -21,7 +23,7 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         handR.INIT(AvatarIKGoal.RightHand);
         handL.INIT(AvatarIKGoal.LeftHand);
         footR.INIT(AvatarIKGoal.RightFoot);
-        footL.INIT(AvatarIKGoal.LeftFoot);
+        footL.INIT(AvatarIKGoal.LeftFoot); 
     }
 
     void OnAnimatorIK(int t)
@@ -44,6 +46,26 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         footR.Update(animator);
     }
 
+
+    private void FixedUpdate()
+    {
+        IKS = new bool[4];
+        IKS[0] = handL.enable;
+        IKS[1] = handR.enable;
+        IKS[2] = footL.enable;
+        IKS[3] = footR.enable; 
+    }
+
+    void ReData()
+    {
+        IKS = new bool[4];
+        handL.enable = IKS[0];
+        handR.enable = IKS[1];
+        footL.enable = IKS[2];
+        footR.enable = IKS[3];
+    } 
+
+
     //送信する情報をキューに追加
     public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
     {
@@ -54,6 +76,10 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
 
         stream.Enqueue(waist.position);
         stream.Enqueue(waist.rotation);
+        stream.Enqueue(handL.enable);
+        stream.Enqueue(handR.enable);
+        stream.Enqueue(footL.enable);
+        stream.Enqueue(footR.enable);
     }
 
     public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
@@ -65,11 +91,13 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
 
         waist.position = (Vector3)stream.Dequeue();
         waist.rotation = (Quaternion)stream.Dequeue();
-
-
-
-
+        handL.enable = (bool)stream.Dequeue();
+        handR.enable = (bool)stream.Dequeue();
+        footL.enable = (bool)stream.Dequeue();
+        footR.enable = (bool)stream.Dequeue(); 
     }
+      
+   
 }
 
 
@@ -95,6 +123,7 @@ public class IKDATA
     public void INIT(AvatarIKGoal goal)
     {
         this.goal = goal;
+        Weight = 1;
     }
 
 
