@@ -10,7 +10,7 @@ public class PLAYERS : MonoBehaviour
 
     private void Start()
     {
-        userID = MonobitEngine.MonobitNetwork.player.ID.ToString();
+        userID = GetComponent<MonobitEngine.MonobitView>().owner.ID.ToString();
     }
 
     public float hp { get { return HP; } set { HP = value > MaxHP ? MaxHP : (value < 0 ? 0 : value); } }
