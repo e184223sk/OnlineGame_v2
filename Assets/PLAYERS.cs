@@ -19,12 +19,4 @@ public class PLAYERS :MonobitEngine.MonoBehaviour
     void OnValidate() => HP = MaxHP < HP ? MaxHP : HP;
 
 
-    public override void OnMonobitSerializeViewWrite(MonobitEngine.MonobitStream stream, MonobitEngine.MonobitMessageInfo info)
-    {
-        stream.Enqueue(userID);
-    }
-    public override void OnMonobitSerializeViewRead(MonobitEngine.MonobitStream stream, MonobitEngine.MonobitMessageInfo info)
-    {
-        userID = (string)stream.Dequeue();
-    }
 }
