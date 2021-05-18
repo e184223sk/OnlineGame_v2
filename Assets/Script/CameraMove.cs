@@ -49,7 +49,7 @@ public class CameraMove : MonoBehaviour
     float yd;
     Vector2 pp;
     Vector3 RTY;
-
+    public float LimitX;
     void Start()
     {
         cameras = transform.Find("Main Camera");
@@ -61,40 +61,50 @@ public class CameraMove : MonoBehaviour
         IsReset = true;
         resetT = 0;
         RTY = transform.rotation.ToEuler();
+        transform.position = target.position;
+        transform.rotation = target.rotation;
+        transform.position -= target.forward * distance;
     }
-    float cc;
-    [SerializeField, Range(0, 120)]
-    float CamYAngleLimit;
-    [SerializeField, Range(0, 1)]
-    float resetPower;
-    public float ffL = 0;
 
-    public Vector2 Power, KEY;
+    float nowx;
 
     void Update()
     {
         if (target == null) return;
-        var vv = Time.deltaTime * sensivirity * Key.JoyStickR.Get * sensivirity;
-        transform.position = target.position;
-        //  transform.rotation = target.rotation;
-        KEY = Key.JoyStickR.GetRAW;
 
-        // if (Mathf.Abs(Key.JoyStickR.GetRAW.x)  < 0.001f )
-        // {
-        //  transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, resetPower);
-        //}
-        //  else
-        cc += vv.x * Power.x;
-        if (cc > CamYAngleLimit) cc = CamYAngleLimit;
-        if (cc < -CamYAngleLimit) cc = -CamYAngleLimit;
-        yd += vv.y * Power.y;
-        yd = yd < downArea ? downArea : (yd > upArea ? upArea : yd);
-        //  float vw = (cc < 0 ? 360 - cc : cc) / 360 + aa;
-        float cw = cc / CamYAngleLimit;
-        var r = (target.position - transform.position);
-        cameras.position = transform.position + Vector3.up * (yd + CenterCorrection) - (target.position - transform.position) * distance + new Vector3(r.z,r.y,r.x) * distance * cc / CamYAngleLimit;//
-        // cameras.position = transform.position + Vector3.up * (yd + CenterCorrection) + new Vector3((Mathf.Cos(vw) * distance), 0, Mathf.Sin(vw) * distance);
+        transform.position = target.position;
+
+        if (IsReset)
+        {
+            resetT += ResetSpeed * Time.deltaTime;
+            if (resetT > 1) IsReset = false;
+            transform.rotation = Quaternion.Lerp(Quaternion.Euler(RTY), target.rotation, resetT);
+        }
+        else
+        {
+
+            var vv = Time.deltaTime * sensivirity * Key.JoyStickR.Get * sensivirity;
+            var r = transform.rotation;
+            nowx += vv.x;
+            if (nowx < -LimitX)
+            {
+                vv.x = vv.x - (nowx + LimitX);
+                nowx = -LimitX;
+            }
+            if (nowx > LimitX)
+            {
+                vv.x = vv.x - (nowx - LimitX);
+                nowx = LimitX;
+            }
+
+            transform.Rotate(Vector3.up * vv.x * 3.14f * 10, Space.World);
+              
+            yd += vv.y;
+            yd = yd < downArea ? downArea : (yd > upArea ? upArea : yd);
+            cameras.position = transform.position - transform.forward * distance + Vector3.up * (yd + CenterCorrection);
+        }
+
         cameras.LookAt(target.position + Vector3.up * CenterCorrection);
     }
-    public float aa;
+
 }
