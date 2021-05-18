@@ -8,7 +8,7 @@ public class PLAYERS :MonobitEngine.MonoBehaviour
     public DamageData DefensePoint;
 
 
-    private void Start()
+    private void Update()
     {
         userID = GetComponent<MonobitEngine.MonobitView>().owner.ID.ToString();
     }
