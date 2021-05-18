@@ -14,19 +14,14 @@ public class DamageObject : MonoBehaviour
 
 
     public PLAYERS playerStatus;
-
-    public void Set(PLAYERS p)
-    {
-        playerStatus = p;
-    }
-
+     
     void OnTriggerStay(Collider c)
     { 
         if (IsDamage)
         { 
             var tp = c.transform.GetComponent<PLAYERS>();
             if(tp == null) tp = c.transform.root.GetComponent<PLAYERS>();
-            if (tp != playerStatus)
+            if (tp.userID != playerStatus.userID)
             {
                 Debug.Log("a1");
                 var ee = c.transform.root.gameObject; 

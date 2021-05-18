@@ -30,8 +30,8 @@ public class CameraMove : MonoBehaviour
                     break;
             }
         }
-           
-            
+
+
     }
 
     CameraCtrlMode mode;
@@ -39,9 +39,9 @@ public class CameraMove : MonoBehaviour
     public Transform target;
     public float sensivirity;      // R
     public float distance;         // R
-    public bool IsReset;           
+    public bool IsReset;
     public float upArea, downArea; // R
-    public float ResetSpeed;    
+    public float ResetSpeed;
     public float CenterCorrection; // R
 
     float resetT;
@@ -76,7 +76,7 @@ public class CameraMove : MonoBehaviour
         if (target == null) return;
         var vv = Time.deltaTime * sensivirity * Key.JoyStickR.Get * sensivirity;
         transform.position = target.position;
-      //  transform.rotation = target.rotation;
+        //  transform.rotation = target.rotation;
         KEY = Key.JoyStickR.GetRAW;
 
         // if (Mathf.Abs(Key.JoyStickR.GetRAW.x)  < 0.001f )
@@ -86,12 +86,13 @@ public class CameraMove : MonoBehaviour
         //  else
         cc += vv.x * Power.x;
         if (cc > CamYAngleLimit) cc = CamYAngleLimit;
-        if (cc < -CamYAngleLimit) cc = -CamYAngleLimit; 
+        if (cc < -CamYAngleLimit) cc = -CamYAngleLimit;
         yd += vv.y * Power.y;
         yd = yd < downArea ? downArea : (yd > upArea ? upArea : yd);
         //  float vw = (cc < 0 ? 360 - cc : cc) / 360 + aa;
         float cw = cc / CamYAngleLimit;
-        cameras.position = transform.position + Vector3.up * (yd + CenterCorrection) - Vector3.forward * distance + Vector3.right * distance * cc / CamYAngleLimit;//
+        var r = (target.position - transform.position);
+        cameras.position = transform.position + Vector3.up * (yd + CenterCorrection) - (target.position - transform.position) * distance + new Vector3(r.z,r.y,r.x) * distance * cc / CamYAngleLimit;//
         // cameras.position = transform.position + Vector3.up * (yd + CenterCorrection) + new Vector3((Mathf.Cos(vw) * distance), 0, Mathf.Sin(vw) * distance);
         cameras.LookAt(target.position + Vector3.up * CenterCorrection);
     }

@@ -53,6 +53,12 @@ MonoBehaviour:
   downArea: -0.25
   ResetSpeed: 0.4
   CenterCorrection: 1.4
+  CamYAngleLimit: 0
+  resetPower: 0
+  ffL: 0
+  Power: {x: 0, y: 0}
+  KEY: {x: 0, y: 0}
+  aa: 0
 --- !u!114 &7112257441802683928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +98,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7112257443023496817}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5275879, y: 0.46046448, z: -2}
+  m_LocalPosition: {x: -0.527598, y: 0.46046448, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7112257441802683929}
