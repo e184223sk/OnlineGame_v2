@@ -8,6 +8,11 @@ public class PLAYERS : MonoBehaviour
     public DamageData DefensePoint;
 
 
+    private void Start()
+    {
+        userID = MonobitEngine.MonobitNetwork.player.ID.ToString();
+    }
+
     public float hp { get { return HP; } set { HP = value > MaxHP ? MaxHP : (value < 0 ? 0 : value); } }
     public float maxHP { get { return MaxHP; } set { MaxHP = value < HP ? HP : (value < 0 ? 0 : value); } }
 
