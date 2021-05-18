@@ -74,20 +74,20 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         stream.Enqueue(lookAtObject.position);
         stream.Enqueue(lookAtObject.rotation);
 
-        stream.Enqueue(waist.position);
-        stream.Enqueue(waist.rotation);
+        stream.Enqueue(waist.localPosition);
+        stream.Enqueue(waist.localRotation);
         stream.Enqueue(handL.enable);
         stream.Enqueue(handR.enable);
         stream.Enqueue(footL.enable);
         stream.Enqueue(footR.enable);
-        stream.Enqueue(handL.target.position);
-        stream.Enqueue(handR.target.position);
-        stream.Enqueue(footL.target.position);
-        stream.Enqueue(footR.target.position);
-        stream.Enqueue(handL.target.rotation);
-        stream.Enqueue(handR.target.rotation);
-        stream.Enqueue(footL.target.rotation);
-        stream.Enqueue(footR.target.rotation);
+        stream.Enqueue(handL.target.localRotation);
+        stream.Enqueue(handR.target.localRotation);
+        stream.Enqueue(footL.target.localRotation);
+        stream.Enqueue(footR.target.localRotation);
+        stream.Enqueue(handL.target.localPosition);
+        stream.Enqueue(handR.target.localPosition);
+        stream.Enqueue(footL.target.localPosition);
+        stream.Enqueue(footR.target.localPosition);
     }
 
     public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
@@ -97,20 +97,20 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         lookAtObject.position =  (Vector3)stream.Dequeue();
         lookAtObject.rotation = (Quaternion)stream.Dequeue();
 
-        waist.position = (Vector3)stream.Dequeue();
+        waist.localPosition = (Vector3)stream.Dequeue();
         waist.rotation = (Quaternion)stream.Dequeue();
         handL.enable = (bool)stream.Dequeue();
         handR.enable = (bool)stream.Dequeue();
         footL.enable = (bool)stream.Dequeue();
         footR.enable = (bool)stream.Dequeue();
-        handL.target.rotation = (Quaternion)stream.Dequeue();
-        handR.target.rotation = (Quaternion)stream.Dequeue();
-        footL.target.rotation = (Quaternion)stream.Dequeue();
-        footR.target.rotation = (Quaternion)stream.Dequeue();
-        handL.target.position = (Vector3)stream.Dequeue();
-        handR.target.position = (Vector3)stream.Dequeue();
-        footL.target.position = (Vector3)stream.Dequeue();
-        footR.target.position = (Vector3)stream.Dequeue();
+        handL.target.localRotation = (Quaternion)stream.Dequeue();
+        handR.target.localRotation = (Quaternion)stream.Dequeue();
+        footL.target.localRotation = (Quaternion)stream.Dequeue();
+        footR.target.localRotation = (Quaternion)stream.Dequeue();
+        handL.target.localPosition = (Vector3)stream.Dequeue();
+        handR.target.localPosition = (Vector3)stream.Dequeue();
+        footL.target.localPosition = (Vector3)stream.Dequeue();
+        footR.target.localPosition = (Vector3)stream.Dequeue();
     }
       
    
