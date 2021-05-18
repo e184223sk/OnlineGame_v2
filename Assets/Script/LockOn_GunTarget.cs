@@ -9,8 +9,13 @@ public class LockOn_GunTarget : MonoBehaviour
     public bool LeftGun, RightGun;
     public MoveJoint IK_Driver;
     public WeaponSelector weaponSelector;
-    [Range(0f, 0.3f)]
+    [Range(0f, 1)]
     public float ArmIKArea;
+    [Range(0f, 1)]
+    public float ArmIK_Weight;
+    [Range(0f, 1)]
+    public float IK_Weight;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,13 +49,13 @@ public class LockOn_GunTarget : MonoBehaviour
         }
 
         IK_Driver.handL.enable = xxv && LeftGun;
-        IK_Driver.handL.weight = 1;
+        IK_Driver.handL.weight = IK_Weight;
         if (LeftGun)
-            IK_Driver.handL.target.position = (Vector3.Distance(xx, HandL.position) < 0.4f) ? xx : (xx - HandL.position).normalized  * ArmIKArea + HandL.position;
+            IK_Driver.handL.target.position = (Vector3.Distance(xx, HandL.position) < 0.4f) ? xx : (xx - HandL.position).normalized * ArmIK_Weight + HandL.position;
          
         IK_Driver.handR.enable = xxv && RightGun;
-        IK_Driver.handR.weight = 1;
+        IK_Driver.handR.weight = IK_Weight;
         if (RightGun)
-            IK_Driver.handR.target.position = (Vector3.Distance(xx, HandR.position) < 0.4f) ? xx : (xx - HandR.position).normalized * ArmIKArea + HandR.position;
+            IK_Driver.handR.target.position = (Vector3.Distance(xx, HandR.position) < 0.4f) ? xx : (xx - HandR.position).normalized * ArmIK_Weight + HandR.position;
     }
 }

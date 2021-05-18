@@ -42,8 +42,8 @@ public class moverTES : MonobitEngine.MonoBehaviour
 
         if (UsingCamera == null)
         {
-            UsingCamera = GameObject.Find("Camera").transform;
-            UsingCamera.GetComponent<CameraMove>().target = transform;
+            UsingCamera = GameObject.Find("Camera/Main Camera").transform;
+            UsingCamera.root.GetComponent<CameraMove>().target = transform;
         }
         rigid.centerOfMass = Vector3.up * massPoint;
         if (!IsCtrl)//ユーザ操作不能時
