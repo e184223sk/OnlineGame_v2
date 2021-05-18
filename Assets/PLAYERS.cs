@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
- 
-public class PLAYERS : MonoBehaviour
+using MonobitEngine;
+public class PLAYERS :MonobitEngine.MonoBehaviour
 {
     [SerializeField]
     float HP, MaxHP;
@@ -18,4 +18,14 @@ public class PLAYERS : MonoBehaviour
     public float maxHP { get { return MaxHP; } set { MaxHP = value < HP ? HP : (value < 0 ? 0 : value); } }
 
     void OnValidate() => HP = MaxHP < HP ? MaxHP : HP;
+
+
+    public override void OnMonobitSerializeViewWrite(MonobitEngine.MonobitStream stream, MonobitEngine.MonobitMessageInfo info)
+    {
+        stream.Enqueue(userID);
+    }
+    public override void OnMonobitSerializeViewRead(MonobitEngine.MonobitStream stream, MonobitEngine.MonobitMessageInfo info)
+    {
+        userID = (string)stream.Dequeue();
+    }
 }
