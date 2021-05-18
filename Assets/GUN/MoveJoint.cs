@@ -6,8 +6,7 @@ using MonobitEngine;
 
 public class MoveJoint :MonobitEngine.MonoBehaviour
 {
-
-    public bool[] IKS;
+     
     public bool Active;
     public Transform lookAtObject = null;
     public Transform waist = null;
@@ -46,25 +45,8 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         footR.Update(animator);
     }
 
-
-    private void FixedUpdate()
-    {
-        IKS = new bool[4];
-        IKS[0] = handL.enable;
-        IKS[1] = handR.enable;
-        IKS[2] = footL.enable;
-        IKS[3] = footR.enable; 
-    }
-
-    void ReData()
-    {
-        IKS = new bool[4];
-        handL.enable = IKS[0];
-        handR.enable = IKS[1];
-        footL.enable = IKS[2];
-        footR.enable = IKS[3];
-    } 
-
+     
+     
 
     //送信する情報をキューに追加
     public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
@@ -88,6 +70,10 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         stream.Enqueue(handR.target.localPosition);
         stream.Enqueue(footL.target.localPosition);
         stream.Enqueue(footR.target.localPosition);
+        stream.Enqueue(handL.weight);
+        stream.Enqueue(handR.weight);
+        stream.Enqueue(footL.weight);
+        stream.Enqueue(footR.weight);
     }
 
     public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
@@ -111,6 +97,10 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         handR.target.localPosition = (Vector3)stream.Dequeue();
         footL.target.localPosition = (Vector3)stream.Dequeue();
         footR.target.localPosition = (Vector3)stream.Dequeue();
+        handL.weight = (float)handL.weight;
+        handR.weight = (float)handR.weight;
+        footL.weight = (float)footL.weight;
+        footR.weight = (float)footR.weight;
     }
       
    
@@ -139,7 +129,6 @@ public class IKDATA
     public void INIT(AvatarIKGoal goal)
     {
         this.goal = goal;
-        Weight = 1;
     }
 
 
