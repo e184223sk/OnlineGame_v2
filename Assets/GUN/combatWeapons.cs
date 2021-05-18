@@ -20,7 +20,6 @@ public class combatWeapons : WeaponBehavior
     {
         d_o.IsDamage = IsAttacked;
         d_o.playerStatus = transform.root.GetComponent<PLAYERS>();
-        d_o.playerStatus.userID = MonobitEngine.MonobitNetwork.player.ID.ToString(); ;
     }
 
 }
