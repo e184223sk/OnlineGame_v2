@@ -15,8 +15,7 @@ public class SendUiParameterFROM_Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if(players.userID != MonobitEngine.MonobitNetwork.player.ID.ToString()) return;
+    { 
         GameSceneUIController.HP = players.hp / players.maxHP;
         GunBehavior gb_A = wSel.weaponA.GetComponent<GunBehavior>();
         GunBehavior gb_B = wSel.weaponA.GetComponent<GunBehavior>();
