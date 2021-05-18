@@ -97,10 +97,10 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         handR.target.localPosition = (Vector3)stream.Dequeue();
         footL.target.localPosition = (Vector3)stream.Dequeue();
         footR.target.localPosition = (Vector3)stream.Dequeue();
-        handL.weight = (float)handL.weight;
-        handR.weight = (float)handR.weight;
-        footL.weight = (float)footL.weight;
-        footR.weight = (float)footR.weight;
+        handL.weight = (float)stream.Dequeue();
+        handR.weight = (float)stream.Dequeue();
+        footL.weight = (float)stream.Dequeue();
+        footR.weight = (float)stream.Dequeue();
     }
       
    
