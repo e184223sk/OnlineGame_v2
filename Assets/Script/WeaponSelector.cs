@@ -79,11 +79,11 @@ public class WeaponSelector :MonobitEngine.MonoBehaviour
 
     public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
     {
-        stream.Enqueue(weaponA.transform.position);
-        stream.Enqueue(weaponA.transform.rotation);
+        stream.Enqueue(weaponA.transform.localPosition); ;
+        stream.Enqueue(weaponA.transform.localRotation); ;
 
-        stream.Enqueue(weaponB.transform.position);
-        stream.Enqueue(weaponB.transform.rotation);
+        stream.Enqueue(weaponB.transform.localPosition);
+        stream.Enqueue(weaponB.transform.localRotation);
     }
 
     public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
