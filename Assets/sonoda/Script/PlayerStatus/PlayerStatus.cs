@@ -5,11 +5,6 @@ using MonobitEngine;
 public class PlayerStatus : MonobitEngine.MonoBehaviour
 {
     #region Status Properties
-    //----------------------------- MonobitNetwork上でのID ----------------------------
-    private int _ID;
-
-    //----------------------------- プレイヤーの体力　Hit Point -------------------------
-    private PlayerHP _HP;
 
     //-----------------------------プレイヤーの所持金 ----------------------------------
     private Wallet _wallet;
@@ -45,19 +40,11 @@ public class PlayerStatus : MonobitEngine.MonoBehaviour
 
     #endregion
 
-    #region Debug Properties
-
-    //--------------------------------- 所持金を表示するためだけの変数 --------------------------------
-    public int ShowMoney;
-
-    #endregion
 
     #region Unity Callbacks
     // Start is called before the first frame update
     void Start()
     {
-
-        _ID = MonobitNetwork.player.ID;
 
         _wallet = new Wallet(100000);
 
@@ -69,8 +56,8 @@ public class PlayerStatus : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ShowMoney = _wallet.GetMoney();
-
+        GameSceneUIController.Money = _wallet.GetMoney();
+        
         Shopping();
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -89,20 +76,8 @@ public class PlayerStatus : MonobitEngine.MonoBehaviour
 
     #endregion
 
-    #region MunRPC
-    [MunRPC]
-    public void Damage(int damage)
-    {
-        _HP.Damage(damage);
-    }
-
-    #endregion
 
     #region Public Methods
-    public int GetID()
-    {
-        return _ID;
-    }
 
     public void EnterShop(GameObject shopObj)
     {
