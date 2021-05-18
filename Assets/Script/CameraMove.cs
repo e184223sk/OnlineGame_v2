@@ -49,7 +49,7 @@ public class CameraMove : MonoBehaviour
     float yd;
     Vector2 pp;
     Vector3 RTY;
-    public float LimitX;
+
     void Start()
     {
         cameras = transform.Find("Main Camera");
@@ -61,12 +61,9 @@ public class CameraMove : MonoBehaviour
         IsReset = true;
         resetT = 0;
         RTY = transform.rotation.ToEuler();
-        transform.position = target.position;
-        transform.rotation = target.rotation;
-        transform.position -= target.forward * distance;
     }
 
-    float nowx;
+
 
     void Update()
     {
@@ -82,23 +79,8 @@ public class CameraMove : MonoBehaviour
         }
         else
         {
-
             var vv = Time.deltaTime * sensivirity * Key.JoyStickR.Get * sensivirity;
-            var r = transform.rotation;
-            nowx += vv.x;
-            if (nowx < -LimitX)
-            {
-                vv.x = vv.x - (nowx + LimitX);
-                nowx = -LimitX;
-            }
-            if (nowx > LimitX)
-            {
-                vv.x = vv.x - (nowx - LimitX);
-                nowx = LimitX;
-            }
-
             transform.Rotate(Vector3.up * vv.x * 3.14f * 10, Space.World);
-              
             yd += vv.y;
             yd = yd < downArea ? downArea : (yd > upArea ? upArea : yd);
             cameras.position = transform.position - transform.forward * distance + Vector3.up * (yd + CenterCorrection);
