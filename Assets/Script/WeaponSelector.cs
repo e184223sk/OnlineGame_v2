@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class WeaponSelector : MonoBehaviour
+using MonobitEngine;
+public class WeaponSelector :MonobitEngine.MonoBehaviour
 {
     public int GetSelect { get => Select; }
     public GameObject GetWeapon { get => Select == 0 ? weaponA : weaponB; }
@@ -74,6 +74,25 @@ public class WeaponSelector : MonoBehaviour
         xx.transform.parent = null;
         UpdateUserID();
         return xx;
+    }
+
+
+    public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
+    {
+        stream.Enqueue(weaponA.transform.position);
+        stream.Enqueue(weaponA.transform.rotation);
+
+        stream.Enqueue(weaponB.transform.position);
+        stream.Enqueue(weaponB.transform.rotation);
+    }
+
+    public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
+    {
+        weaponA.transform.localPosition = (Vector3)stream.Dequeue();
+        weaponA.transform.localRotation = (Quaternion)stream.Dequeue();
+
+        weaponB.transform.localPosition = (Vector3)stream.Dequeue();
+        weaponB.transform.localRotation = (Quaternion)stream.Dequeue();
     }
 }
 
