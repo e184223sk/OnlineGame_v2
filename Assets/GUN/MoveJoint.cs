@@ -80,6 +80,14 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         stream.Enqueue(handR.enable);
         stream.Enqueue(footL.enable);
         stream.Enqueue(footR.enable);
+        stream.Enqueue(handL.target.position);
+        stream.Enqueue(handR.target.position);
+        stream.Enqueue(footL.target.position);
+        stream.Enqueue(footR.target.position);
+        stream.Enqueue(handL.target.rotation);
+        stream.Enqueue(handR.target.rotation);
+        stream.Enqueue(footL.target.rotation);
+        stream.Enqueue(footR.target.rotation);
     }
 
     public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
@@ -94,7 +102,15 @@ public class MoveJoint :MonobitEngine.MonoBehaviour
         handL.enable = (bool)stream.Dequeue();
         handR.enable = (bool)stream.Dequeue();
         footL.enable = (bool)stream.Dequeue();
-        footR.enable = (bool)stream.Dequeue(); 
+        footR.enable = (bool)stream.Dequeue();
+        handL.target.rotation = (Quaternion)stream.Dequeue();
+        handR.target.rotation = (Quaternion)stream.Dequeue();
+        footL.target.rotation = (Quaternion)stream.Dequeue();
+        footR.target.rotation = (Quaternion)stream.Dequeue();
+        handL.target.position = (Vector3)stream.Dequeue();
+        handR.target.position = (Vector3)stream.Dequeue();
+        footL.target.position = (Vector3)stream.Dequeue();
+        footR.target.position = (Vector3)stream.Dequeue();
     }
       
    
