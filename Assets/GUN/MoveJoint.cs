@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
-public class MoveJoint : MonoBehaviour
+public class MoveJoint :MonobitEngine.MonoBehaviour
 {
     public bool Active;
     public Transform lookAtObject = null;
