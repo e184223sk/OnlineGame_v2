@@ -179,6 +179,7 @@ public class GunBehavior : WeaponBehavior
         try
         {
             player = transform.root.GetComponent<PLAYERS>();
+            player.userID = MonobitEngine.MonobitNetwork.player.ID.ToString();
             mover = transform.root.GetComponent<moverTES>();
         }
         catch (System.Exception)
