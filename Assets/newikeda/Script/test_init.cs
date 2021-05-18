@@ -26,6 +26,7 @@ public class test_init : MonobitEngine.MonoBehaviour
             {
                 _player = MonobitNetwork.Instantiate("Player", transform.position,Quaternion.identity,0);
                 GameObject.Find("target").GetComponent<targetPointer>().INIT(_player.transform);
+                _player.AddComponent<SendUiParameterFROM_Player>();
               //  
             }
         }
