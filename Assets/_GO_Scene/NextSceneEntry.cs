@@ -21,11 +21,17 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
     }
     void Update()
     {
+
+        if (!MonobitNetwork.isConnect)
+        {
+            MonobitNetwork.autoJoinLobby = true;
+            MonobitNetwork.ConnectServer("test");
+        }
+
         if (IsFade) return;
         IsFade = IsBackTitle || IsEnter;
         if (IsBackTitle) SceneLoader.Load("SelectScene"); 
         else if(IsEnter) JoinRoom(nextRoom);
-
 
     }
 
@@ -41,6 +47,7 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
 
     void JoinRoom(string roomName)
     {
+        Debug.Log(roomName);
         //roomNameという部屋へ移動
         //あるなら移動ないなら作る
         if(!MonobitNetwork.inRoom)
@@ -71,7 +78,7 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
             {
                 //roomNameで部屋を作る
                 MonobitNetwork.CreateRoom(roomName);
-
+                Debug.Log("create");
             }
         }
     }
