@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Go_Scene_ctrl : MonoBehaviour
-{ 
+{
+    public bool IsEnter;
+    public string nextRoom;
+
     public delegate void TASK_GS();
 
     public struct TASKDATA
