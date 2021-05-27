@@ -9,6 +9,11 @@ public class Go_Scene_selectButton : MonoBehaviour
     NextSceneEntry next;
     int L_Select;
     Image[] buttons;
+    [Range(-2, 2)]
+    public float XX;
+    public float cnt;
+    [Range(0, 12)]
+    public float sensivirity;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +21,9 @@ public class Go_Scene_selectButton : MonoBehaviour
         buttons = new Image[14];
         for (int c = 0; c < buttons.Length; c++)
             buttons[c] = GameObject.Find("Canvas/buttons/Image (" + c + ")").GetComponent<Image>();
+        L_Select = int.MinValue;
     }
+
 
     // Update is called once per frame
     void Update()
@@ -34,12 +41,27 @@ public class Go_Scene_selectButton : MonoBehaviour
                 next.IsEnter = true;
             }
         }
+        XX = Key.JoyStickL.GetRAW.y;
+        if (Key.JoyStickL.GetRAW.y > 0.1f) cnt += Time.deltaTime * XX * sensivirity;
+        else if (Key.JoyStickL.GetRAW.y < -0.1f) cnt += Time.deltaTime * XX * sensivirity;
+        else cnt = 0;
+        if (cnt < -1)
+        {
+            Select--;
+            cnt = 0;
+            if (Select < 0)
+                Select = buttons.Length - 1;
+        }
 
-        if (Key.JoyStickL.GetRAW.y > 0.4f) Select--;
-        else if (Key.JoyStickL.GetRAW.y > 0.4f) Select++;
+        if (cnt > 1)
+        {
+            Select++;
+            cnt = 0;
+            if (Select >= buttons.Length)
+                Select = 0;
+        }
 
-        if (Select <  0)  Select = buttons.Length - 1;
-        else if (Select >= buttons.Length) Select = 0;
+         
 
         if (Select != L_Select)
         {
@@ -51,7 +73,3 @@ public class Go_Scene_selectButton : MonoBehaviour
 }
 
 
-//切り替え
-//フォーカスを矯正
-//エンターで次へ 
-//最終デバッグ
