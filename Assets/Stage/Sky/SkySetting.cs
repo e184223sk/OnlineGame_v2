@@ -50,6 +50,7 @@ public class SkySetting : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        if (!this.enabled) return;
         Draw(); 
         float VR = 100;
         float VLL = 400;
