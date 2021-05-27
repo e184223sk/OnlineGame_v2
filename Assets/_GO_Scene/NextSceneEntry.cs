@@ -11,7 +11,7 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
     public bool IsEnter;
     public string nextRoom;
     public bool IsBackTitle;
-     
+
     void INIT()
     {
         GetComponent<Go_Scene_selectButton>().enabled = mode == CTRLTYPE.BUTTONS;
@@ -25,6 +25,8 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
         IsFade = IsBackTitle || IsEnter;
         if (IsBackTitle) SceneLoader.Load("SelectScene"); 
         else if(IsEnter) JoinRoom(nextRoom);
+
+
     }
 
 
@@ -41,6 +43,36 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
     {
         //roomNameという部屋へ移動
         //あるなら移動ないなら作る
+        if(!MonobitNetwork.inRoom)
+        {
+            //サーバ上の部屋を全取得
+            RoomData[] roomDatas = MonobitNetwork.GetRoomData();
+            //部屋が1つでもあるなら
+            if (roomDatas.Length > 0) 
+            {
+                bool IsRoom = false ;
+                
+                //部屋があるか確認
+                foreach(RoomData r in roomDatas)
+                {
+                    if(r.name == roomName)
+                    {
+                        IsRoom = true;
+                        break;
+                    }
+                }
 
+                if (IsRoom) MonobitNetwork.JoinRoom(roomName);
+                else        MonobitNetwork.CreateRoom(roomName);
+                
+
+            }
+            else
+            {
+                //roomNameで部屋を作る
+                MonobitNetwork.CreateRoom(roomName);
+
+            }
+        }
     }
 }
