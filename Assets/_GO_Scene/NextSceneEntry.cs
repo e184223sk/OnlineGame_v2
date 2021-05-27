@@ -80,6 +80,7 @@ public class NextSceneEntry : UnityEngine.MonoBehaviour
                 MonobitNetwork.CreateRoom(roomName);
                 Debug.Log("create");
             }
+            SceneLoader.Load("Meeting_Scene");
         }
     }
 }
