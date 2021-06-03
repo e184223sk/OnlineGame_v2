@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameScene.unity
     guid: 1edf41ed676434e438dbdf834f1e4d37
+  - enabled: 1
+    path: Assets/_GO_Scene/Meeting_Scene.unity
+    guid: 7a401334b6b7411488560b0e6cace042
   m_configObjects: {}

@@ -477,6 +477,8 @@ public class WeaponUIData
     [Range(0,1f)]
     public float reload;
 
+    public WeaponUI_obj.WeaponType type;
+
 }
 
 
@@ -487,6 +489,7 @@ public class WeaponUIData
 /// </summary>
 public class WeaponUI_obj
 {
+    public enum WeaponType { GUN, COMBAT }
     /// <summary>
     /// コンストラクタ
     /// </summary>
@@ -520,10 +523,13 @@ public class WeaponUI_obj
         Icon.texture = data.icon;
 
         int now = data.now < 0 ? 0 : (data.now > 999 ? 999 : data.now);
-        int max = data.max < 0 ? 0 : (data.max > 999 ? 999: data.max);
+        int max = data.max < 0 ? 0 : (data.max > 999 ? 999 : data.max);
+
+        bool X = (data.type == WeaponType.GUN);
+        Reload.enabled = n2.enabled = n1.enabled = n0.enabled = m2.enabled = m1.enabled = m0.enabled = X; //剣などの近接武器なら弾数やリロードUIを非表示に...
 
         n2.texture = GameScene_UI_Manager.ui.getNum[now / 100];
-        n1.texture = GameScene_UI_Manager.ui.getNum[now % 100/10];
+        n1.texture = GameScene_UI_Manager.ui.getNum[now % 100 / 10];
         n0.texture = GameScene_UI_Manager.ui.getNum[now % 10];
 
         m2.texture = GameScene_UI_Manager.ui.getNum[max / 100];
@@ -567,7 +573,11 @@ public class WeaponUI_obj
     /// </summary>
     public GameObject root;
 
-
+    /// <summary>
+    /// 武器が弾数がある系か
+    /// </summary>
+    public WeaponType type = WeaponType.GUN;
+     
 }
 
 

@@ -28,17 +28,9 @@ public class LOD_Root : MonoBehaviour
     
     void Update()
     {
-        if (cam == null) return;
-
-        if (Vector3.Distance(lastPoint, transform.position) > MovementThreshold)
-        { 
+        if (cam != null) 
             foreach (var a in area)
-            {
-                Vector3 x = a.transform.position - cam.transform.position;
-                a.IsActive = (x.x * x.x) + (x.z * x.z) < a.size * a.size + a.size * a.size;
-            }
-            lastPoint = transform.position;
-        }
+                a.IsActive = Vector3.Distance(a.transform.position, cam.transform.position) <  a.size; 
     }
 
     private void OnDrawGizmos()
