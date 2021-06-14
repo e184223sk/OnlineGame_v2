@@ -9,17 +9,22 @@ public class LOD_Area : MonoBehaviour
     public float size;
     public LOD_obj[] lods;
 
-    public const float _HIGHAREA =15;
-    public const float _MIDAREA = 50;
-    public const float _LOWAREA = 100; 
+    public const float _HIGHAREA =45;
+    public const float _MIDAREA = 100;
+    public const float _LOWAREA = 150; 
 
     void Start()
-    { 
+    {
+        int h = 0;
         List<LOD_obj> lod = new List<LOD_obj>();
-        foreach (Transform obj in gameObject.transform)
-            if (obj.GetComponent<LOD>() != null)
+        foreach (Transform obj in this.gameObject.transform)
+        {
+            if (obj.gameObject.GetComponent<LOD>() != null)
             {
-                var t = obj.GetComponent<LOD>();
+                var t = obj.gameObject.GetComponent<LOD>();
+                if (t.transform.Find("High") == null) Debug.Log(t.transform.name + "/:" + h + "::High");
+                if (t.transform.Find("Mid" ) == null) Debug.Log(t.transform.name + "/:" + h + "::Mid");
+                if (t.transform.Find("Low" ) == null) Debug.Log(t.transform.name + "/:" + h + "::Low");
                 lod.Add(new LOD_obj()
                 {
                     highObj = t.transform.Find("High").gameObject,
@@ -27,9 +32,11 @@ public class LOD_Area : MonoBehaviour
                     lowObj  = t.transform.Find("Low").gameObject,
                     root    = t.transform
                 });
-
             }
+            h++;
+        }
         lods = lod.ToArray();
+        LastActive = true;
     }
 
 
@@ -50,15 +57,18 @@ public class LOD_Area : MonoBehaviour
                 Debug.Log(a.highObj.active ? "H" : (a.midObj.active ? "M" : (a.lowObj.active ? "L" : "X")));
             }
         }
-        else if (LastActive != IsActive)
+        else if (LastActive)
         {
             foreach (var a in lods)
-                a.highObj.gameObject.active =
-                a.midObj.gameObject.active =
-                a.lowObj.gameObject.active =
-                false; 
-            LastActive = IsActive;
+            {
+                a.highObj.gameObject.active = 
+                a.midObj.gameObject.active  = 
+                a.lowObj.gameObject.active  = 
+                false;
+            }
         }
+
+        LastActive = IsActive;
     }
 
     private void OnDrawGizmos()
