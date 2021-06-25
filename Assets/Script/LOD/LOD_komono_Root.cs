@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿ 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LOD_Root : MonoBehaviour
+public class LOD_komono_Root : MonoBehaviour
 {
     public Camera cam;
     public LOD_komono_Area[] area;
@@ -12,8 +13,8 @@ public class LOD_Root : MonoBehaviour
     public float MovementThreshold;
 
     public static Camera target { get => me.cam; set => me.cam = value; }
-    public static float movementThreshold { get => me.MovementThreshold; set => me.MovementThreshold = value > 20 ? 20 : (value < 0 ? 0: value); }
-    static LOD_Root me;
+    public static float movementThreshold { get => me.MovementThreshold; set => me.MovementThreshold = value > 20 ? 20 : (value < 0 ? 0 : value); }
+    static LOD_komono_Root me;
 
     void Start()
     {
@@ -24,13 +25,13 @@ public class LOD_Root : MonoBehaviour
                 lla.Add(a);
         area = lla.ToArray();
     }
-    
-    
+
+
     void Update()
     {
-        if (cam != null) 
+        if (cam != null)
             foreach (var a in area)
-                a.IsActive = Vector3.Distance(a.transform.position, cam.transform.position) <  a.size; 
+                a.IsActive = Vector3.Distance(a.transform.position, cam.transform.position) < a.size;
     }
 
     private void OnDrawGizmos()

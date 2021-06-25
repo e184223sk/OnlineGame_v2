@@ -87,7 +87,6 @@ public class LOD_Area : MonoBehaviour
     }
 }
 
-
 [System.Serializable]
 public class LOD_obj
 {

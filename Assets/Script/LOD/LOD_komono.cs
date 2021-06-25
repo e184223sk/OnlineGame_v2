@@ -1,0 +1,1 @@
+﻿public class LOD_komono : UnityEngine.MonoBehaviour { }
