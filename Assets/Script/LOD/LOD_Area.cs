@@ -32,10 +32,11 @@ public class LOD_Area : MonoBehaviour
                     lowObj  = t.transform.Find("Low").gameObject,
                     root    = t.transform
                 });
+                Destroy(t);
             }
             h++;
         }
-        lods = lod.ToArray();
+        lods = lod.ToArray(); 
         LastActive = true;
     }
 
@@ -43,18 +44,15 @@ public class LOD_Area : MonoBehaviour
     void Update()
     {
         if (IsActive)
-        {
-            Debug.Log("GG");
+        { 
             float dis;
             Vector3 point = LOD_Root.target.transform.position;
             foreach (var a in lods)
             {
-                dis = Vector3.Distance(a.root.position, point);
-                Debug.Log("gr:" + dis);
+                dis = Vector3.Distance(a.root.position, point); 
                 a.highObj.active = dis < _HIGHAREA;
                 a.midObj.active = dis < _MIDAREA & dis > _HIGHAREA;
                 a.lowObj.active = dis < _LOWAREA & dis > _MIDAREA;
-                Debug.Log(a.highObj.active ? "H" : (a.midObj.active ? "M" : (a.lowObj.active ? "L" : "X")));
             }
         }
         else if (LastActive)
