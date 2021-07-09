@@ -47,6 +47,7 @@ public class LOD_komono_Area : MonoBehaviour
     {
         Gizmos.color = IsActive ? Color.cyan : Color.red;
         Gizmos.DrawWireSphere(transform.position, size);
+        if (lods == null) return;
         foreach (var a in lods)
         {
             Gizmos.color = a.gameObject.active ? Color.magenta : Color.gray;

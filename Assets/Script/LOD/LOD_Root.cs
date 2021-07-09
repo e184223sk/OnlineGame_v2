@@ -5,7 +5,7 @@ using UnityEngine;
 public class LOD_Root : MonoBehaviour
 {
     public Camera cam;
-    public LOD_komono_Area[] area;
+    public LOD_Area[] area;
     Vector3 lastPoint;
 
     [Range(0.1f, 20f)]
@@ -18,19 +18,21 @@ public class LOD_Root : MonoBehaviour
     void Start()
     {
         me = this;
-        List<LOD_komono_Area> lla = new List<LOD_komono_Area>();
+        List<LOD_Area> lla = new List<LOD_Area>();
         foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
-            foreach (var a in obj.GetComponentsInChildren<LOD_komono_Area>(true))
+            foreach (var a in obj.GetComponentsInChildren<LOD_Area>(true))
                 lla.Add(a);
         area = lla.ToArray();
+        if(cam == null)
+            Debug.LogError("LOD対象のカメラがセットされていません");
     }
     
     
-    void Update()
+    void FixedUpdate()
     {
-        if (cam != null) 
-            foreach (var a in area)
-                a.IsActive = Vector3.Distance(a.transform.position, cam.transform.position) <  a.size; 
+        if (cam != null)
+            foreach (var a in area) 
+                a.IsActive = Vector3.Distance(a.transform.position, cam.transform.position) < a.size;
     }
 
     private void OnDrawGizmos()
